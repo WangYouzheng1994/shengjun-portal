@@ -67,7 +67,7 @@ const handleSubmit = async () => {
 <template>
   <div>
     <section class="relative h-screen flex items-center overflow-hidden">
-      <div class="absolute inset-0 z-0">
+      <div class="absolute inset-0 z-0 parallax-bg">
         <img
           src="https://images.unsplash.com/photo-1557804506-669a67965ba0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=2000"
           alt="Consultation"
@@ -76,7 +76,7 @@ const handleSubmit = async () => {
         <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
       </div>
 
-      <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
+      <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full parallax-content">
         <div class="max-w-2xl">
           <div class="text-sm tracking-widest text-gray-300 mb-4">
             CONSULTATION CENTER
@@ -90,7 +90,7 @@ const handleSubmit = async () => {
         </div>
       </div>
 
-      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 scroll-indicator">
         <div class="w-6 h-10 border-2 border-white/50 rounded-full flex items-start justify-center p-2">
           <div class="w-1.5 h-1.5 bg-white rounded-full animate-bounce" />
         </div>
@@ -311,5 +311,26 @@ const handleSubmit = async () => {
 
 .animate-bounce {
   animation: bounce 1.5s ease-in-out infinite;
+}
+
+/* 视差滚动效果 - 使用 CSS 实现更流畅的体验 */
+.parallax-bg {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.parallax-content {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+}
+
+.scroll-indicator {
+  transition: opacity 0.3s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 </style>

@@ -51,7 +51,7 @@ const globalStats = [
 <template>
   <div>
     <section class="relative h-screen flex items-center overflow-hidden">
-      <div class="absolute inset-0 z-0">
+      <div class="absolute inset-0 z-0 parallax-bg">
         <img
           src="https://images.unsplash.com/photo-1567789884554-0b844b597180?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=2000"
           alt="Manufacturing"
@@ -60,7 +60,7 @@ const globalStats = [
         <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
       </div>
 
-      <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
+      <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full parallax-content">
         <div class="max-w-2xl">
           <div class="text-sm tracking-widest text-gray-300 mb-4">
             MADE IN CHINA · TRUSTED GLOBALLY
@@ -71,7 +71,7 @@ const globalStats = [
             <span class="text-gray-300">全球品质</span>
           </h1>
           <p class="text-xl text-gray-200 mb-8 max-w-xl">
-            顶级汽车零部件供应商，为全球50+国家提供高精度解决方案
+            顶级汽车零部件供应商，为全球 50+ 国家提供高精度解决方案
           </p>
           <div class="flex flex-col sm:flex-row gap-4">
             <button class="px-8 py-4 bg-white text-black hover:bg-gray-100 transition-colors flex items-center justify-center gap-2 group">
@@ -85,7 +85,7 @@ const globalStats = [
         </div>
       </div>
 
-      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 scroll-indicator">
         <div class="w-6 h-10 border-2 border-white/50 rounded-full flex items-start justify-center p-2">
           <div class="w-1.5 h-1.5 bg-white rounded-full animate-bounce" />
         </div>
@@ -271,5 +271,41 @@ const globalStats = [
 
 .animate-bounce {
   animation: bounce 1.5s ease-in-out infinite;
+}
+
+/* 视差滚动效果 - 使用 CSS 实现更流畅的体验 */
+.parallax-bg {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.parallax-content {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+}
+
+.scroll-indicator {
+  transition: opacity 0.3s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* 使用 CSS 实现视差效果 */
+  .parallax-section {
+    perspective: 1px;
+    overflow: hidden;
+  }
+  
+  .parallax-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transform-style: preserve-3d;
+  }
 }
 </style>
