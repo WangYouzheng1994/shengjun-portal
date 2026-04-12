@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.portal.mapper.PortalBannerMapper">
+
+    <resultMap type="com.ruoyi.portal.domain.PortalBanner" id="PortalBannerResult">
+        <result property="bannerId"       column="banner_id"       />
+        <result property="title"          column="title"           />
+        <result property="pcImage"        column="pc_image"        />
+        <result property="mobileImage"    column="mobile_image"    />
+        <result property="pcWidth"        column="pc_width"        />
+        <result property="pcHeight"       column="pc_height"       />
+        <result property="mobileWidth"    column="mobile_width"    />
+        <result property="mobileHeight"   column="mobile_height"   />
+        <result property="linkType"       column="link_type"       />
+        <result property="linkUrl"        column="link_url"        />
+        <result property="sortOrder"      column="sort_order"      />
+        <result property="status"         column="status"          />
+        <result property="createBy"       column="create_by"       />
+        <result property="createTime"     column="create_time"     />
+        <result property="updateBy"       column="update_by"       />
+        <result property="updateTime"     column="update_time"     />
+        <result property="remark"         column="remark"          />
+    </resultMap>
+
+    <sql id="selectPortalBannerVo">
+        select banner_id, title, pc_image, mobile_image, pc_width, pc_height,
+               mobile_width, mobile_height, link_type, link_url, sort_order,
+               status, create_by, create_time, update_by, update_time, remark
+        from portal_banner
+    </sql>
+
+    <select id="selectPortalBannerList" parameterType="com.ruoyi.portal.domain.PortalBanner" resultMap="PortalBannerResult">
+        <include refid="selectPortalBannerVo"/>
+        <where>
+            <if test="title != null  and title != ''">
+                and title like concat('%', #{title}, '%')
+            </if>
+            <if test="linkType != null  and linkType != ''">
+                and link_type = #{linkType}
+            </if>
+            <if test="status != null  and status != ''">
+                and status = #{status}
+            </if>
+        </where>
+        order by sort_order asc, banner_id desc
+    </select>
+
+    <select id="selectPortalBannerByBannerId" parameterType="Long" resultMap="PortalBannerResult">
+        <include refid="selectPortalBannerVo"/>
+        where banner_id = #{bannerId}
+    </select>
+
+    <insert id="insertPortalBanner" parameterType="com.ruoyi.portal.domain.PortalBanner" useGeneratedKeys="true" keyProperty="bannerId">
+        insert into portal_banner
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">title,</if>
+            <if test="pcImage != null">pc_image,</if>
+            <if test="mobileImage != null">mobile_image,</if>
+            <if test="pcWidth != null">pc_width,</if>
+            <if test="pcHeight != null">pc_height,</if>
+            <if test="mobileWidth != null">mobile_width,</if>
+            <if test="mobileHeight != null">mobile_height,</if>
+            <if test="linkType != null">link_type,</if>
+            <if test="linkUrl != null">link_url,</if>
+            <if test="sortOrder != null">sort_order,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="pcImage != null">#{pcImage},</if>
+            <if test="mobileImage != null">#{mobileImage},</if>
+            <if test="pcWidth != null">#{pcWidth},</if>
+            <if test="pcHeight != null">#{pcHeight},</if>
+            <if test="mobileWidth != null">#{mobileWidth},</if>
+            <if test="mobileHeight != null">#{mobileHeight},</if>
+            <if test="linkType != null">#{linkType},</if>
+            <if test="linkUrl != null">#{linkUrl},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePortalBanner" parameterType="com.ruoyi.portal.domain.PortalBanner">
+        update portal_banner
+        <set>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="pcImage != null">pc_image = #{pcImage},</if>
+            <if test="mobileImage != null">mobile_image = #{mobileImage},</if>
+            <if test="pcWidth != null">pc_width = #{pcWidth},</if>
+            <if test="pcHeight != null">pc_height = #{pcHeight},</if>
+            <if test="mobileWidth != null">mobile_width = #{mobileWidth},</if>
+            <if test="mobileHeight != null">mobile_height = #{mobileHeight},</if>
+            <if test="linkType != null">link_type = #{linkType},</if>
+            <if test="linkUrl != null">link_url = #{linkUrl},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where banner_id = #{bannerId}
+    </update>
+
+    <delete id="deletePortalBannerByBannerId" parameterType="Long">
+        delete from portal_banner where banner_id = #{bannerId}
+    </delete>
+
+    <delete id="deletePortalBannerByBannerIds" parameterType="String">
+        delete from portal_banner where banner_id in
+        <foreach item="bannerId" collection="array" open="(" separator="," close=")">
+            #{bannerId}
+        </foreach>
+    </delete>
+
+</mapper>

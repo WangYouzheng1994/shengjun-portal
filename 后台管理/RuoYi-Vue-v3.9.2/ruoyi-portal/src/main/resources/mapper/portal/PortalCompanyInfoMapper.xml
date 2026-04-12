@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.portal.mapper.PortalCompanyInfoMapper">
+
+    <resultMap type="com.ruoyi.portal.domain.PortalCompanyInfo" id="PortalCompanyInfoResult">
+        <result property="infoId"          column="info_id"           />
+        <result property="companyName"     column="company_name"      />
+        <result property="companyLogo"     column="company_logo"      />
+        <result property="address"         column="address"           />
+        <result property="phone"           column="phone"             />
+        <result property="email"           column="email"             />
+        <result property="fax"             column="fax"               />
+        <result property="wechat"          column="wechat"            />
+        <result property="weibo"           column="weibo"             />
+        <result property="douyin"          column="douyin"            />
+        <result property="qq"              column="qq"                />
+        <result property="introduction"    column="introduction"      />
+        <result property="businessLicense" column="business_license"  />
+        <result property="icpNumber"       column="icp_number"        />
+        <result property="status"          column="status"            />
+        <result property="createBy"        column="create_by"         />
+        <result property="createTime"      column="create_time"       />
+        <result property="updateBy"        column="update_by"         />
+        <result property="updateTime"      column="update_time"       />
+        <result property="remark"          column="remark"            />
+    </resultMap>
+
+    <sql id="selectPortalCompanyInfoVo">
+        select info_id, company_name, company_logo, address, phone, email, fax,
+               wechat, weibo, douyin, qq, introduction, business_license, icp_number,
+               status, create_by, create_time, update_by, update_time, remark
+        from portal_company_info
+    </sql>
+
+    <select id="selectPortalCompanyInfoList" parameterType="com.ruoyi.portal.domain.PortalCompanyInfo" resultMap="PortalCompanyInfoResult">
+        <include refid="selectPortalCompanyInfoVo"/>
+        <where>
+            <if test="companyName != null  and companyName != ''">
+                and company_name like concat('%', #{companyName}, '%')
+            </if>
+            <if test="status != null  and status != ''">
+                and status = #{status}
+            </if>
+        </where>
+        order by info_id desc
+    </select>
+
+    <select id="selectPortalCompanyInfoByInfoId" parameterType="Long" resultMap="PortalCompanyInfoResult">
+        <include refid="selectPortalCompanyInfoVo"/>
+        where info_id = #{infoId}
+    </select>
+
+    <insert id="insertPortalCompanyInfo" parameterType="com.ruoyi.portal.domain.PortalCompanyInfo" useGeneratedKeys="true" keyProperty="infoId">
+        insert into portal_company_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="companyName != null and companyName != ''">company_name,</if>
+            <if test="companyLogo != null">company_logo,</if>
+            <if test="address != null">address,</if>
+            <if test="phone != null">phone,</if>
+            <if test="email != null">email,</if>
+            <if test="fax != null">fax,</if>
+            <if test="wechat != null">wechat,</if>
+            <if test="weibo != null">weibo,</if>
+            <if test="douyin != null">douyin,</if>
+            <if test="qq != null">qq,</if>
+            <if test="introduction != null">introduction,</if>
+            <if test="businessLicense != null">business_license,</if>
+            <if test="icpNumber != null">icp_number,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="companyName != null and companyName != ''">#{companyName},</if>
+            <if test="companyLogo != null">#{companyLogo},</if>
+            <if test="address != null">#{address},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="email != null">#{email},</if>
+            <if test="fax != null">#{fax},</if>
+            <if test="wechat != null">#{wechat},</if>
+            <if test="weibo != null">#{weibo},</if>
+            <if test="douyin != null">#{douyin},</if>
+            <if test="qq != null">#{qq},</if>
+            <if test="introduction != null">#{introduction},</if>
+            <if test="businessLicense != null">#{businessLicense},</if>
+            <if test="icpNumber != null">#{icpNumber},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePortalCompanyInfo" parameterType="com.ruoyi.portal.domain.PortalCompanyInfo">
+        update portal_company_info
+        <set>
+            <if test="companyName != null and companyName != ''">company_name = #{companyName},</if>
+            <if test="companyLogo != null">company_logo = #{companyLogo},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="fax != null">fax = #{fax},</if>
+            <if test="wechat != null">wechat = #{wechat},</if>
+            <if test="weibo != null">weibo = #{weibo},</if>
+            <if test="douyin != null">douyin = #{douyin},</if>
+            <if test="qq != null">qq = #{qq},</if>
+            <if test="introduction != null">introduction = #{introduction},</if>
+            <if test="businessLicense != null">business_license = #{businessLicense},</if>
+            <if test="icpNumber != null">icp_number = #{icpNumber},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where info_id = #{infoId}
+    </update>
+
+    <delete id="deletePortalCompanyInfoByInfoId" parameterType="Long">
+        delete from portal_company_info where info_id = #{infoId}
+    </delete>
+
+    <delete id="deletePortalCompanyInfoByInfoIds" parameterType="String">
+        delete from portal_company_info where info_id in
+        <foreach item="infoId" collection="array" open="(" separator="," close=")">
+            #{infoId}
+        </foreach>
+    </delete>
+
+</mapper>
