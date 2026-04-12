@@ -20,6 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="businessLicense" column="business_license"  />
         <result property="icpNumber"       column="icp_number"        />
         <result property="status"          column="status"            />
+        <result property="delFlag"         column="del_flag"          />
         <result property="createBy"        column="create_by"         />
         <result property="createTime"      column="create_time"       />
         <result property="updateBy"        column="update_by"         />
@@ -30,13 +31,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectPortalCompanyInfoVo">
         select info_id, company_name, company_logo, address, phone, email, fax,
                wechat, weibo, douyin, qq, introduction, business_license, icp_number,
-               status, create_by, create_time, update_by, update_time, remark
+               status, del_flag, create_by, create_time, update_by, update_time, remark
         from portal_company_info
     </sql>
 
     <select id="selectPortalCompanyInfoList" parameterType="com.ruoyi.portal.domain.PortalCompanyInfo" resultMap="PortalCompanyInfoResult">
         <include refid="selectPortalCompanyInfoVo"/>
         <where>
+            del_flag = '0'
             <if test="companyName != null  and companyName != ''">
                 and company_name like concat('%', #{companyName}, '%')
             </if>
@@ -69,6 +71,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="businessLicense != null">business_license,</if>
             <if test="icpNumber != null">icp_number,</if>
             <if test="status != null">status,</if>
+            <if test="delFlag != null">del_flag,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
@@ -90,6 +93,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="businessLicense != null">#{businessLicense},</if>
             <if test="icpNumber != null">#{icpNumber},</if>
             <if test="status != null">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
@@ -123,11 +127,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deletePortalCompanyInfoByInfoId" parameterType="Long">
-        delete from portal_company_info where info_id = #{infoId}
+        update portal_company_info set del_flag = '2' where info_id = #{infoId}
     </delete>
 
     <delete id="deletePortalCompanyInfoByInfoIds" parameterType="String">
-        delete from portal_company_info where info_id in
+        update portal_company_info set del_flag = '2' where info_id in
         <foreach item="infoId" collection="array" open="(" separator="," close=")">
             #{infoId}
         </foreach>

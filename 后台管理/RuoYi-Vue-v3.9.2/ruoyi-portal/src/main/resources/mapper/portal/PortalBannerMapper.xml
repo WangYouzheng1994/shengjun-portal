@@ -17,6 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="linkUrl"        column="link_url"        />
         <result property="sortOrder"      column="sort_order"      />
         <result property="status"         column="status"          />
+        <result property="delFlag"        column="del_flag"         />
         <result property="createBy"       column="create_by"       />
         <result property="createTime"     column="create_time"     />
         <result property="updateBy"       column="update_by"       />
@@ -27,13 +28,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectPortalBannerVo">
         select banner_id, title, pc_image, mobile_image, pc_width, pc_height,
                mobile_width, mobile_height, link_type, link_url, sort_order,
-               status, create_by, create_time, update_by, update_time, remark
+               status, del_flag, create_by, create_time, update_by, update_time, remark
         from portal_banner
     </sql>
 
     <select id="selectPortalBannerList" parameterType="com.ruoyi.portal.domain.PortalBanner" resultMap="PortalBannerResult">
         <include refid="selectPortalBannerVo"/>
         <where>
+            del_flag = '0'
             <if test="title != null  and title != ''">
                 and title like concat('%', #{title}, '%')
             </if>
@@ -66,6 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="linkUrl != null">link_url,</if>
             <if test="sortOrder != null">sort_order,</if>
             <if test="status != null">status,</if>
+            <if test="delFlag != null">del_flag,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
@@ -84,6 +87,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="linkUrl != null">#{linkUrl},</if>
             <if test="sortOrder != null">#{sortOrder},</if>
             <if test="status != null">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
@@ -114,11 +118,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deletePortalBannerByBannerId" parameterType="Long">
-        delete from portal_banner where banner_id = #{bannerId}
+        update portal_banner set del_flag = '2' where banner_id = #{bannerId}
     </delete>
 
     <delete id="deletePortalBannerByBannerIds" parameterType="String">
-        delete from portal_banner where banner_id in
+        update portal_banner set del_flag = '2' where banner_id in
         <foreach item="bannerId" collection="array" open="(" separator="," close=")">
             #{bannerId}
         </foreach>

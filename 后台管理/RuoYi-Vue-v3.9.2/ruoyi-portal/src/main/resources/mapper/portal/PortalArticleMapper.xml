@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.portal.mapper.PortalArticleMapper">
+
+    <resultMap type="com.ruoyi.portal.domain.PortalArticle" id="PortalArticleResult">
+        <result property="articleId"        column="article_id"        />
+        <result property="categoryId"       column="category_id"       />
+        <result property="title"            column="title"             />
+        <result property="subtitle"         column="subtitle"          />
+        <result property="summary"          column="summary"           />
+        <result property="content"          column="content"           />
+        <result property="coverImage"       column="cover_image"       />
+        <result property="author"           column="author"            />
+        <result property="source"           column="source"            />
+        <result property="viewCount"        column="view_count"        />
+        <result property="isTop"            column="is_top"            />
+        <result property="isRecommend"      column="is_recommend"      />
+        <result property="status"           column="status"            />
+        <result property="publishTime"      column="publish_time"      />
+        <result property="sortOrder"        column="sort_order"        />
+        <result property="delFlag"          column="del_flag"          />
+        <result property="createBy"         column="create_by"         />
+        <result property="createTime"       column="create_time"       />
+        <result property="updateBy"         column="update_by"         />
+        <result property="updateTime"       column="update_time"       />
+        <result property="remark"           column="remark"            />
+    </resultMap>
+
+    <sql id="selectPortalArticleVo">
+        select a.article_id, a.category_id, a.title, a.subtitle, a.summary,
+               a.content, a.cover_image, a.author, a.source, a.view_count,
+               a.is_top, a.is_recommend, a.status, a.publish_time, a.sort_order,
+               a.del_flag, a.create_by, a.create_time, a.update_by, a.update_time,
+               a.remark, c.category_name
+        from portal_article a
+        left join portal_article_category c on a.category_id = c.category_id
+    </sql>
+
+    <select id="selectPortalArticleList" parameterType="com.ruoyi.portal.domain.PortalArticle" resultMap="PortalArticleResult">
+        <include refid="selectPortalArticleVo"/>
+        <where>
+            a.del_flag = '0'
+            <if test="categoryId != null">
+                and a.category_id = #{categoryId}
+            </if>
+            <if test="title != null and title != ''">
+                and a.title like concat('%', #{title}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                and a.status = #{status}
+            </if>
+            <if test="author != null and author != ''">
+                and a.author like concat('%', #{author}, '%')
+            </if>
+            <if test="params.beginTime != null and params.beginTime != ''">
+                and date_format(a.publish_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''">
+                and date_format(a.publish_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+        order by a.is_top desc, a.sort_order asc, a.article_id desc
+    </select>
+
+    <select id="selectPortalArticleByArticleId" parameterType="Long" resultMap="PortalArticleResult">
+        <include refid="selectPortalArticleVo"/>
+        where a.article_id = #{articleId}
+    </select>
+
+    <insert id="insertPortalArticle" parameterType="com.ruoyi.portal.domain.PortalArticle" useGeneratedKeys="true" keyProperty="articleId">
+        insert into portal_article
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="categoryId != null">category_id,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="subtitle != null">subtitle,</if>
+            <if test="summary != null">summary,</if>
+            <if test="content != null">content,</if>
+            <if test="coverImage != null">cover_image,</if>
+            <if test="author != null">author,</if>
+            <if test="source != null">source,</if>
+            <if test="viewCount != null">view_count,</if>
+            <if test="isTop != null">is_top,</if>
+            <if test="isRecommend != null">is_recommend,</if>
+            <if test="status != null">status,</if>
+            <if test="publishTime != null">publish_time,</if>
+            <if test="sortOrder != null">sort_order,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="categoryId != null">#{categoryId},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="subtitle != null">#{subtitle},</if>
+            <if test="summary != null">#{summary},</if>
+            <if test="content != null">#{content},</if>
+            <if test="coverImage != null">#{coverImage},</if>
+            <if test="author != null">#{author},</if>
+            <if test="source != null">#{source},</if>
+            <if test="viewCount != null">#{viewCount},</if>
+            <if test="isTop != null">#{isTop},</if>
+            <if test="isRecommend != null">#{isRecommend},</if>
+            <if test="status != null">#{status},</if>
+            <if test="publishTime != null">#{publishTime},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePortalArticle" parameterType="com.ruoyi.portal.domain.PortalArticle">
+        update portal_article
+        <set>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="subtitle != null">subtitle = #{subtitle},</if>
+            <if test="summary != null">summary = #{summary},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="coverImage != null">cover_image = #{coverImage},</if>
+            <if test="author != null">author = #{author},</if>
+            <if test="source != null">source = #{source},</if>
+            <if test="viewCount != null">view_count = #{viewCount},</if>
+            <if test="isTop != null">is_top = #{isTop},</if>
+            <if test="isRecommend != null">is_recommend = #{isRecommend},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="publishTime != null">publish_time = #{publishTime},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where article_id = #{articleId}
+    </update>
+
+    <delete id="deletePortalArticleByArticleId" parameterType="Long">
+        update portal_article set del_flag = '2' where article_id = #{articleId}
+    </delete>
+
+    <delete id="deletePortalArticleByArticleIds" parameterType="String">
+        update portal_article set del_flag = '2' where article_id in
+        <foreach item="articleId" collection="array" open="(" separator="," close=")">
+            #{articleId}
+        </foreach>
+    </delete>
+
+</mapper>

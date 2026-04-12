@@ -81,6 +81,19 @@ public class PortalBanner extends BaseEntity {
     @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
     private String status;
 
+    /**
+     * 删除标志（0正常 1已删除）
+     */
+    private String delFlag;
+
+    public void setDelFlag(String delFlag) {
+        this.delFlag = delFlag;
+    }
+
+    public String getDelFlag() {
+        return delFlag;
+    }
+
     public void setBannerId(Long bannerId) {
         this.bannerId = bannerId;
     }
@@ -192,6 +205,7 @@ public class PortalBanner extends BaseEntity {
             .append("linkUrl", getLinkUrl())
             .append("sortOrder", getSortOrder())
             .append("status", getStatus())
+            .append("delFlag", getDelFlag())
             .toString();
     }
 }

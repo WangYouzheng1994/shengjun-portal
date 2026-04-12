@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.portal.mapper.PortalArticleCategoryMapper">
+
+    <resultMap type="com.ruoyi.portal.domain.PortalArticleCategory" id="PortalArticleCategoryResult">
+        <result property="categoryId"       column="category_id"       />
+        <result property="categoryName"     column="category_name"     />
+        <result property="categoryCode"     column="category_code"     />
+        <result property="parentId"         column="parent_id"         />
+        <result property="sortOrder"        column="sort_order"        />
+        <result property="status"           column="status"            />
+        <result property="delFlag"          column="del_flag"          />
+        <result property="createBy"         column="create_by"         />
+        <result property="createTime"       column="create_time"       />
+        <result property="updateBy"         column="update_by"         />
+        <result property="updateTime"       column="update_time"       />
+        <result property="remark"           column="remark"            />
+    </resultMap>
+
+    <sql id="selectPortalArticleCategoryVo">
+        select category_id, category_name, category_code, parent_id,
+               sort_order, status, del_flag, create_by, create_time,
+               update_by, update_time, remark
+        from portal_article_category
+    </sql>
+
+    <select id="selectPortalArticleCategoryList" parameterType="com.ruoyi.portal.domain.PortalArticleCategory" resultMap="PortalArticleCategoryResult">
+        <include refid="selectPortalArticleCategoryVo"/>
+        <where>
+            del_flag = '0'
+            <if test="categoryName != null and categoryName != ''">
+                and category_name like concat('%', #{categoryName}, '%')
+            </if>
+            <if test="categoryCode != null and categoryCode != ''">
+                and category_code = #{categoryCode}
+            </if>
+            <if test="parentId != null">
+                and parent_id = #{parentId}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+        </where>
+        order by sort_order asc, category_id asc
+    </select>
+
+    <select id="selectPortalArticleCategoryByCategoryId" parameterType="Long" resultMap="PortalArticleCategoryResult">
+        <include refid="selectPortalArticleCategoryVo"/>
+        where category_id = #{categoryId}
+    </select>
+
+    <insert id="insertPortalArticleCategory" parameterType="com.ruoyi.portal.domain.PortalArticleCategory" useGeneratedKeys="true" keyProperty="categoryId">
+        insert into portal_article_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="categoryName != null and categoryName != ''">category_name,</if>
+            <if test="categoryCode != null and categoryCode != ''">category_code,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="sortOrder != null">sort_order,</if>
+            <if test="status != null">status,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="categoryName != null and categoryName != ''">#{categoryName},</if>
+            <if test="categoryCode != null and categoryCode != ''">#{categoryCode},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+            <if test="status != null">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePortalArticleCategory" parameterType="com.ruoyi.portal.domain.PortalArticleCategory">
+        update portal_article_category
+        <set>
+            <if test="categoryName != null and categoryName != ''">category_name = #{categoryName},</if>
+            <if test="categoryCode != null and categoryCode != ''">category_code = #{categoryCode},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where category_id = #{categoryId}
+    </update>
+
+    <delete id="deletePortalArticleCategoryByCategoryId" parameterType="Long">
+        update portal_article_category set del_flag = '2' where category_id = #{categoryId}
+    </delete>
+
+    <delete id="deletePortalArticleCategoryByCategoryIds" parameterType="String">
+        update portal_article_category set del_flag = '2' where category_id in
+        <foreach item="categoryId" collection="array" open="(" separator="," close=")">
+            #{categoryId}
+        </foreach>
+    </delete>
+
+</mapper>

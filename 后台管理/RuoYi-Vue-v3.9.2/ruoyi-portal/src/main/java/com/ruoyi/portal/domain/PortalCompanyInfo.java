@@ -100,6 +100,19 @@ public class PortalCompanyInfo extends BaseEntity {
     @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
     private String status;
 
+    /**
+     * 删除标志（0正常 1已删除）
+     */
+    private String delFlag;
+
+    public void setDelFlag(String delFlag) {
+        this.delFlag = delFlag;
+    }
+
+    public String getDelFlag() {
+        return delFlag;
+    }
+
     public void setInfoId(Long infoId) {
         this.infoId = infoId;
     }
@@ -238,6 +251,7 @@ public class PortalCompanyInfo extends BaseEntity {
             .append("businessLicense", getBusinessLicense())
             .append("icpNumber", getIcpNumber())
             .append("status", getStatus())
+            .append("delFlag", getDelFlag())
             .toString();
     }
 }
