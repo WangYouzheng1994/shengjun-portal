@@ -46,6 +46,16 @@ public class PortalArticleCategoryController extends BaseController {
     }
 
     /**
+     * 获取文章分类下拉树列表
+     */
+    @PreAuthorize("@ss.hasPermi('portal:articleCategory:list')")
+    @GetMapping("/treeselect")
+    public AjaxResult treeselect(PortalArticleCategory portalArticleCategory) {
+        List<PortalArticleCategory> categories = portalArticleCategoryService.selectPortalArticleCategoryList(portalArticleCategory);
+        return success(portalArticleCategoryService.buildCategoryTreeSelect(categories));
+    }
+
+    /**
      * 导出文章分类列表
      */
     @PreAuthorize("@ss.hasPermi('portal:articleCategory:export')")

@@ -28,11 +28,28 @@
 
 <script setup>
 import axios from 'axios'
-import { QuillEditor } from "@vueup/vue-quill"
+import { QuillEditor, Quill } from "@vueup/vue-quill"
 import "@vueup/vue-quill/dist/vue-quill.snow.css"
 import { getToken } from "@/utils/auth"
 
 const { proxy } = getCurrentInstance()
+
+/**
+ * 注册Quill自定义字体
+ * 包含常用中文字体，满足文章发布需求
+ */
+const Font = Quill.import("formats/font")
+Font.whitelist = [
+  "false",
+  "songti",
+  "heiti",
+  "kaiti",
+  "fangsong",
+  "yahei",
+  "serif",
+  "monospace"
+]
+Quill.register(Font, true)
 
 const quillEditorRef = ref()
 const uploadUrl = ref(import.meta.env.VITE_APP_BASE_API + "/common/upload") // 上传的图片服务器地址
@@ -85,6 +102,7 @@ const options = ref({
       [{ indent: "-1" }, { indent: "+1" }],           // 缩进
       [{ size: ["small", false, "large", "huge"] }],  // 字体大小
       [{ header: [1, 2, 3, 4, 5, 6, false] }],        // 标题
+      [{ font: [false, "songti", "heiti", "kaiti", "fangsong", "yahei", "serif", "monospace"] }],  // 字体（含中文字体）
       [{ color: [] }, { background: [] }],            // 字体颜色、字体背景颜色
       [{ align: [] }],                                // 对齐方式
       ["clean"],                                      // 清除文本格式
@@ -115,8 +133,15 @@ watch(() => props.modelValue, (v) => {
 
 // 如果设置了上传地址则自定义图片上传事件
 onMounted(() => {
+  let quill = quillEditorRef.value.getQuill()
+
+  /**
+   * 为工具栏按钮添加中文悬停提示
+   * 提升用户体验，让每个按钮功能一目了然
+   */
+  addToolbarTooltips(quill)
+
   if (props.type == 'url') {
-    let quill = quillEditorRef.value.getQuill()
     let toolbar = quill.getModule("toolbar")
     toolbar.addHandler("image", (value) => {
       if (value) {
@@ -128,6 +153,77 @@ onMounted(() => {
     quill.root.addEventListener('paste', handlePasteCapture, true)
   }
 })
+
+/**
+ * 工具栏按钮提示文案映射表
+ * 按钮格式 -> 中文说明
+ */
+const toolbarTooltipMap = {
+  "ql-bold": "加粗",
+  "ql-italic": "斜体",
+  "ql-underline": "下划线",
+  "ql-strike": "删除线",
+  "ql-blockquote": "引用",
+  "ql-code-block": "代码块",
+  "ql-list[value=ordered]": "有序列表",
+  "ql-list[value=bullet]": "无序列表",
+  "ql-indent[value=-1]": "减少缩进",
+  "ql-indent[value=+1]": "增加缩进",
+  "ql-header[value=1]": "标题1",
+  "ql-header[value=2]": "标题2",
+  "ql-header[value=3]": "标题3",
+  "ql-header[value=4]": "标题4",
+  "ql-header[value=5]": "标题5",
+  "ql-header[value=6]": "标题6",
+  "ql-size[value=small]": "小号字体",
+  "ql-size[value=large]": "大号字体",
+  "ql-size[value=huge]": "超大号字体",
+  "ql-font[value=songti]": "宋体",
+  "ql-font[value=heiti]": "黑体",
+  "ql-font[value=kaiti]": "楷体",
+  "ql-font[value=fangsong]": "仿宋",
+  "ql-font[value=yahei]": "微软雅黑",
+  "ql-font[value=serif]": "衬线体",
+  "ql-font[value=monospace]": "等宽字体",
+  "ql-color": "字体颜色",
+  "ql-background": "背景颜色",
+  "ql-align": "对齐方式",
+  "ql-clean": "清除格式",
+  "ql-link": "插入链接",
+  "ql-image": "插入图片",
+  "ql-video": "插入视频"
+}
+
+/**
+ * 为Quill编辑器工具栏添加悬停提示
+ *
+ * @param quill Quill实例对象
+ */
+function addToolbarTooltips(quill) {
+  nextTick(() => {
+    const toolbarElement = quill.getModule("toolbar").container
+    if (!toolbarElement) {
+      return
+    }
+
+    const buttons = toolbarElement.querySelectorAll("button, .ql-picker")
+    buttons.forEach((btn) => {
+      const className = btn.className || ""
+      let tooltipText = ""
+
+      for (const [key, value] of Object.entries(toolbarTooltipMap)) {
+        if (className.includes(key.replace(/[[\]]/g, ""))) {
+          tooltipText = value
+          break
+        }
+      }
+
+      if (tooltipText && !btn.getAttribute("title")) {
+        btn.setAttribute("title", tooltipText)
+      }
+    })
+  })
+}
 
 // 上传前校检格式和大小
 function handleBeforeUpload(file) {
@@ -263,14 +359,54 @@ function insertImage(file) {
 }
 .ql-snow .ql-picker.ql-font .ql-picker-label::before,
 .ql-snow .ql-picker.ql-font .ql-picker-item::before {
-  content: "标准字体";
+  content: "字体";
+}
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="songti"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="songti"]::before {
+  content: "宋体";
+}
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="heiti"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="heiti"]::before {
+  content: "黑体";
+}
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="kaiti"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="kaiti"]::before {
+  content: "楷体";
+}
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="fangsong"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="fangsong"]::before {
+  content: "仿宋";
+}
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="yahei"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="yahei"]::before {
+  content: "微软雅黑";
 }
 .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="serif"]::before,
 .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="serif"]::before {
-  content: "衬线字体";
+  content: "衬线体";
 }
 .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="monospace"]::before,
 .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="monospace"]::before {
-  content: "等宽字体";
+  content: "等宽";
+}
+
+/**
+ * 字体样式定义
+ * 使用系统默认字体，确保跨平台兼容性
+ */
+.ql-editor .ql-font-songti {
+  font-family: "SimSun", "STSong", "Songti SC", serif;
+}
+.ql-editor .ql-font-heiti {
+  font-family: "SimHei", "STHeiti", "Heiti SC", sans-serif;
+}
+.ql-editor .ql-font-kaiti {
+  font-family: "KaiTi", "STKaiti", "KaiTi_SC", serif;
+}
+.ql-editor .ql-font-fangsong {
+  font-family: "FangSong", "STFangsong", serif;
+}
+.ql-editor .ql-font-yahei {
+  font-family: "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", sans-serif;
 }
 </style>

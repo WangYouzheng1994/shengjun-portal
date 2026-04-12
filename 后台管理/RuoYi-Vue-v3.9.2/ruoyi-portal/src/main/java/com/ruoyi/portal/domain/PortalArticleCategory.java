@@ -1,7 +1,7 @@
 package com.ruoyi.portal.domain;
 
 import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.List;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.common.annotation.Excel;
@@ -53,6 +53,11 @@ public class PortalArticleCategory extends BaseEntity {
      * 删除标志（0正常 1已删除）
      */
     private String delFlag;
+
+    /**
+     * 子分类列表
+     */
+    private List<PortalArticleCategory> children;
 
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
@@ -108,6 +113,14 @@ public class PortalArticleCategory extends BaseEntity {
 
     public String getDelFlag() {
         return delFlag;
+    }
+
+    public void setChildren(List<PortalArticleCategory> children) {
+        this.children = children;
+    }
+
+    public List<PortalArticleCategory> getChildren() {
+        return children;
     }
 
     @Override

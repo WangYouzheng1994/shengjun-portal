@@ -1,6 +1,7 @@
 package com.ruoyi.portal.service;
 
 import java.util.List;
+import com.ruoyi.common.core.domain.TreeSelect;
 import com.ruoyi.portal.domain.PortalArticleCategory;
 
 /**
@@ -56,4 +57,20 @@ public interface IPortalArticleCategoryService {
      * @return 结果
      */
     public int deletePortalArticleCategoryByCategoryId(Long categoryId);
+
+    /**
+     * 构建前端所需要树结构
+     *
+     * @param categories 分类列表
+     * @return 树结构列表
+     */
+    public List<PortalArticleCategory> buildCategoryTree(List<PortalArticleCategory> categories);
+
+    /**
+     * 构建前端所需要下拉树结构
+     *
+     * @param categories 分类列表
+     * @return 下拉树结构列表
+     */
+    public List<TreeSelect> buildCategoryTreeSelect(List<PortalArticleCategory> categories);
 }
