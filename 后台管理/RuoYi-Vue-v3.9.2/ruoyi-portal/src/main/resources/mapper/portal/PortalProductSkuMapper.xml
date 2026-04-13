@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.portal.mapper.PortalProductSkuMapper">
+
+    <resultMap type="com.ruoyi.portal.domain.PortalProductSku" id="PortalProductSkuResult">
+        <result property="skuId"          column="sku_id"            />
+        <result property="productId"      column="product_id"         />
+        <result property="skuCode"        column="sku_code"           />
+        <result property="skuName"        column="sku_name"           />
+        <result property="skuImage"       column="sku_image"          />
+        <result property="price"          column="price"              />
+        <result property="originalPrice"  column="original_price"      />
+        <result property="costPrice"      column="cost_price"          />
+        <result property="stockQuantity"  column="stock_quantity"      />
+        <result property="weight"         column="weight"              />
+        <result property="skuAttrs"       column="sku_attrs"           />
+        <result property="barCode"        column="bar_code"            />
+        <result property="status"         column="status"              />
+        <result property="isDefault"      column="is_default"           />
+        <result property="delFlag"        column="del_flag"             />
+        <result property="createBy"       column="create_by"             />
+        <result property="createTime"     column="create_time"           />
+        <result property="updateBy"       column="update_by"             />
+        <result property="updateTime"     column="update_time"           />
+        <result property="remark"         column="remark"                />
+    </resultMap>
+
+    <sql id="selectPortalProductSkuVo">
+        select sku_id, product_id, sku_code, sku_name, sku_image,
+               price, original_price, cost_price, stock_quantity, weight,
+               sku_attrs, bar_code, status, is_default, del_flag,
+               create_by, create_time, update_by, update_time, remark
+        from portal_product_sku
+    </sql>
+
+    <select id="selectPortalProductSkuList" parameterType="com.ruoyi.portal.domain.PortalProductSku" resultMap="PortalProductSkuResult">
+        <include refid="selectPortalProductSkuVo"/>
+        <where>
+            del_flag = '0'
+            <if test="productId != null">
+                and product_id = #{productId}
+            </if>
+            <if test="skuCode != null and skuCode != ''">
+                and sku_code like concat('%', #{skuCode}, '%')
+            </if>
+            <if test="skuName != null and skuName != ''">
+                and sku_name like concat('%', #{skuName}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+            <if test="barCode != null and barCode != ''">
+                and bar_code like concat('%', #{barCode}, '%')
+            </if>
+        </where>
+        order by is_default desc, sku_id asc
+    </select>
+
+    <select id="selectPortalProductSkuListByProductId" parameterType="Long" resultMap="PortalProductSkuResult">
+        <include refid="selectPortalProductSkuVo"/>
+        where product_id = #{productId} and del_flag = '0'
+        order by is_default desc, sku_id asc
+    </select>
+
+    <select id="selectPortalProductSkuBySkuId" parameterType="Long" resultMap="PortalProductSkuResult">
+        <include refid="selectPortalProductSkuVo"/>
+        where sku_id = #{skuId}
+    </select>
+
+    <insert id="insertPortalProductSku" parameterType="com.ruoyi.portal.domain.PortalProductSku" useGeneratedKeys="true" keyProperty="skuId">
+        insert into portal_product_sku
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productId != null">product_id,</if>
+            <if test="skuCode != null and skuCode != ''">sku_code,</if>
+            <if test="skuName != null and skuName != ''">sku_name,</if>
+            <if test="skuImage != null">sku_image,</if>
+            <if test="price != null">price,</if>
+            <if test="originalPrice != null">original_price,</if>
+            <if test="costPrice != null">cost_price,</if>
+            <if test="stockQuantity != null">stock_quantity,</if>
+            <if test="weight != null">weight,</if>
+            <if test="skuAttrs != null">sku_attrs,</if>
+            <if test="barCode != null">bar_code,</if>
+            <if test="status != null">status,</if>
+            <if test="isDefault != null">is_default,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productId != null">#{productId},</if>
+            <if test="skuCode != null and skuCode != ''">#{skuCode},</if>
+            <if test="skuName != null and skuName != ''">#{skuName},</if>
+            <if test="skuImage != null">#{skuImage},</if>
+            <if test="price != null">#{price},</if>
+            <if test="originalPrice != null">#{originalPrice},</if>
+            <if test="costPrice != null">#{costPrice},</if>
+            <if test="stockQuantity != null">#{stockQuantity},</if>
+            <if test="weight != null">#{weight},</if>
+            <if test="skuAttrs != null">#{skuAttrs},</if>
+            <if test="barCode != null">#{barCode},</if>
+            <if test="status != null">#{status},</if>
+            <if test="isDefault != null">#{isDefault},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <insert id="batchInsertPortalProductSku" parameterType="java.util.List">
+        insert into portal_product_sku (product_id, sku_code, sku_name, sku_image, price, original_price, cost_price, stock_quantity, weight, sku_attrs, bar_code, status, is_default, del_flag, create_by, create_time)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.productId}, #{item.skuCode}, #{item.skuName}, #{item.skuImage}, #{item.price}, #{item.originalPrice}, #{item.costPrice}, #{item.stockQuantity}, #{item.weight}, #{item.skuAttrs}, #{item.barCode}, #{item.status}, #{item.isDefault}, #{item.delFlag}, #{item.createBy}, #{item.createTime})
+        </foreach>
+    </insert>
+
+    <update id="updatePortalProductSku" parameterType="com.ruoyi.portal.domain.PortalProductSku">
+        update portal_product_sku
+        <set>
+            <if test="skuCode != null and skuCode != ''">sku_code = #{skuCode},</if>
+            <if test="skuName != null and skuName != ''">sku_name = #{skuName},</if>
+            <if test="skuImage != null">sku_image = #{skuImage},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="originalPrice != null">original_price = #{originalPrice},</if>
+            <if test="costPrice != null">cost_price = #{costPrice},</if>
+            <if test="stockQuantity != null">stock_quantity = #{stockQuantity},</if>
+            <if test="weight != null">weight = #{weight},</if>
+            <if test="skuAttrs != null">sku_attrs = #{skuAttrs},</if>
+            <if test="barCode != null">bar_code = #{barCode},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="isDefault != null">is_default = #{isDefault},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where sku_id = #{skuId}
+    </update>
+
+    <delete id="deletePortalProductSkuBySkuId" parameterType="Long">
+        update portal_product_sku set del_flag = '1' where sku_id = #{skuId}
+    </delete>
+
+    <delete id="deletePortalProductSkuBySkuIds" parameterType="String">
+        update portal_product_sku set del_flag = '1' where sku_id in
+        <foreach item="skuId" collection="array" open="(" separator="," close=")">
+            #{skuId}
+        </foreach>
+    </delete>
+
+    <delete id="deletePortalProductSkuByProductId" parameterType="Long">
+        update portal_product_sku set del_flag = '1' where product_id = #{productId}
+    </delete>
+
+</mapper>

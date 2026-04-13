@@ -1,4 +1,4 @@
-package com.ruoyi.portal.controller;
+package com.ruoyi.portal.controller.article;
 
 import java.util.List;
 
@@ -37,7 +37,7 @@ public class PortalArticleCategoryController extends BaseController {
     /**
      * 查询文章分类列表
      */
-    @PreAuthorize("@ss.hasPermi('portal:articleCategory:list')")
+    @PreAuthorize("@ss.hasPermi('portal:article:category:list')")
     @GetMapping("/list")
     public TableDataInfo list(PortalArticleCategory portalArticleCategory) {
         startPage();
@@ -48,7 +48,7 @@ public class PortalArticleCategoryController extends BaseController {
     /**
      * 获取文章分类下拉树列表
      */
-    @PreAuthorize("@ss.hasPermi('portal:articleCategory:list')")
+    @PreAuthorize("@ss.hasPermi('portal:article:category:list')")
     @GetMapping("/treeselect")
     public AjaxResult treeselect(PortalArticleCategory portalArticleCategory) {
         List<PortalArticleCategory> categories = portalArticleCategoryService.selectPortalArticleCategoryList(portalArticleCategory);
@@ -58,7 +58,7 @@ public class PortalArticleCategoryController extends BaseController {
     /**
      * 导出文章分类列表
      */
-    @PreAuthorize("@ss.hasPermi('portal:articleCategory:export')")
+    @PreAuthorize("@ss.hasPermi('portal:article:category:export')")
     @Log(title = "文章分类", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, PortalArticleCategory portalArticleCategory) {
@@ -70,7 +70,7 @@ public class PortalArticleCategoryController extends BaseController {
     /**
      * 获取文章分类详细信息
      */
-    @PreAuthorize("@ss.hasPermi('portal:articleCategory:query')")
+    @PreAuthorize("@ss.hasPermi('portal:article:category:query')")
     @GetMapping(value = "/{categoryId}")
     public AjaxResult getInfo(@PathVariable("categoryId") Long categoryId) {
         return success(portalArticleCategoryService.selectPortalArticleCategoryByCategoryId(categoryId));
@@ -79,7 +79,7 @@ public class PortalArticleCategoryController extends BaseController {
     /**
      * 新增文章分类
      */
-    @PreAuthorize("@ss.hasPermi('portal:articleCategory:add')")
+    @PreAuthorize("@ss.hasPermi('portal:article:category:add')")
     @Log(title = "文章分类", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody PortalArticleCategory portalArticleCategory) {
@@ -89,7 +89,7 @@ public class PortalArticleCategoryController extends BaseController {
     /**
      * 修改文章分类
      */
-    @PreAuthorize("@ss.hasPermi('portal:articleCategory:edit')")
+    @PreAuthorize("@ss.hasPermi('portal:article:category:edit')")
     @Log(title = "文章分类", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody PortalArticleCategory portalArticleCategory) {
@@ -99,7 +99,7 @@ public class PortalArticleCategoryController extends BaseController {
     /**
      * 删除文章分类
      */
-    @PreAuthorize("@ss.hasPermi('portal:articleCategory:remove')")
+    @PreAuthorize("@ss.hasPermi('portal:article:category:remove')")
     @Log(title = "文章分类", businessType = BusinessType.DELETE)
     @DeleteMapping("/{categoryIds}")
     public AjaxResult remove(@PathVariable Long[] categoryIds) {

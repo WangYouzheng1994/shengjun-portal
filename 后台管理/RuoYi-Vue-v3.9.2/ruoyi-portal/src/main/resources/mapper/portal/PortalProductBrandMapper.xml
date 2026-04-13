@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.portal.mapper.PortalProductBrandMapper">
+
+    <resultMap type="com.ruoyi.portal.domain.PortalProductBrand" id="PortalProductBrandResult">
+        <result property="brandId"        column="brand_id"        />
+        <result property="brandName"      column="brand_name"      />
+        <result property="brandCode"      column="brand_code"      />
+        <result property="brandLogo"      column="brand_logo"      />
+        <result property="brandImage"     column="brand_image"     />
+        <result property="description"    column="description"     />
+        <result property="websiteUrl"     column="website_url"      />
+        <result property="sortOrder"      column="sort_order"       />
+        <result property="status"         column="status"           />
+        <result property="delFlag"        column="del_flag"         />
+        <result property="createBy"       column="create_by"        />
+        <result property="createTime"     column="create_time"      />
+        <result property="updateBy"       column="update_by"        />
+        <result property="updateTime"     column="update_time"      />
+        <result property="remark"         column="remark"            />
+    </resultMap>
+
+    <sql id="selectPortalProductBrandVo">
+        select brand_id, brand_name, brand_code, brand_logo, brand_image,
+               description, website_url, sort_order, status, del_flag,
+               create_by, create_time, update_by, update_time, remark
+        from portal_product_brand
+    </sql>
+
+    <select id="selectPortalProductBrandList" parameterType="com.ruoyi.portal.domain.PortalProductBrand" resultMap="PortalProductBrandResult">
+        <include refid="selectPortalProductBrandVo"/>
+        <where>
+            del_flag = '0'
+            <if test="brandName != null and brandName != ''">
+                and brand_name like concat('%', #{brandName}, '%')
+            </if>
+            <if test="brandCode != null and brandCode != ''">
+                and brand_code like concat('%', #{brandCode}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+        </where>
+        order by sort_order asc, brand_id desc
+    </select>
+
+    <select id="selectPortalProductBrandByBrandId" parameterType="Long" resultMap="PortalProductBrandResult">
+        <include refid="selectPortalProductBrandVo"/>
+        where brand_id = #{brandId}
+    </select>
+
+    <insert id="insertPortalProductBrand" parameterType="com.ruoyi.portal.domain.PortalProductBrand" useGeneratedKeys="true" keyProperty="brandId">
+        insert into portal_product_brand
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="brandName != null and brandName != ''">brand_name,</if>
+            <if test="brandCode != null and brandCode != ''">brand_code,</if>
+            <if test="brandLogo != null">brand_logo,</if>
+            <if test="brandImage != null">brand_image,</if>
+            <if test="description != null">description,</if>
+            <if test="websiteUrl != null">website_url,</if>
+            <if test="sortOrder != null">sort_order,</if>
+            <if test="status != null">status,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="brandName != null and brandName != ''">#{brandName},</if>
+            <if test="brandCode != null and brandCode != ''">#{brandCode},</if>
+            <if test="brandLogo != null">#{brandLogo},</if>
+            <if test="brandImage != null">#{brandImage},</if>
+            <if test="description != null">#{description},</if>
+            <if test="websiteUrl != null">#{websiteUrl},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+            <if test="status != null">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePortalProductBrand" parameterType="com.ruoyi.portal.domain.PortalProductBrand">
+        update portal_product_brand
+        <set>
+            <if test="brandName != null and brandName != ''">brand_name = #{brandName},</if>
+            <if test="brandCode != null and brandCode != ''">brand_code = #{brandCode},</if>
+            <if test="brandLogo != null">brand_logo = #{brandLogo},</if>
+            <if test="brandImage != null">brand_image = #{brandImage},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="websiteUrl != null">website_url = #{websiteUrl},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where brand_id = #{brandId}
+    </update>
+
+    <delete id="deletePortalProductBrandByBrandId" parameterType="Long">
+        update portal_product_brand set del_flag = '1' where brand_id = #{brandId}
+    </delete>
+
+    <delete id="deletePortalProductBrandByBrandIds" parameterType="String">
+        update portal_product_brand set del_flag = '1' where brand_id in
+        <foreach item="brandId" collection="array" open="(" separator="," close=")">
+            #{brandId}
+        </foreach>
+    </delete>
+
+</mapper>

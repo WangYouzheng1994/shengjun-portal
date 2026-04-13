@@ -1,4 +1,4 @@
-package com.ruoyi.portal.controller;
+package com.ruoyi.portal.controller.base;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * @author 王有政
  */
 @RestController
-@RequestMapping("/portal/banner")
+@RequestMapping("/portal/base/banner")
 public class PortalBannerController extends BaseController {
 
     @Autowired
@@ -37,7 +37,7 @@ public class PortalBannerController extends BaseController {
     /**
      * 查询轮播图配置列表
      */
-    @PreAuthorize("@ss.hasPermi('portal:banner:list')")
+    @PreAuthorize("@ss.hasPermi('portal:base:banner:list')")
     @GetMapping("/list")
     public TableDataInfo list(PortalBanner portalBanner) {
         startPage();
@@ -48,7 +48,7 @@ public class PortalBannerController extends BaseController {
     /**
      * 导出轮播图配置列表
      */
-    @PreAuthorize("@ss.hasPermi('portal:banner:export')")
+    @PreAuthorize("@ss.hasPermi('portal:base:banner:export')")
     @Log(title = "轮播图配置", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, PortalBanner portalBanner) {
@@ -60,7 +60,7 @@ public class PortalBannerController extends BaseController {
     /**
      * 获取轮播图配置详细信息
      */
-    @PreAuthorize("@ss.hasPermi('portal:banner:query')")
+    @PreAuthorize("@ss.hasPermi('portal:base:banner:query')")
     @GetMapping(value = "/{bannerId}")
     public AjaxResult getInfo(@PathVariable("bannerId") Long bannerId) {
         return success(portalBannerService.selectPortalBannerByBannerId(bannerId));
@@ -69,7 +69,7 @@ public class PortalBannerController extends BaseController {
     /**
      * 新增轮播图配置
      */
-    @PreAuthorize("@ss.hasPermi('portal:banner:add')")
+    @PreAuthorize("@ss.hasPermi('portal:base:banner:add')")
     @Log(title = "轮播图配置", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody PortalBanner portalBanner) {
@@ -79,7 +79,7 @@ public class PortalBannerController extends BaseController {
     /**
      * 修改轮播图配置
      */
-    @PreAuthorize("@ss.hasPermi('portal:banner:edit')")
+    @PreAuthorize("@ss.hasPermi('portal:base:banner:edit')")
     @Log(title = "轮播图配置", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody PortalBanner portalBanner) {
@@ -89,7 +89,7 @@ public class PortalBannerController extends BaseController {
     /**
      * 删除轮播图配置
      */
-    @PreAuthorize("@ss.hasPermi('portal:banner:remove')")
+    @PreAuthorize("@ss.hasPermi('portal:base:banner:remove')")
     @Log(title = "轮播图配置", businessType = BusinessType.DELETE)
     @DeleteMapping("/{bannerIds}")
     public AjaxResult remove(@PathVariable Long[] bannerIds) {

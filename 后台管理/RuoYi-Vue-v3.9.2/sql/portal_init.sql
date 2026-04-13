@@ -1,6 +1,7 @@
 -- ----------------------------
 -- 门户管理模块SQL脚本
--- 包含：轮播图表、企业信息表、菜单、角色、权限
+-- 目录结构：门户管理 > 基础管理/信息发布 > 具体功能
+-- 包含：轮播图表、企业信息表、文章分类表、文章表、菜单、角色、权限
 -- 作者：王有政
 -- 日期：2026-04-12
 -- ----------------------------
@@ -61,100 +62,7 @@ CREATE TABLE `portal_company_info` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 COMMENT='企业基础信息表';
 
 -- ----------------------------
--- 3、菜单配置
--- ----------------------------
-
--- 一级菜单：信息管理
-INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('信息管理', 0, 10, 'portal', NULL, 'M', '0', '0', '', 'documentation', 'admin', sysdate(), '', null, '信息管理目录');
-
--- 获取刚插入的一级菜单ID（假设为2000，实际使用时需要根据实际情况调整）
-SET @portalMenuId = LAST_INSERT_ID();
-
--- 二级菜单：轮播图管理
-INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('轮播图管理', @portalMenuId, 1, 'banner', 'portal/banner/index', 'C', '0', '0', 'portal:banner:list', '#', 'admin', sysdate(), '', null, '轮播图菜单');
-
-SET @bannerMenuId = LAST_INSERT_ID();
-
--- 轮播图按钮：查询
-INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('轮播图查询', @bannerMenuId, 1, '#', '', 'F', '0', '0', 'portal:banner:query', '#', 'admin', sysdate(), '', null, '');
-
--- 轮播图按钮：新增
-INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('轮播图新增', @bannerMenuId, 2, '#', '', 'F', '0', '0', 'portal:banner:add', '#', 'admin', sysdate(), '', null, '');
-
--- 轮播图按钮：修改
-INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('轮播图修改', @bannerMenuId, 3, '#', '', 'F', '0', '0', 'portal:banner:edit', '#', 'admin', sysdate(), '', null, '');
-
--- 轮播图按钮：删除
-INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('轮播图删除', @bannerMenuId, 4, '#', '', 'F', '0', '0', 'portal:banner:remove', '#', 'admin', sysdate(), '', null, '');
-
--- 轮播图按钮：导出
-INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('轮播图导出', @bannerMenuId, 5, '#', '', 'F', '0', '0', 'portal:banner:export', '#', 'admin', sysdate(), '', null, '');
-
--- 二级菜单：企业信息管理
-INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('企业信息', @portalMenuId, 2, 'company', 'portal/company/index', 'C', '0', '0', 'portal:company:list', '#', 'admin', sysdate(), '', null, '企业信息菜单');
-
-SET @companyMenuId = LAST_INSERT_ID();
-
--- 企业信息按钮：查询
-INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('企业信息查询', @companyMenuId, 1, '#', '', 'F', '0', '0', 'portal:company:query', '#', 'admin', sysdate(), '', null, '');
-
--- 企业信息按钮：新增
-INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('企业信息新增', @companyMenuId, 2, '#', '', 'F', '0', '0', 'portal:company:add', '#', 'admin', sysdate(), '', null, '');
-
--- 企业信息按钮：修改
-INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('企业信息修改', @companyMenuId, 3, '#', '', 'F', '0', '0', 'portal:company:edit', '#', 'admin', sysdate(), '', null, '');
-
--- 企业信息按钮：删除
-INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('企业信息删除', @companyMenuId, 4, '#', '', 'F', '0', '0', 'portal:company:remove', '#', 'admin', sysdate(), '', null, '');
-
--- 企业信息按钮：导出
-INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('企业信息导出', @companyMenuId, 5, '#', '', 'F', '0', '0', 'portal:company:export', '#', 'admin', sysdate(), '', null, '');
-
--- ----------------------------
--- 4、企业管理员角色
--- ----------------------------
-INSERT INTO `sys_role`(`role_name`, `role_key`, `role_sort`, `data_scope`, `menu_check_strictly`, `dept_check_strictly`, `status`, `del_flag`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('企业管理员', 'company_admin', 3, '2', 1, 1, '0', '0', 'admin', sysdate(), '', null, '企业管理员角色');
-
-SET @companyAdminRoleId = LAST_INSERT_ID();
-
--- 为企业管理员角色分配菜单权限（信息管理的所有菜单）
-INSERT INTO `sys_role_menu`(`role_id`, `menu_id`)
-SELECT @companyAdminRoleId, menu_id FROM sys_menu WHERE menu_name IN ('信息管理', '轮播图管理', '轮播图查询', '轮播图新增', '轮播图修改', '轮播图删除', '轮播图导出', '企业信息', '企业信息查询', '企业信息新增', '企业信息修改', '企业信息删除', '企业信息导出');
-
--- ----------------------------
--- 5、字典数据（可选）
--- ----------------------------
-
--- 链接类型字典
-INSERT INTO `sys_dict_type`(`dict_name`, `dict_type`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('链接类型', 'portal_link_type', '0', 'admin', sysdate(), '', NULL, '轮播图链接类型');
-
-INSERT INTO `sys_dict_data`(`dict_sort`, `dict_label`, `dict_value`, `dict_type`, `css_class`, `list_class`, `is_default`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES(1, '无跳转', '0', 'portal_link_type', '', 'primary', 'Y', '0', 'admin', sysdate(), '', NULL, '无跳转'),
-      (2, '内部链接', '1', 'portal_link_type', '', 'success', 'N', '0', 'admin', sysdate(), '', NULL, '内部链接'),
-      (3, '外部链接', '2', 'portal_link_type', '', 'warning', 'N', '0', 'admin', sysdate(), '', NULL, '外部链接');
-
--- ----------------------------
--- 6、初始化企业基础数据（可选）
--- ----------------------------
-INSERT INTO `portal_company_info`(`company_name`, `status`, `create_by`, `create_time`) VALUES('请填写公司名称', '0', 'admin', sysdate());
-
--- ----------------------------
--- 7、文章分类表
+-- 3、文章分类表
 -- ----------------------------
 DROP TABLE IF EXISTS `portal_article_category`;
 CREATE TABLE `portal_article_category` (
@@ -174,7 +82,7 @@ CREATE TABLE `portal_article_category` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 COMMENT='文章分类表';
 
 -- ----------------------------
--- 8、文章表
+-- 4、文章表
 -- ----------------------------
 DROP TABLE IF EXISTS `portal_article`;
 CREATE TABLE `portal_article` (
@@ -206,83 +114,149 @@ CREATE TABLE `portal_article` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 COMMENT='文章表';
 
 -- ----------------------------
--- 9、插入默认文章分类数据
--- ----------------------------
-INSERT INTO `portal_article_category`(`category_name`, `category_code`, `parent_id`, `sort_order`, `status`, `create_by`, `create_time`)
-VALUES
-('新闻中心', 'news', 0, 1, '0', 'admin', sysdate()),
-('行业资讯', 'info', 0, 2, '0', 'admin', sysdate()),
-('关于我们', 'about', 0, 3, '0', 'admin', sysdate()),
-('帮助中心', 'help', 0, 4, '0', 'admin', sysdate());
-
--- ----------------------------
--- 10、文章管理菜单配置
+-- 5、菜单配置（三级结构）
 -- ----------------------------
 
--- 二级菜单：文章分类管理
+-- 一级菜单：门户管理
 INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('文章分类', @portalMenuId, 3, 'article/category', 'portal/article/category/index', 'C', '0', '0', 'portal:articleCategory:list', '#', 'admin', sysdate(), '', null, '文章分类菜单');
+VALUES('门户管理', 0, 10, 'portal', NULL, 'M', '0', '0', '', 'documentation', 'admin', sysdate(), '', null, '门户管理目录');
+
+SET @portalMenuId = LAST_INSERT_ID();
+
+-- 二级目录：基础管理
+INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES('基础管理', @portalMenuId, 1, 'base', NULL, 'M', '0', '0', '', 'system', 'admin', sysdate(), '', null, '基础管理目录');
+
+SET @baseMenuId = LAST_INSERT_ID();
+
+-- 三级菜单：轮播图管理（属于基础管理）
+INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES('轮播图管理', @baseMenuId, 1, 'banner', 'portal/base/banner/index', 'C', '0', '0', 'portal:base:banner:list', '#', 'admin', sysdate(), '', null, '轮播图菜单');
+
+SET @bannerMenuId = LAST_INSERT_ID();
+
+-- 轮播图按钮权限
+INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES('轮播图查询', @bannerMenuId, 1, '#', '', 'F', '0', '0', 'portal:base:banner:query', '#', 'admin', sysdate(), '', null, '');
+
+INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES('轮播图新增', @bannerMenuId, 2, '#', '', 'F', '0', '0', 'portal:base:banner:add', '#', 'admin', sysdate(), '', null, '');
+
+INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES('轮播图修改', @bannerMenuId, 3, '#', '', 'F', '0', '0', 'portal:base:banner:edit', '#', 'admin', sysdate(), '', null, '');
+
+INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES('轮播图删除', @bannerMenuId, 4, '#', '', 'F', '0', '0', 'portal:base:banner:remove', '#', 'admin', sysdate(), '', null, '');
+
+INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES('轮播图导出', @bannerMenuId, 5, '#', '', 'F', '0', '0', 'portal:base:banner:export', '#', 'admin', sysdate(), '', null, '');
+
+-- 三级菜单：企业信息（属于基础管理）
+INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES('企业信息', @baseMenuId, 2, 'company', 'portal/base/company/index', 'C', '0', '0', 'portal:base:company:list', '#', 'admin', sysdate(), '', null, '企业信息菜单');
+
+SET @companyMenuId = LAST_INSERT_ID();
+
+-- 企业信息按钮权限
+INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES('企业信息查询', @companyMenuId, 1, '#', '', 'F', '0', '0', 'portal:base:company:query', '#', 'admin', sysdate(), '', null, '');
+
+INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES('企业信息新增', @companyMenuId, 2, '#', '', 'F', '0', '0', 'portal:base:company:add', '#', 'admin', sysdate(), '', null, '');
+
+INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES('企业信息修改', @companyMenuId, 3, '#', '', 'F', '0', '0', 'portal:base:company:edit', '#', 'admin', sysdate(), '', null, '');
+
+INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES('企业信息删除', @companyMenuId, 4, '#', '', 'F', '0', '0', 'portal:base:company:remove', '#', 'admin', sysdate(), '', null, '');
+
+INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES('企业信息导出', @companyMenuId, 5, '#', '', 'F', '0', '0', 'portal:base:company:export', '#', 'admin', sysdate(), '', null, '');
+
+-- 二级目录：信息发布
+INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES('信息发布', @portalMenuId, 2, 'article', NULL, 'M', '0', '0', '', 'documentation', 'admin', sysdate(), '', null, '信息发布目录');
+
+SET @articleDirMenuId = LAST_INSERT_ID();
+
+-- 三级菜单：文章分类（属于信息发布）
+INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES('文章分类', @articleDirMenuId, 1, 'category', 'portal/article/category/index', 'C', '0', '0', 'portal:article:category:list', '#', 'admin', sysdate(), '', null, '文章分类菜单');
 
 SET @articleCategoryMenuId = LAST_INSERT_ID();
 
--- 文章分类按钮：查询
+-- 文章分类按钮权限
 INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('文章分类查询', @articleCategoryMenuId, 1, '#', '', 'F', '0', '0', 'portal:articleCategory:query', '#', 'admin', sysdate(), '', null, '');
+VALUES('文章分类查询', @articleCategoryMenuId, 1, '#', '', 'F', '0', '0', 'portal:article:category:query', '#', 'admin', sysdate(), '', null, '');
 
--- 文章分类按钮：新增
 INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('文章分类新增', @articleCategoryMenuId, 2, '#', '', 'F', '0', '0', 'portal:articleCategory:add', '#', 'admin', sysdate(), '', null, '');
+VALUES('文章分类新增', @articleCategoryMenuId, 2, '#', '', 'F', '0', '0', 'portal:article:category:add', '#', 'admin', sysdate(), '', null, '');
 
--- 文章分类按钮：修改
 INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('文章分类修改', @articleCategoryMenuId, 3, '#', '', 'F', '0', '0', 'portal:articleCategory:edit', '#', 'admin', sysdate(), '', null, '');
+VALUES('文章分类修改', @articleCategoryMenuId, 3, '#', '', 'F', '0', '0', 'portal:article:category:edit', '#', 'admin', sysdate(), '', null, '');
 
--- 文章分类按钮：删除
 INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('文章分类删除', @articleCategoryMenuId, 4, '#', '', 'F', '0', '0', 'portal:articleCategory:remove', '#', 'admin', sysdate(), '', null, '');
+VALUES('文章分类删除', @articleCategoryMenuId, 4, '#', '', 'F', '0', '0', 'portal:article:category:remove', '#', 'admin', sysdate(), '', null, '');
 
--- 文章分类按钮：导出
 INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('文章分类导出', @articleCategoryMenuId, 5, '#', '', 'F', '0', '0', 'portal:articleCategory:export', '#', 'admin', sysdate(), '', null, '');
+VALUES('文章分类导出', @articleCategoryMenuId, 5, '#', '', 'F', '0', '0', 'portal:article:category:export', '#', 'admin', sysdate(), '', null, '');
 
--- 二级菜单：文章管理
+-- 三级菜单：文章管理（属于信息发布）
 INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('文章管理', @portalMenuId, 4, 'article', 'portal/article/index', 'C', '0', '0', 'portal:article:list', '#', 'admin', sysdate(), '', null, '文章管理菜单');
+VALUES('文章管理', @articleDirMenuId, 2, 'article', 'portal/article/article/index', 'C', '0', '0', 'portal:article:article:list', '#', 'admin', sysdate(), '', null, '文章管理菜单');
 
 SET @articleMenuId = LAST_INSERT_ID();
 
--- 文章按钮：查询
+-- 文章按钮权限
 INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('文章查询', @articleMenuId, 1, '#', '', 'F', '0', '0', 'portal:article:query', '#', 'admin', sysdate(), '', null, '');
+VALUES('文章查询', @articleMenuId, 1, '#', '', 'F', '0', '0', 'portal:article:article:query', '#', 'admin', sysdate(), '', null, '');
 
--- 文章按钮：新增
 INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('文章新增', @articleMenuId, 2, '#', '', 'F', '0', '0', 'portal:article:add', '#', 'admin', sysdate(), '', null, '');
+VALUES('文章新增', @articleMenuId, 2, '#', '', 'F', '0', '0', 'portal:article:article:add', '#', 'admin', sysdate(), '', null, '');
 
--- 文章按钮：修改
 INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('文章修改', @articleMenuId, 3, '#', '', 'F', '0', '0', 'portal:article:edit', '#', 'admin', sysdate(), '', null, '');
+VALUES('文章修改', @articleMenuId, 3, '#', '', 'F', '0', '0', 'portal:article:article:edit', '#', 'admin', sysdate(), '', null, '');
 
--- 文章按钮：删除
 INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('文章删除', @articleMenuId, 4, '#', '', 'F', '0', '0', 'portal:article:remove', '#', 'admin', sysdate(), '', null, '');
+VALUES('文章删除', @articleMenuId, 4, '#', '', 'F', '0', '0', 'portal:article:article:remove', '#', 'admin', sysdate(), '', null, '');
 
--- 文章按钮：导出
 INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('文章导出', @articleMenuId, 5, '#', '', 'F', '0', '0', 'portal:article:export', '#', 'admin', sysdate(), '', null, '');
+VALUES('文章导出', @articleMenuId, 5, '#', '', 'F', '0', '0', 'portal:article:article:export', '#', 'admin', sysdate(), '', null, '');
 
--- 文章按钮：发布
 INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES('文章发布', @articleMenuId, 6, '#', '', 'F', '0', '0', 'portal:article:publish', '#', 'admin', sysdate(), '', null, '');
+VALUES('文章发布', @articleMenuId, 6, '#', '', 'F', '0', '0', 'portal:article:article:publish', '#', 'admin', sysdate(), '', null, '');
 
 -- ----------------------------
--- 11、为企业管理员角色分配文章管理权限
+-- 6、企业管理员角色
 -- ----------------------------
+INSERT INTO `sys_role`(`role_name`, `role_key`, `role_sort`, `data_scope`, `menu_check_strictly`, `dept_check_strictly`, `status`, `del_flag`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES('企业管理员', 'company_admin', 3, '2', 1, 1, '0', '0', 'admin', sysdate(), '', null, '企业管理员角色');
+
+SET @companyAdminRoleId = LAST_INSERT_ID();
+
+-- 为企业管理员角色分配所有门户管理相关菜单权限
 INSERT INTO `sys_role_menu`(`role_id`, `menu_id`)
-SELECT @companyAdminRoleId, menu_id FROM sys_menu WHERE menu_name IN ('文章分类', '文章分类查询', '文章分类新增', '文章分类修改', '文章分类删除', '文章分类导出', '文章管理', '文章查询', '文章新增', '文章修改', '文章删除', '文章导出', '文章发布');
+SELECT @companyAdminRoleId, menu_id FROM sys_menu WHERE menu_name IN (
+  '门户管理', '基础管理', '信息发布',
+  '轮播图管理', '轮播图查询', '轮播图新增', '轮播图修改', '轮播图删除', '轮播图导出',
+  '企业信息', '企业信息查询', '企业信息新增', '企业信息修改', '企业信息删除', '企业信息导出',
+  '文章分类', '文章分类查询', '文章分类新增', '文章分类修改', '文章分类删除', '文章分类导出',
+  '文章管理', '文章查询', '文章新增', '文章修改', '文章删除', '文章导出', '文章发布'
+);
 
 -- ----------------------------
--- 12、字典数据：文章状态
+-- 7、字典数据：链接类型
+-- ----------------------------
+INSERT INTO `sys_dict_type`(`dict_name`, `dict_type`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES('链接类型', 'portal_link_type', '0', 'admin', sysdate(), '', NULL, '轮播图链接类型');
+
+INSERT INTO `sys_dict_data`(`dict_sort`, `dict_label`, `dict_value`, `dict_type`, `css_class`, `list_class`, `is_default`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES(1, '无跳转', '0', 'portal_link_type', '', 'primary', 'Y', '0', 'admin', sysdate(), '', NULL, '无跳转'),
+      (2, '内部链接', '1', 'portal_link_type', '', 'success', 'N', '0', 'admin', sysdate(), '', NULL, '内部链接'),
+      (3, '外部链接', '2', 'portal_link_type', '', 'warning', 'N', '0', 'admin', sysdate(), '', NULL, '外部链接');
+
+-- ----------------------------
+-- 8、字典数据：文章状态
 -- ----------------------------
 INSERT INTO `sys_dict_type`(`dict_name`, `dict_type`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
 VALUES('文章状态', 'portal_article_status', '0', 'admin', sysdate(), '', NULL, '文章状态');
@@ -291,3 +265,56 @@ INSERT INTO `sys_dict_data`(`dict_sort`, `dict_label`, `dict_value`, `dict_type`
 VALUES(1, '草稿', '0', 'portal_article_status', '', 'info', 'Y', '0', 'admin', sysdate(), '', NULL, '草稿'),
       (2, '已发布', '1', 'portal_article_status', '', 'success', 'N', '0', 'admin', sysdate(), '', NULL, '已发布'),
       (3, '已下架', '2', 'portal_article_status', '', 'danger', 'N', '0', 'admin', sysdate(), '', NULL, '已下架');
+
+-- ----------------------------
+-- 9、初始化默认数据
+-- ----------------------------
+
+-- 初始化企业基础数据
+INSERT INTO `portal_company_info`(`company_name`, `status`, `create_by`, `create_time`) VALUES('请填写公司名称', '0', 'admin', sysdate());
+
+-- 插入默认文章分类数据
+INSERT INTO `portal_article_category`(`category_name`, `category_code`, `parent_id`, `sort_order`, `status`, `create_by`, `create_time`)
+VALUES
+('新闻中心', 'news', 0, 1, '0', 'admin', sysdate()),
+('行业资讯', 'info', 0, 2, '0', 'admin', sysdate()),
+('关于我们', 'about', 0, 3, '0', 'admin', sysdate()),
+('帮助中心', 'help', 0, 4, '0', 'admin', sysdate());
+
+-- ----------------------------
+-- 10、客户管理模块（CRM）
+-- ----------------------------
+
+-- 一级菜单：客户管理
+INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES('客户管理', 0, 20, 'crm', NULL, 'M', '0', '0', '', 'peoples', 'admin', sysdate(), '', null, '客户管理目录');
+
+SET @crmMenuId = LAST_INSERT_ID();
+
+-- 二级目录：客户信息
+INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES('客户信息', @crmMenuId, 1, 'customer', NULL, 'M', '0', '0', '', 'user', 'admin', sysdate(), '', null, '客户信息目录');
+
+SET @customerDirMenuId = LAST_INSERT_ID();
+
+-- 三级菜单：客户列表（包含按钮权限，完整配置见upgrade_portal_crm.sql）
+INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES('客户列表', @customerDirMenuId, 1, 'list', 'portal/crm/customer/list', 'C', '0', '0', 'portal:crm:customer:list', '#', 'admin', sysdate(), '', null, '客户列表菜单');
+
+-- 二级目录：留言管理
+INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES('留言管理', @crmMenuId, 2, 'message', NULL, 'M', '0', '0', '', 'message', 'admin', sysdate(), '', null, '留言管理目录');
+
+SET @messageDirMenuId = LAST_INSERT_ID();
+
+-- 三级菜单：留言列表
+INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES('留言列表', @messageDirMenuId, 1, 'list', 'portal/crm/message/list', 'C', '0', '0', 'portal:crm:message:list', '#', 'admin', sysdate(), '', null, '留言列表菜单');
+
+-- 二级菜单：跟进记录
+INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES('跟进记录', @crmMenuId, 3, 'followup', 'portal/crm/followup/list', 'C', '0', '0', 'portal:crm:followup:list', '#', 'admin', sysdate(), '', null, '跟进记录菜单');
+
+-- 二级菜单：标签管理
+INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES('标签管理', @crmMenuId, 4, 'tag', 'portal/crm/tag/index', 'C', '0', '0', 'portal:crm:tag:list', '#', 'admin', sysdate(), '', null, '标签管理菜单');

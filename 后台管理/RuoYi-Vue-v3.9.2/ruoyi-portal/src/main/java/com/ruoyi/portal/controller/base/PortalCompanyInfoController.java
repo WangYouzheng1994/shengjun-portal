@@ -1,4 +1,4 @@
-package com.ruoyi.portal.controller;
+package com.ruoyi.portal.controller.base;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * @author 王有政
  */
 @RestController
-@RequestMapping("/portal/company")
+@RequestMapping("/portal/base/company")
 public class PortalCompanyInfoController extends BaseController {
 
     @Autowired
@@ -37,7 +37,7 @@ public class PortalCompanyInfoController extends BaseController {
     /**
      * 查询企业基础信息列表
      */
-    @PreAuthorize("@ss.hasPermi('portal:company:list')")
+    @PreAuthorize("@ss.hasPermi('portal:base:company:list')")
     @GetMapping("/list")
     public TableDataInfo list(PortalCompanyInfo portalCompanyInfo) {
         startPage();
@@ -48,7 +48,7 @@ public class PortalCompanyInfoController extends BaseController {
     /**
      * 导出企业基础信息列表
      */
-    @PreAuthorize("@ss.hasPermi('portal:company:export')")
+    @PreAuthorize("@ss.hasPermi('portal:base:company:export')")
     @Log(title = "企业基础信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, PortalCompanyInfo portalCompanyInfo) {
@@ -60,7 +60,7 @@ public class PortalCompanyInfoController extends BaseController {
     /**
      * 获取企业基础信息详细信息
      */
-    @PreAuthorize("@ss.hasPermi('portal:company:query')")
+    @PreAuthorize("@ss.hasPermi('portal:base:company:query')")
     @GetMapping(value = "/{infoId}")
     public AjaxResult getInfo(@PathVariable("infoId") Long infoId) {
         return success(portalCompanyInfoService.selectPortalCompanyInfoByInfoId(infoId));
@@ -69,7 +69,7 @@ public class PortalCompanyInfoController extends BaseController {
     /**
      * 新增企业基础信息
      */
-    @PreAuthorize("@ss.hasPermi('portal:company:add')")
+    @PreAuthorize("@ss.hasPermi('portal:base:company:add')")
     @Log(title = "企业基础信息", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody PortalCompanyInfo portalCompanyInfo) {
@@ -79,7 +79,7 @@ public class PortalCompanyInfoController extends BaseController {
     /**
      * 修改企业基础信息
      */
-    @PreAuthorize("@ss.hasPermi('portal:company:edit')")
+    @PreAuthorize("@ss.hasPermi('portal:base:company:edit')")
     @Log(title = "企业基础信息", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody PortalCompanyInfo portalCompanyInfo) {
@@ -89,7 +89,7 @@ public class PortalCompanyInfoController extends BaseController {
     /**
      * 删除企业基础信息
      */
-    @PreAuthorize("@ss.hasPermi('portal:company:remove')")
+    @PreAuthorize("@ss.hasPermi('portal:base:company:remove')")
     @Log(title = "企业基础信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{infoIds}")
     public AjaxResult remove(@PathVariable Long[] infoIds) {

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.portal.mapper.PortalMessageMapper">
+
+    <resultMap type="com.ruoyi.portal.domain.PortalMessage" id="PortalMessageResult">
+        <result property="messageId"     column="message_id"       />
+        <result property="customerId"    column="customer_id"      />
+        <result property="name"          column="name"             />
+        <result property="phone"         column="phone"            />
+        <result property="email"         column="email"            />
+        <result property="subject"       column="subject"          />
+        <result property="content"       column="content"          />
+        <result property="ipAddress"     column="ip_address"       />
+        <result property="userAgent"     column="user_agent"       />
+        <result property="sourcePage"    column="source_page"      />
+        <result property="handleStatus"  column="handle_status"    />
+        <result property="handlerId"     column="handler_id"       />
+        <result property="handlerName"   column="handler_name"     />
+        <result property="replyContent"  column="reply_content"     />
+        <result property="replyTime"     column="reply_time"       />
+        <result property="isRead"        column="is_read"          />
+        <result property="delFlag"       column="del_flag"         />
+        <result property="createBy"      column="create_by"        />
+        <result property="createTime"    column="create_time"      />
+        <result property="updateBy"      column="update_by"        />
+        <result property="updateTime"    column="update_time"      />
+        <result property="remark"        column="remark"           />
+    </resultMap>
+
+    <sql id="selectPortalMessageVo">
+        select m.message_id, m.customer_id, m.name, m.phone, m.email,
+               m.subject, m.content, m.ip_address, m.user_agent, m.source_page,
+               m.handle_status, m.handler_id, m.handler_name, m.reply_content,
+               m.reply_time, m.is_read, m.del_flag, m.create_by, m.create_time,
+               m.update_by, m.update_time, m.remark,
+               c.customer_name as customer_name
+        from portal_message m
+        left join portal_customer c on m.customer_id = c.customer_id
+    </sql>
+
+    <select id="selectPortalMessageList" parameterType="com.ruoyi.portal.domain.PortalMessage" resultMap="PortalMessageResult">
+        <include refid="selectPortalMessageVo"/>
+        <where>
+            m.del_flag = '0'
+            <if test="name != null and name != ''">
+                and m.name like concat('%', #{name}, '%')
+            </if>
+            <if test="phone != null and phone != ''">
+                and m.phone like concat('%', #{phone}, '%')
+            </if>
+            <if test="handleStatus != null and handleStatus != ''">
+                and m.handle_status = #{handleStatus}
+            </if>
+            <if test="isRead != null and isRead != ''">
+                and m.is_read = #{isRead}
+            </if>
+            <if test="params.beginTime != null and params.beginTime != ''">
+                and date_format(m.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''">
+                and date_format(m.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+        order by m.create_time desc
+    </select>
+
+    <select id="selectPortalMessageByMessageId" parameterType="Long" resultMap="PortalMessageResult">
+        <include refid="selectPortalMessageVo"/>
+        where m.message_id = #{messageId} and m.del_flag = '0'
+    </select>
+
+    <insert id="insertPortalMessage" parameterType="com.ruoyi.portal.domain.PortalMessage" useGeneratedKeys="true" keyProperty="messageId">
+        insert into portal_message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">customer_id,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="phone != null">phone,</if>
+            <if test="email != null">email,</if>
+            <if test="subject != null">subject,</if>
+            <if test="content != null">content,</if>
+            <if test="ipAddress != null">ip_address,</if>
+            <if test="userAgent != null">user_agent,</if>
+            <if test="sourcePage != null">source_page,</if>
+            <if test="handleStatus != null">handle_status,</if>
+            <if test="handlerId != null">handler_id,</if>
+            <if test="handlerName != null">handler_name,</if>
+            <if test="replyContent != null">reply_content,</if>
+            <if test="replyTime != null">reply_time,</if>
+            <if test="isRead != null">is_read,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">#{customerId},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="email != null">#{email},</if>
+            <if test="subject != null">#{subject},</if>
+            <if test="content != null">#{content},</if>
+            <if test="ipAddress != null">#{ipAddress},</if>
+            <if test="userAgent != null">#{userAgent},</if>
+            <if test="sourcePage != null">#{sourcePage},</if>
+            <if test="handleStatus != null">#{handleStatus},</if>
+            <if test="handlerId != null">#{handlerId},</if>
+            <if test="handlerName != null">#{handlerName},</if>
+            <if test="replyContent != null">#{replyContent},</if>
+            <if test="replyTime != null">#{replyTime},</if>
+            <if test="isRead != null">#{isRead},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePortalMessage" parameterType="com.ruoyi.portal.domain.PortalMessage">
+        update portal_message
+        <set>
+            <if test="customerId != null">customer_id = #{customerId},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="subject != null">subject = #{subject},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="handleStatus != null">handle_status = #{handleStatus},</if>
+            <if test="handlerId != null">handler_id = #{handlerId},</if>
+            <if test="handlerName != null">handler_name = #{handlerName},</if>
+            <if test="replyContent != null">reply_content = #{replyContent},</if>
+            <if test="replyTime != null">reply_time = #{replyTime},</if>
+            <if test="isRead != null">is_read = #{isRead},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where message_id = #{messageId}
+    </update>
+
+    <delete id="deletePortalMessageByMessageId" parameterType="Long">
+        update portal_message set del_flag = '1' where message_id = #{messageId}
+    </delete>
+
+    <delete id="deletePortalMessageByMessageIds" parameterType="String">
+        update portal_message set del_flag = '1' where message_id in
+        <foreach item="messageId" collection="array" open="(" separator="," close=")">
+            #{messageId}
+        </foreach>
+    </delete>
+
+</mapper>

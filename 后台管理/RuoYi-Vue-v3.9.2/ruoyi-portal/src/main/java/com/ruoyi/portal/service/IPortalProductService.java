@@ -1,0 +1,75 @@
+package com.ruoyi.portal.service;
+
+import java.util.List;
+import com.ruoyi.portal.domain.PortalProduct;
+
+/**
+ * 产品Service接口
+ *
+ * @author 王有政
+ */
+public interface IPortalProductService {
+    /**
+     * 查询产品
+     *
+     * @param productId 产品ID
+     * @return 产品
+     */
+    public PortalProduct selectPortalProductByProductId(Long productId);
+
+    /**
+     * 查询产品列表
+     *
+     * @param portalProduct 产品
+     * @return 产品集合
+     */
+    public List<PortalProduct> selectPortalProductList(PortalProduct portalProduct);
+
+    /**
+     * 新增产品（包含属性值和SKU）
+     *
+     * @param portalProduct 产品
+     * @return 结果
+     */
+    public int insertPortalProduct(PortalProduct portalProduct);
+
+    /**
+     * 修改产品（包含属性值和SKU）
+     *
+     * @param portalProduct 产品
+     * @return 结果
+     */
+    public int updatePortalProduct(PortalProduct portalProduct);
+
+    /**
+     * 批量删除产品
+     *
+     * @param productIds 需要删除的产品ID
+     * @return 结果
+     */
+    public int deletePortalProductByProductIds(Long[] productIds);
+
+    /**
+     * 删除产品信息
+     *
+     * @param productId 产品ID
+     * @return 结果
+     */
+    public int deletePortalProductByProductId(Long productId);
+
+    /**
+     * 上架产品
+     *
+     * @param portalProduct 产品
+     * @return 结果
+     */
+    public int publishProduct(PortalProduct portalProduct);
+
+    /**
+     * 下架产品
+     *
+     * @param portalProduct 产品
+     * @return 结果
+     */
+    public int offlineProduct(PortalProduct portalProduct);
+}

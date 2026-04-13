@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.portal.mapper.PortalProductMapper">
+
+    <resultMap type="com.ruoyi.portal.domain.PortalProduct" id="PortalProductResult">
+        <result property="productId"      column="product_id"       />
+        <result property="productCode"    column="product_code"      />
+        <result property="productName"    column="product_name"      />
+        <result property="categoryId"     column="category_id"       />
+        <result property="categoryName"   column="category_name"     />
+        <result property="brandId"        column="brand_id"          />
+        <result property="brandName"      column="brand_name"        />
+        <result property="mainImage"      column="main_image"        />
+        <result property="thumbnailImage" column="thumbnail_image"   />
+        <result property="videoUrl"       column="video_url"         />
+        <result property="subTitle"       column="sub_title"          />
+        <result property="summary"        column="summary"            />
+        <result property="description"    column="description"        />
+        <result property="price"          column="price"              />
+        <result property="originalPrice"  column="original_price"     />
+        <result property="costPrice"      column="cost_price"         />
+        <result property="unit"           column="unit"               />
+        <result property="weight"         column="weight"             />
+        <result property="volume"         column="volume"             />
+        <result property="salesCount"     column="sales_count"        />
+        <result property="viewCount"      column="view_count"         />
+        <result property="collectCount"   column="collect_count"      />
+        <result property="commentCount"   column="comment_count"      />
+        <result property="skuCount"       column="sku_count"           />
+        <result property="isRecommend"    column="is_recommend"        />
+        <result property="isNew"          column="is_new"              />
+        <result property="isHot"          column="is_hot"              />
+        <result property="status"         column="status"              />
+        <result property="sortOrder"      column="sort_order"           />
+        <result property="publishTime"    column="publish_time"        />
+        <result property="delFlag"        column="del_flag"            />
+        <result property="createBy"       column="create_by"            />
+        <result property="createTime"     column="create_time"          />
+        <result property="updateBy"       column="update_by"            />
+        <result property="updateTime"     column="update_time"          />
+        <result property="remark"         column="remark"               />
+    </resultMap>
+
+    <sql id="selectPortalProductVo">
+        select p.product_id, p.product_code, p.product_name, p.category_id,
+               c.category_name, p.brand_id, b.brand_name, p.main_image,
+               p.thumbnail_image, p.video_url, p.sub_title, p.summary,
+               p.description, p.price, p.original_price, p.cost_price,
+               p.unit, p.weight, p.volume, p.sales_count, p.view_count,
+               p.collect_count, p.comment_count, p.sku_count, p.is_recommend,
+               p.is_new, p.is_hot, p.status, p.sort_order, p.publish_time,
+               p.del_flag, p.create_by, p.create_time, p.update_by,
+               p.update_time, p.remark
+        from portal_product p
+        left join portal_product_category c on p.category_id = c.category_id
+        left join portal_product_brand b on p.brand_id = b.brand_id
+    </sql>
+
+    <select id="selectPortalProductList" parameterType="com.ruoyi.portal.domain.PortalProduct" resultMap="PortalProductResult">
+        <include refid="selectPortalProductVo"/>
+        <where>
+            p.del_flag = '0'
+            <if test="productName != null and productName != ''">
+                and p.product_name like concat('%', #{productName}, '%')
+            </if>
+            <if test="productCode != null and productCode != ''">
+                and p.product_code like concat('%', #{productCode}, '%')
+            </if>
+            <if test="categoryId != null">
+                and p.category_id = #{categoryId}
+            </if>
+            <if test="brandId != null">
+                and p.brand_id = #{brandId}
+            </if>
+            <if test="status != null and status != ''">
+                and p.status = #{status}
+            </if>
+            <if test="isRecommend != null and isRecommend != ''">
+                and p.is_recommend = #{isRecommend}
+            </if>
+            <if test="isNew != null and isNew != ''">
+                and p.is_new = #{isNew}
+            </if>
+            <if test="isHot != null and isHot != ''">
+                and p.is_hot = #{isHot}
+            </if>
+            <if test="params.beginTime != null and params.beginTime != ''">
+                and date_format(p.publish_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''">
+                and date_format(p.publish_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+        order by p.sort_order asc, p.product_id desc
+    </select>
+
+    <select id="selectPortalProductByProductId" parameterType="Long" resultMap="PortalProductResult">
+        <include refid="selectPortalProductVo"/>
+        where p.product_id = #{productId}
+    </select>
+
+    <insert id="insertPortalProduct" parameterType="com.ruoyi.portal.domain.PortalProduct" useGeneratedKeys="true" keyProperty="productId">
+        insert into portal_product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productCode != null and productCode != ''">product_code,</if>
+            <if test="productName != null and productName != ''">product_name,</if>
+            <if test="categoryId != null">category_id,</if>
+            <if test="brandId != null">brand_id,</if>
+            <if test="mainImage != null">main_image,</if>
+            <if test="thumbnailImage != null">thumbnail_image,</if>
+            <if test="videoUrl != null">video_url,</if>
+            <if test="subTitle != null">sub_title,</if>
+            <if test="summary != null">summary,</if>
+            <if test="description != null">description,</if>
+            <if test="price != null">price,</if>
+            <if test="originalPrice != null">original_price,</if>
+            <if test="costPrice != null">cost_price,</if>
+            <if test="unit != null">unit,</if>
+            <if test="weight != null">weight,</if>
+            <if test="volume != null">volume,</if>
+            <if test="salesCount != null">sales_count,</if>
+            <if test="viewCount != null">view_count,</if>
+            <if test="collectCount != null">collect_count,</if>
+            <if test="commentCount != null">comment_count,</if>
+            <if test="skuCount != null">sku_count,</if>
+            <if test="isRecommend != null">is_recommend,</if>
+            <if test="isNew != null">is_new,</if>
+            <if test="isHot != null">is_hot,</if>
+            <if test="status != null">status,</if>
+            <if test="sortOrder != null">sort_order,</if>
+            <if test="publishTime != null">publish_time,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productCode != null and productCode != ''">#{productCode},</if>
+            <if test="productName != null and productName != ''">#{productName},</if>
+            <if test="categoryId != null">#{categoryId},</if>
+            <if test="brandId != null">#{brandId},</if>
+            <if test="mainImage != null">#{mainImage},</if>
+            <if test="thumbnailImage != null">#{thumbnailImage},</if>
+            <if test="videoUrl != null">#{videoUrl},</if>
+            <if test="subTitle != null">#{subTitle},</if>
+            <if test="summary != null">#{summary},</if>
+            <if test="description != null">#{description},</if>
+            <if test="price != null">#{price},</if>
+            <if test="originalPrice != null">#{originalPrice},</if>
+            <if test="costPrice != null">#{costPrice},</if>
+            <if test="unit != null">#{unit},</if>
+            <if test="weight != null">#{weight},</if>
+            <if test="volume != null">#{volume},</if>
+            <if test="salesCount != null">#{salesCount},</if>
+            <if test="viewCount != null">#{viewCount},</if>
+            <if test="collectCount != null">#{collectCount},</if>
+            <if test="commentCount != null">#{commentCount},</if>
+            <if test="skuCount != null">#{skuCount},</if>
+            <if test="isRecommend != null">#{isRecommend},</if>
+            <if test="isNew != null">#{isNew},</if>
+            <if test="isHot != null">#{isHot},</if>
+            <if test="status != null">#{status},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+            <if test="publishTime != null">#{publishTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePortalProduct" parameterType="com.ruoyi.portal.domain.PortalProduct">
+        update portal_product
+        <set>
+            <if test="productCode != null and productCode != ''">product_code = #{productCode},</if>
+            <if test="productName != null and productName != ''">product_name = #{productName},</if>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="brandId != null">brand_id = #{brandId},</if>
+            <if test="mainImage != null">main_image = #{mainImage},</if>
+            <if test="thumbnailImage != null">thumbnail_image = #{thumbnailImage},</if>
+            <if test="videoUrl != null">video_url = #{videoUrl},</if>
+            <if test="subTitle != null">sub_title = #{subTitle},</if>
+            <if test="summary != null">summary = #{summary},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="originalPrice != null">original_price = #{originalPrice},</if>
+            <if test="costPrice != null">cost_price = #{costPrice},</if>
+            <if test="unit != null">unit = #{unit},</if>
+            <if test="weight != null">weight = #{weight},</if>
+            <if test="volume != null">volume = #{volume},</if>
+            <if test="salesCount != null">sales_count = #{salesCount},</if>
+            <if test="viewCount != null">view_count = #{viewCount},</if>
+            <if test="collectCount != null">collect_count = #{collectCount},</if>
+            <if test="commentCount != null">comment_count = #{commentCount},</if>
+            <if test="skuCount != null">sku_count = #{skuCount},</if>
+            <if test="isRecommend != null">is_recommend = #{isRecommend},</if>
+            <if test="isNew != null">is_new = #{isNew},</if>
+            <if test="isHot != null">is_hot = #{isHot},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+            <if test="publishTime != null">publish_time = #{publishTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where product_id = #{productId}
+    </update>
+
+    <delete id="deletePortalProductByProductId" parameterType="Long">
+        update portal_product set del_flag = '1' where product_id = #{productId}
+    </delete>
+
+    <delete id="deletePortalProductByProductIds" parameterType="String">
+        update portal_product set del_flag = '1' where product_id in
+        <foreach item="productId" collection="array" open="(" separator="," close=")">
+            #{productId}
+        </foreach>
+    </delete>
+
+</mapper>

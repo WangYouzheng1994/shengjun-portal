@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.portal.mapper.PortalProductAttrValueMapper">
+
+    <resultMap type="com.ruoyi.portal.domain.PortalProductAttrValue" id="PortalProductAttrValueResult">
+        <result property="valueId"        column="value_id"         />
+        <result property="productId"      column="product_id"        />
+        <result property="attrDefId"      column="attr_def_id"       />
+        <result property="attrName"       column="attr_name"         />
+        <result property="attrValue"      column="attr_value"        />
+        <result property="attrValueText"  column="attr_value_text"   />
+        <result property="attrValueNum"   column="attr_value_num"    />
+        <result property="sortOrder"      column="sort_order"         />
+        <result property="delFlag"        column="del_flag"           />
+        <result property="createBy"       column="create_by"          />
+        <result property="createTime"     column="create_time"        />
+        <result property="updateBy"       column="update_by"          />
+        <result property="updateTime"     column="update_time"        />
+        <result property="remark"         column="remark"              />
+    </resultMap>
+
+    <sql id="selectPortalProductAttrValueVo">
+        select v.value_id, v.product_id, v.attr_def_id, d.attr_name,
+               v.attr_value, v.attr_value_text, v.attr_value_num,
+               v.sort_order, v.del_flag, v.create_by, v.create_time,
+               v.update_by, v.update_time, v.remark
+        from portal_product_attr_value v
+        left join portal_product_attr_def d on v.attr_def_id = d.attr_def_id
+    </sql>
+
+    <select id="selectPortalProductAttrValueList" parameterType="com.ruoyi.portal.domain.PortalProductAttrValue" resultMap="PortalProductAttrValueResult">
+        <include refid="selectPortalProductAttrValueVo"/>
+        <where>
+            v.del_flag = '0'
+            <if test="productId != null">
+                and v.product_id = #{productId}
+            </if>
+            <if test="attrDefId != null">
+                and v.attr_def_id = #{attrDefId}
+            </if>
+            <if test="attrValue != null and attrValue != ''">
+                and v.attr_value like concat('%', #{attrValue}, '%')
+            </if>
+        </where>
+        order by v.sort_order asc, v.value_id asc
+    </select>
+
+    <select id="selectPortalProductAttrValueListByProductId" parameterType="Long" resultMap="PortalProductAttrValueResult">
+        <include refid="selectPortalProductAttrValueVo"/>
+        where v.product_id = #{productId} and v.del_flag = '0'
+        order by v.sort_order asc, v.value_id asc
+    </select>
+
+    <select id="selectPortalProductAttrValueByValueId" parameterType="Long" resultMap="PortalProductAttrValueResult">
+        <include refid="selectPortalProductAttrValueVo"/>
+        where v.value_id = #{valueId}
+    </select>
+
+    <insert id="insertPortalProductAttrValue" parameterType="com.ruoyi.portal.domain.PortalProductAttrValue" useGeneratedKeys="true" keyProperty="valueId">
+        insert into portal_product_attr_value
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productId != null">product_id,</if>
+            <if test="attrDefId != null">attr_def_id,</if>
+            <if test="attrValue != null">attr_value,</if>
+            <if test="attrValueText != null">attr_value_text,</if>
+            <if test="attrValueNum != null">attr_value_num,</if>
+            <if test="sortOrder != null">sort_order,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productId != null">#{productId},</if>
+            <if test="attrDefId != null">#{attrDefId},</if>
+            <if test="attrValue != null">#{attrValue},</if>
+            <if test="attrValueText != null">#{attrValueText},</if>
+            <if test="attrValueNum != null">#{attrValueNum},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <insert id="batchInsertPortalProductAttrValue" parameterType="java.util.List">
+        insert into portal_product_attr_value (product_id, attr_def_id, attr_value, attr_value_text, attr_value_num, sort_order, del_flag, create_by, create_time)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.productId}, #{item.attrDefId}, #{item.attrValue}, #{item.attrValueText}, #{item.attrValueNum}, #{item.sortOrder}, #{item.delFlag}, #{item.createBy}, #{item.createTime})
+        </foreach>
+    </insert>
+
+    <update id="updatePortalProductAttrValue" parameterType="com.ruoyi.portal.domain.PortalProductAttrValue">
+        update portal_product_attr_value
+        <set>
+            <if test="attrValue != null">attr_value = #{attrValue},</if>
+            <if test="attrValueText != null">attr_value_text = #{attrValueText},</if>
+            <if test="attrValueNum != null">attr_value_num = #{attrValueNum},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where value_id = #{valueId}
+    </update>
+
+    <delete id="deletePortalProductAttrValueByValueId" parameterType="Long">
+        update portal_product_attr_value set del_flag = '1' where value_id = #{valueId}
+    </delete>
+
+    <delete id="deletePortalProductAttrValueByValueIds" parameterType="String">
+        update portal_product_attr_value set del_flag = '1' where value_id in
+        <foreach item="valueId" collection="array" open="(" separator="," close=")">
+            #{valueId}
+        </foreach>
+    </delete>
+
+    <delete id="deletePortalProductAttrValueByProductId" parameterType="Long">
+        update portal_product_attr_value set del_flag = '1' where product_id = #{productId}
+    </delete>
+
+</mapper>

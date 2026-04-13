@@ -1,0 +1,25 @@
+# ============================ 消息对接模块配置 ============================
+# 第三方消息对接（钉钉、企业微信等）配置
+
+message:
+  # 钉钉对接配置
+  dingtalk:
+    # 是否启用钉钉对接
+    enabled: false
+    # 应用AppKey（在钉钉开放平台创建应用后获取）
+    appKey: your_dingtalk_app_key
+    # 应用AppSecret
+    appSecret: your_dingtalk_app_secret
+    # 代理应用AgentId（工作通知使用，在钉钉开放平台查看）
+    agentId: 123456789
+
+  # 企业微信对接配置
+  wecom:
+    # 是否启用企业微信对接
+    enabled: false
+    # 企业ID（CorpID，在企业微信管理后台查看）
+    corpId: your_wecom_corp_id
+    # 应用Secret（应用的凭证密钥，在企业微信管理后台创建应用后获取）
+    agentSecret: your_wecom_agent_secret
+    # 应用ID（AgentId，在企业微信管理后台查看）
+    agentId: 1000002

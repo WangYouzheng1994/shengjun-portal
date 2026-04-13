@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.portal.mapper.PortalProductAttrDefMapper">
+
+    <resultMap type="com.ruoyi.portal.domain.PortalProductAttrDef" id="PortalProductAttrDefResult">
+        <result property="attrDefId"      column="attr_def_id"      />
+        <result property="templateId"     column="template_id"      />
+        <result property="attrName"       column="attr_name"        />
+        <result property="attrCode"       column="attr_code"        />
+        <result property="attrGroup"      column="attr_group"        />
+        <result property="attrType"       column="attr_type"         />
+        <result property="inputType"      column="input_type"        />
+        <result property="options"        column="options"           />
+        <result property="defaultValue"   column="default_value"     />
+        <result property="validationRule" column="validation_rule"  />
+        <result property="unit"           column="unit"              />
+        <result property="isRequired"     column="is_required"       />
+        <result property="isSearchable"   column="is_searchable"     />
+        <result property="isFilterable"   column="is_filterable"     />
+        <result property="isSkuAttr"      column="is_sku_attr"       />
+        <result property="showInList"     column="show_in_list"      />
+        <result property="showInDetail"   column="show_in_detail"    />
+        <result property="sortOrder"      column="sort_order"         />
+        <result property="status"         column="status"             />
+        <result property="delFlag"        column="del_flag"           />
+        <result property="createBy"       column="create_by"          />
+        <result property="createTime"     column="create_time"        />
+        <result property="updateBy"       column="update_by"          />
+        <result property="updateTime"     column="update_time"        />
+        <result property="remark"         column="remark"              />
+    </resultMap>
+
+    <sql id="selectPortalProductAttrDefVo">
+        select attr_def_id, template_id, attr_name, attr_code, attr_group,
+               attr_type, input_type, options, default_value, validation_rule,
+               unit, is_required, is_searchable, is_filterable, is_sku_attr,
+               show_in_list, show_in_detail, sort_order, status, del_flag,
+               create_by, create_time, update_by, update_time, remark
+        from portal_product_attr_def
+    </sql>
+
+    <select id="selectPortalProductAttrDefList" parameterType="com.ruoyi.portal.domain.PortalProductAttrDef" resultMap="PortalProductAttrDefResult">
+        <include refid="selectPortalProductAttrDefVo"/>
+        <where>
+            del_flag = '0'
+            <if test="attrName != null and attrName != ''">
+                and attr_name like concat('%', #{attrName}, '%')
+            </if>
+            <if test="attrCode != null and attrCode != ''">
+                and attr_code like concat('%', #{attrCode}, '%')
+            </if>
+            <if test="templateId != null">
+                and template_id = #{templateId}
+            </if>
+            <if test="attrGroup != null and attrGroup != ''">
+                and attr_group = #{attrGroup}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+        </where>
+        order by sort_order asc, attr_def_id asc
+    </select>
+
+    <select id="selectPortalProductAttrDefListByTemplateId" parameterType="Long" resultMap="PortalProductAttrDefResult">
+        <include refid="selectPortalProductAttrDefVo"/>
+        where template_id = #{templateId} and del_flag = '0'
+        order by sort_order asc, attr_def_id asc
+    </select>
+
+    <select id="selectPortalProductAttrDefByAttrDefId" parameterType="Long" resultMap="PortalProductAttrDefResult">
+        <include refid="selectPortalProductAttrDefVo"/>
+        where attr_def_id = #{attrDefId}
+    </select>
+
+    <insert id="insertPortalProductAttrDef" parameterType="com.ruoyi.portal.domain.PortalProductAttrDef" useGeneratedKeys="true" keyProperty="attrDefId">
+        insert into portal_product_attr_def
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="templateId != null">template_id,</if>
+            <if test="attrName != null and attrName != ''">attr_name,</if>
+            <if test="attrCode != null and attrCode != ''">attr_code,</if>
+            <if test="attrGroup != null">attr_group,</if>
+            <if test="attrType != null">attr_type,</if>
+            <if test="inputType != null">input_type,</if>
+            <if test="options != null">options,</if>
+            <if test="defaultValue != null">default_value,</if>
+            <if test="validationRule != null">validation_rule,</if>
+            <if test="unit != null">unit,</if>
+            <if test="isRequired != null">is_required,</if>
+            <if test="isSearchable != null">is_searchable,</if>
+            <if test="isFilterable != null">is_filterable,</if>
+            <if test="isSkuAttr != null">is_sku_attr,</if>
+            <if test="showInList != null">show_in_list,</if>
+            <if test="showInDetail != null">show_in_detail,</if>
+            <if test="sortOrder != null">sort_order,</if>
+            <if test="status != null">status,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="templateId != null">#{templateId},</if>
+            <if test="attrName != null and attrName != ''">#{attrName},</if>
+            <if test="attrCode != null and attrCode != ''">#{attrCode},</if>
+            <if test="attrGroup != null">#{attrGroup},</if>
+            <if test="attrType != null">#{attrType},</if>
+            <if test="inputType != null">#{inputType},</if>
+            <if test="options != null">#{options},</if>
+            <if test="defaultValue != null">#{defaultValue},</if>
+            <if test="validationRule != null">#{validationRule},</if>
+            <if test="unit != null">#{unit},</if>
+            <if test="isRequired != null">#{isRequired},</if>
+            <if test="isSearchable != null">#{isSearchable},</if>
+            <if test="isFilterable != null">#{isFilterable},</if>
+            <if test="isSkuAttr != null">#{isSkuAttr},</if>
+            <if test="showInList != null">#{showInList},</if>
+            <if test="showInDetail != null">#{showInDetail},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+            <if test="status != null">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePortalProductAttrDef" parameterType="com.ruoyi.portal.domain.PortalProductAttrDef">
+        update portal_product_attr_def
+        <set>
+            <if test="attrName != null and attrName != ''">attr_name = #{attrName},</if>
+            <if test="attrCode != null and attrCode != ''">attr_code = #{attrCode},</if>
+            <if test="attrGroup != null">attr_group = #{attrGroup},</if>
+            <if test="attrType != null">attr_type = #{attrType},</if>
+            <if test="inputType != null">input_type = #{inputType},</if>
+            <if test="options != null">options = #{options},</if>
+            <if test="defaultValue != null">default_value = #{defaultValue},</if>
+            <if test="validationRule != null">validation_rule = #{validationRule},</if>
+            <if test="unit != null">unit = #{unit},</if>
+            <if test="isRequired != null">is_required = #{isRequired},</if>
+            <if test="isSearchable != null">is_searchable = #{isSearchable},</if>
+            <if test="isFilterable != null">is_filterable = #{isFilterable},</if>
+            <if test="isSkuAttr != null">is_sku_attr = #{isSkuAttr},</if>
+            <if test="showInList != null">show_in_list = #{showInList},</if>
+            <if test="showInDetail != null">show_in_detail = #{showInDetail},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where attr_def_id = #{attrDefId}
+    </update>
+
+    <delete id="deletePortalProductAttrDefByAttrDefId" parameterType="Long">
+        update portal_product_attr_def set del_flag = '1' where attr_def_id = #{attrDefId}
+    </delete>
+
+    <delete id="deletePortalProductAttrDefByAttrDefIds" parameterType="String">
+        update portal_product_attr_def set del_flag = '1' where attr_def_id in
+        <foreach item="attrDefId" collection="array" open="(" separator="," close=")">
+            #{attrDefId}
+        </foreach>
+    </delete>
+
+    <delete id="deletePortalProductAttrDefByTemplateId" parameterType="Long">
+        update portal_product_attr_def set del_flag = '1' where template_id = #{templateId}
+    </delete>
+
+</mapper>

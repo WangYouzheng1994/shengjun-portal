@@ -1,4 +1,4 @@
-package com.ruoyi.portal.controller;
+package com.ruoyi.portal.controller.article;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * @author 王有政
  */
 @RestController
-@RequestMapping("/portal/article")
+@RequestMapping("/portal/article/article")
 public class PortalArticleController extends BaseController {
 
     @Autowired
@@ -37,7 +37,7 @@ public class PortalArticleController extends BaseController {
     /**
      * 查询文章列表
      */
-    @PreAuthorize("@ss.hasPermi('portal:article:list')")
+    @PreAuthorize("@ss.hasPermi('portal:article:article:list')")
     @GetMapping("/list")
     public TableDataInfo list(PortalArticle portalArticle) {
         startPage();
@@ -48,7 +48,7 @@ public class PortalArticleController extends BaseController {
     /**
      * 导出文章列表
      */
-    @PreAuthorize("@ss.hasPermi('portal:article:export')")
+    @PreAuthorize("@ss.hasPermi('portal:article:article:export')")
     @Log(title = "文章", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, PortalArticle portalArticle) {
@@ -60,7 +60,7 @@ public class PortalArticleController extends BaseController {
     /**
      * 获取文章详细信息
      */
-    @PreAuthorize("@ss.hasPermi('portal:article:query')")
+    @PreAuthorize("@ss.hasPermi('portal:article:article:query')")
     @GetMapping(value = "/{articleId}")
     public AjaxResult getInfo(@PathVariable("articleId") Long articleId) {
         return success(portalArticleService.selectPortalArticleByArticleId(articleId));
@@ -69,7 +69,7 @@ public class PortalArticleController extends BaseController {
     /**
      * 新增文章
      */
-    @PreAuthorize("@ss.hasPermi('portal:article:add')")
+    @PreAuthorize("@ss.hasPermi('portal:article:article:add')")
     @Log(title = "文章", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody PortalArticle portalArticle) {
@@ -79,7 +79,7 @@ public class PortalArticleController extends BaseController {
     /**
      * 修改文章
      */
-    @PreAuthorize("@ss.hasPermi('portal:article:edit')")
+    @PreAuthorize("@ss.hasPermi('portal:article:article:edit')")
     @Log(title = "文章", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody PortalArticle portalArticle) {
@@ -89,7 +89,7 @@ public class PortalArticleController extends BaseController {
     /**
      * 删除文章
      */
-    @PreAuthorize("@ss.hasPermi('portal:article:remove')")
+    @PreAuthorize("@ss.hasPermi('portal:article:article:remove')")
     @Log(title = "文章", businessType = BusinessType.DELETE)
     @DeleteMapping("/{articleIds}")
     public AjaxResult remove(@PathVariable Long[] articleIds) {
@@ -99,7 +99,7 @@ public class PortalArticleController extends BaseController {
     /**
      * 发布文章
      */
-    @PreAuthorize("@ss.hasPermi('portal:article:publish')")
+    @PreAuthorize("@ss.hasPermi('portal:article:article:publish')")
     @Log(title = "文章发布", businessType = BusinessType.UPDATE)
     @PostMapping("/publish")
     public AjaxResult publish(@RequestBody PortalArticle portalArticle) {
@@ -109,7 +109,7 @@ public class PortalArticleController extends BaseController {
     /**
      * 下架文章
      */
-    @PreAuthorize("@ss.hasPermi('portal:article:edit')")
+    @PreAuthorize("@ss.hasPermi('portal:article:article:edit')")
     @Log(title = "文章下架", businessType = BusinessType.UPDATE)
     @PostMapping("/offline")
     public AjaxResult offline(@RequestBody PortalArticle portalArticle) {

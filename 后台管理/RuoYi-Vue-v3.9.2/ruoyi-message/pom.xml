@@ -9,29 +9,36 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ruoyi-portal</artifactId>
+    <artifactId>ruoyi-message</artifactId>
 
     <description>
-        门户管理模块
+        第三方消息对接工具模块（钉钉、企业微信等）
     </description>
 
     <dependencies>
-        <!-- 通用工具-->
+        <!-- 通用工具 -->
         <dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-common</artifactId>
         </dependency>
 
-        <!-- 系统模块-->
+        <!-- Spring Boot Web（用于HTTP调用） -->
         <dependency>
-            <groupId>com.ruoyi</groupId>
-            <artifactId>ruoyi-system</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- 消息对接模块（钉钉、企业微信等） -->
+        <!-- JSON处理 -->
         <dependency>
-            <groupId>com.ruoyi</groupId>
-            <artifactId>ruoyi-message</artifactId>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+        </dependency>
+
+        <!-- Lombok（简化代码） -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

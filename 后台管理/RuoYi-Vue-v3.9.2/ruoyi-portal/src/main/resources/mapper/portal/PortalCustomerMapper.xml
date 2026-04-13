@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.portal.mapper.PortalCustomerMapper">
+
+    <resultMap type="com.ruoyi.portal.domain.PortalCustomer" id="PortalCustomerResult">
+        <result property="customerId"        column="customer_id"        />
+        <result property="customerName"      column="customer_name"      />
+        <result property="phone"             column="phone"              />
+        <result property="email"             column="email"              />
+        <result property="companyName"       column="company_name"       />
+        <result property="position"          column="position"           />
+        <result property="gender"            column="gender"             />
+        <result property="source"            column="source"             />
+        <result property="sourceDetail"      column="source_detail"      />
+        <result property="status"            column="status"             />
+        <result property="level"             column="level"              />
+        <result property="ownerId"           column="owner_id"           />
+        <result property="ownerName"         column="owner_name"         />
+        <result property="isPublic"          column="is_public"          />
+        <result property="lastContactTime"   column="last_contact_time"  />
+        <result property="nextContactTime"   column="next_contact_time"  />
+        <result property="address"           column="address"            />
+        <result property="delFlag"           column="del_flag"           />
+        <result property="createBy"          column="create_by"          />
+        <result property="createTime"        column="create_time"        />
+        <result property="updateBy"          column="update_by"          />
+        <result property="updateTime"        column="update_time"        />
+        <result property="remark"            column="remark"             />
+    </resultMap>
+
+    <sql id="selectPortalCustomerVo">
+        select customer_id, customer_name, phone, email, company_name, position,
+               gender, source, source_detail, status, level, owner_id, owner_name,
+               is_public, last_contact_time, next_contact_time, address,
+               del_flag, create_by, create_time, update_by, update_time, remark
+        from portal_customer
+    </sql>
+
+    <select id="selectPortalCustomerList" parameterType="com.ruoyi.portal.domain.PortalCustomer" resultMap="PortalCustomerResult">
+        <include refid="selectPortalCustomerVo"/>
+        <where>
+            del_flag = '0'
+            <if test="customerName != null and customerName != ''">
+                and customer_name like concat('%', #{customerName}, '%')
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone like concat('%', #{phone}, '%')
+            </if>
+            <if test="email != null and email != ''">
+                and email like concat('%', #{email}, '%')
+            </if>
+            <if test="companyName != null and companyName != ''">
+                and company_name like concat('%', #{companyName}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+            <if test="level != null and level != ''">
+                and level = #{level}
+            </if>
+            <if test="source != null and source != ''">
+                and source = #{source}
+            </if>
+            <if test="ownerId != null">
+                and owner_id = #{ownerId}
+            </if>
+            <if test="isPublic != null and isPublic != ''">
+                and is_public = #{isPublic}
+            </if>
+            <if test="params.beginTime != null and params.beginTime != ''">
+                and date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''">
+                and date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectPortalCustomerByCustomerId" parameterType="Long" resultMap="PortalCustomerResult">
+        <include refid="selectPortalCustomerVo"/>
+        where customer_id = #{customerId} and del_flag = '0'
+    </select>
+
+    <select id="selectCustomerByPhone" parameterType="String" resultMap="PortalCustomerResult">
+        <include refid="selectPortalCustomerVo"/>
+        where phone = #{phone} and del_flag = '0' limit 1
+    </select>
+
+    <select id="selectCustomerByEmail" parameterType="String" resultMap="PortalCustomerResult">
+        <include refid="selectPortalCustomerVo"/>
+        where email = #{email} and del_flag = '0' limit 1
+    </select>
+
+    <insert id="insertPortalCustomer" parameterType="com.ruoyi.portal.domain.PortalCustomer" useGeneratedKeys="true" keyProperty="customerId">
+        insert into portal_customer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerName != null and customerName != ''">customer_name,</if>
+            <if test="phone != null">phone,</if>
+            <if test="email != null">email,</if>
+            <if test="companyName != null">company_name,</if>
+            <if test="position != null">position,</if>
+            <if test="gender != null">gender,</if>
+            <if test="source != null">source,</if>
+            <if test="sourceDetail != null">source_detail,</if>
+            <if test="status != null">status,</if>
+            <if test="level != null">level,</if>
+            <if test="ownerId != null">owner_id,</if>
+            <if test="ownerName != null">owner_name,</if>
+            <if test="isPublic != null">is_public,</if>
+            <if test="lastContactTime != null">last_contact_time,</if>
+            <if test="nextContactTime != null">next_contact_time,</if>
+            <if test="address != null">address,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customerName != null and customerName != ''">#{customerName},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="email != null">#{email},</if>
+            <if test="companyName != null">#{companyName},</if>
+            <if test="position != null">#{position},</if>
+            <if test="gender != null">#{gender},</if>
+            <if test="source != null">#{source},</if>
+            <if test="sourceDetail != null">#{sourceDetail},</if>
+            <if test="status != null">#{status},</if>
+            <if test="level != null">#{level},</if>
+            <if test="ownerId != null">#{ownerId},</if>
+            <if test="ownerName != null">#{ownerName},</if>
+            <if test="isPublic != null">#{isPublic},</if>
+            <if test="lastContactTime != null">#{lastContactTime},</if>
+            <if test="nextContactTime != null">#{nextContactTime},</if>
+            <if test="address != null">#{address},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePortalCustomer" parameterType="com.ruoyi.portal.domain.PortalCustomer">
+        update portal_customer
+        <set>
+            <if test="customerName != null and customerName != ''">customer_name = #{customerName},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="companyName != null">company_name = #{companyName},</if>
+            <if test="position != null">position = #{position},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="source != null">source = #{source},</if>
+            <if test="sourceDetail != null">source_detail = #{sourceDetail},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="level != null">level = #{level},</if>
+            <if test="ownerId != null">owner_id = #{ownerId},</if>
+            <if test="ownerName != null">owner_name = #{ownerName},</if>
+            <if test="isPublic != null">is_public = #{isPublic},</if>
+            <if test="lastContactTime != null">last_contact_time = #{lastContactTime},</if>
+            <if test="nextContactTime != null">next_contact_time = #{nextContactTime},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where customer_id = #{customerId}
+    </update>
+
+    <delete id="deletePortalCustomerByCustomerId" parameterType="Long">
+        update portal_customer set del_flag = '1' where customer_id = #{customerId}
+    </delete>
+
+    <delete id="deletePortalCustomerByCustomerIds" parameterType="String">
+        update portal_customer set del_flag = '1' where customer_id in
+        <foreach item="customerId" collection="array" open="(" separator="," close=")">
+            #{customerId}
+        </foreach>
+    </delete>
+
+</mapper>

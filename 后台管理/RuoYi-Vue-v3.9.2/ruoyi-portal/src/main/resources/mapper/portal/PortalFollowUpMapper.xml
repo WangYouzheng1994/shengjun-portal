@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.portal.mapper.PortalFollowUpMapper">
+
+    <resultMap type="com.ruoyi.portal.domain.PortalFollowUp" id="PortalFollowUpResult">
+        <result property="followId"          column="follow_id"            />
+        <result property="customerId"        column="customer_id"          />
+        <result property="messageId"         column="message_id"           />
+        <result property="followType"        column="follow_type"          />
+        <result property="followContent"     column="follow_content"       />
+        <result property="followResult"      column="follow_result"        />
+        <result property="nextPlan"          column="next_plan"            />
+        <result property="nextContactTime"   column="next_contact_time"    />
+        <result property="followUserId"      column="follow_user_id"       />
+        <result property="followUserName"    column="follow_user_name"     />
+        <result property="contactFeeling"    column="contact_feeling"      />
+        <result property="attachments"       column="attachments"          />
+        <result property="delFlag"           column="del_flag"             />
+        <result property="createBy"          column="create_by"            />
+        <result property="createTime"        column="create_time"          />
+        <result property="updateBy"          column="update_by"            />
+        <result property="updateTime"        column="update_time"          />
+        <result property="remark"            column="remark"               />
+    </resultMap>
+
+    <sql id="selectPortalFollowUpVo">
+        select f.follow_id, f.customer_id, f.message_id, f.follow_type,
+               f.follow_content, f.follow_result, f.next_plan, f.next_contact_time,
+               f.follow_user_id, f.follow_user_name, f.contact_feeling, f.attachments,
+               f.del_flag, f.create_by, f.create_time, f.update_by, f.update_time, f.remark,
+               c.customer_name as customer_name
+        from portal_follow_up f
+        left join portal_customer c on f.customer_id = c.customer_id
+    </sql>
+
+    <select id="selectPortalFollowUpList" parameterType="com.ruoyi.portal.domain.PortalFollowUp" resultMap="PortalFollowUpResult">
+        <include refid="selectPortalFollowUpVo"/>
+        <where>
+            f.del_flag = '0'
+            <if test="customerId != null">
+                and f.customer_id = #{customerId}
+            </if>
+            <if test="messageId != null">
+                and f.message_id = #{messageId}
+            </if>
+            <if test="followType != null and followType != ''">
+                and f.follow_type = #{followType}
+            </if>
+            <if test="followUserId != null">
+                and f.follow_user_id = #{followUserId}
+            </if>
+            <if test="params.beginTime != null and params.beginTime != ''">
+                and date_format(f.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''">
+                and date_format(f.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+        order by f.create_time desc
+    </select>
+
+    <select id="selectPortalFollowUpByFollowId" parameterType="Long" resultMap="PortalFollowUpResult">
+        <include refid="selectPortalFollowUpVo"/>
+        where f.follow_id = #{followId} and f.del_flag = '0'
+    </select>
+
+    <select id="selectFollowUpsByCustomerId" parameterType="Long" resultMap="PortalFollowUpResult">
+        <include refid="selectPortalFollowUpVo"/>
+        where f.customer_id = #{customerId} and f.del_flag = '0'
+        order by f.create_time desc
+    </select>
+
+    <insert id="insertPortalFollowUp" parameterType="com.ruoyi.portal.domain.PortalFollowUp" useGeneratedKeys="true" keyProperty="followId">
+        insert into portal_follow_up
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">customer_id,</if>
+            <if test="messageId != null">message_id,</if>
+            <if test="followType != null">follow_type,</if>
+            <if test="followContent != null">follow_content,</if>
+            <if test="followResult != null">follow_result,</if>
+            <if test="nextPlan != null">next_plan,</if>
+            <if test="nextContactTime != null">next_contact_time,</if>
+            <if test="followUserId != null">follow_user_id,</if>
+            <if test="followUserName != null">follow_user_name,</if>
+            <if test="contactFeeling != null">contact_feeling,</if>
+            <if test="attachments != null">attachments,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">#{customerId},</if>
+            <if test="messageId != null">#{messageId},</if>
+            <if test="followType != null">#{followType},</if>
+            <if test="followContent != null">#{followContent},</if>
+            <if test="followResult != null">#{followResult},</if>
+            <if test="nextPlan != null">#{nextPlan},</if>
+            <if test="nextContactTime != null">#{nextContactTime},</if>
+            <if test="followUserId != null">#{followUserId},</if>
+            <if test="followUserName != null">#{followUserName},</if>
+            <if test="contactFeeling != null">#{contactFeeling},</if>
+            <if test="attachments != null">#{attachments},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePortalFollowUp" parameterType="com.ruoyi.portal.domain.PortalFollowUp">
+        update portal_follow_up
+        <set>
+            <if test="customerId != null">customer_id = #{customerId},</if>
+            <if test="messageId != null">message_id = #{messageId},</if>
+            <if test="followType != null">follow_type = #{followType},</if>
+            <if test="followContent != null">follow_content = #{followContent},</if>
+            <if test="followResult != null">follow_result = #{followResult},</if>
+            <if test="nextPlan != null">next_plan = #{nextPlan},</if>
+            <if test="nextContactTime != null">next_contact_time = #{nextContactTime},</if>
+            <if test="followUserId != null">follow_user_id = #{followUserId},</if>
+            <if test="followUserName != null">follow_user_name = #{followUserName},</if>
+            <if test="contactFeeling != null">contact_feeling = #{contactFeeling},</if>
+            <if test="attachments != null">attachments = #{attachments},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where follow_id = #{followId}
+    </update>
+
+    <delete id="deletePortalFollowUpByFollowId" parameterType="Long">
+        update portal_follow_up set del_flag = '1' where follow_id = #{followId}
+    </delete>
+
+    <delete id="deletePortalFollowUpByFollowIds" parameterType="String">
+        update portal_follow_up set del_flag = '1' where follow_id in
+        <foreach item="followId" collection="array" open="(" separator="," close=")">
+            #{followId}
+        </foreach>
+    </delete>
+
+</mapper>
