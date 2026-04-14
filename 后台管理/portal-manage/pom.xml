@@ -137,50 +137,50 @@
 
             <!-- 定时任务-->
             <dependency>
-                <groupId>com.ruoyi</groupId>
+                <groupId>com.raisetech</groupId>
                 <artifactId>ruoyi-quartz</artifactId>
-                <version>${ruoyi.version}</version>
+                <version>3.9.2</version>
             </dependency>
 
             <!-- 代码生成-->
             <dependency>
-                <groupId>com.ruoyi</groupId>
+                <groupId>com.raisetech</groupId>
                 <artifactId>ruoyi-generator</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
 
             <!-- 核心模块-->
             <dependency>
-                <groupId>com.ruoyi</groupId>
+                <groupId>com.raisetech</groupId>
                 <artifactId>ruoyi-framework</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
 
             <!-- 系统模块-->
             <dependency>
-                <groupId>com.ruoyi</groupId>
+                <groupId>com.raisetech</groupId>
                 <artifactId>ruoyi-system</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
 
             <!-- 门户模块-->
             <dependency>
-                <groupId>com.ruoyi</groupId>
-                <artifactId>ruoyi-portal</artifactId>
+                <groupId>com.raisetech</groupId>
+                <artifactId>portal-control</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
 
             <!-- 消息对接模块-->
             <dependency>
-                <groupId>com.ruoyi</groupId>
-                <artifactId>ruoyi-message</artifactId>
+                <groupId>com.raisetech</groupId>
+                <artifactId>portal-message</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
 
             <!-- 通用工具-->
             <dependency>
-                <groupId>com.ruoyi</groupId>
-                <artifactId>ruoyi-common</artifactId>
+                <groupId>com.raisetech</groupId>
+                <artifactId>portal-common</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
 
@@ -188,14 +188,14 @@
     </dependencyManagement>
 
     <modules>
-        <module>ruoyi-admin</module>
+        <module>portal-admin</module>
         <module>ruoyi-framework</module>
         <module>ruoyi-system</module>
         <module>ruoyi-quartz</module>
         <module>ruoyi-generator</module>
-        <module>ruoyi-common</module>
-        <module>ruoyi-portal</module>
-        <module>ruoyi-message</module>
+        <module>portal-common</module>
+        <module>portal-control</module>
+        <module>portal-message</module>
     </modules>
     <packaging>pom</packaging>
 

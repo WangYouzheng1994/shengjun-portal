@@ -3,13 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>ruoyi</artifactId>
-        <groupId>com.ruoyi</groupId>
+        <artifactId>portal-manage</artifactId>
+        <groupId>com.raisetech</groupId>
         <version>3.9.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ruoyi-message</artifactId>
+    <artifactId>portal-message</artifactId>
 
     <description>
         第三方消息对接工具模块（钉钉、企业微信等）
@@ -18,8 +18,8 @@
     <dependencies>
         <!-- 通用工具 -->
         <dependency>
-            <groupId>com.ruoyi</groupId>
-            <artifactId>ruoyi-common</artifactId>
+            <groupId>com.raisetech</groupId>
+            <artifactId>portal-common</artifactId>
         </dependency>
 
         <!-- Spring Boot Web（用于HTTP调用） -->
