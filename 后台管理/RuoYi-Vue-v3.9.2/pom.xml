@@ -3,15 +3,15 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
-    <groupId>com.ruoyi</groupId>
-    <artifactId>ruoyi</artifactId>
+
+    <groupId>com.raisetech</groupId>
+    <artifactId>portal-manage</artifactId>
     <version>3.9.2</version>
 
     <name>ruoyi</name>
-    <url>http://www.ruoyi.vip</url>
-    <description>若依管理系统</description>
-    
+    <url>http://www.raisetech.top</url>
+    <description>门户信息管理平台</description>
+
     <properties>
         <ruoyi.version>3.9.2</ruoyi.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
