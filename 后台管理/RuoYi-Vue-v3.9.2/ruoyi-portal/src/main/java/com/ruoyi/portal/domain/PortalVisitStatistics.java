@@ -1,8 +1,9 @@
 package com.ruoyi.portal.domain;
 
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.core.domain.BaseEntity;
+
+import java.util.Date;
 
 /**
  * 门户访问统计对象 portal_visit_statistics

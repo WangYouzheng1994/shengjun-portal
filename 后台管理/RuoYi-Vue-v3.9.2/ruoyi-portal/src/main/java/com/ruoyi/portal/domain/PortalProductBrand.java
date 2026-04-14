@@ -1,8 +1,8 @@
 package com.ruoyi.portal.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.common.annotation.Excel;
+import com.ruoyi.common.core.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * 产品品牌对象 portal_product_brand

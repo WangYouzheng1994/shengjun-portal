@@ -1,7 +1,7 @@
 package com.ruoyi.portal.domain;
 
-import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.common.annotation.Excel;
+import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 留言回复模板对象 portal_message_template

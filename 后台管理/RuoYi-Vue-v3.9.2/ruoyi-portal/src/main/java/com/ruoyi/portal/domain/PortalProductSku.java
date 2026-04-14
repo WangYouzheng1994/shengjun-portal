@@ -1,9 +1,10 @@
 package com.ruoyi.portal.domain;
 
-import java.math.BigDecimal;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.common.annotation.Excel;
+import com.ruoyi.common.core.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import java.math.BigDecimal;
 
 /**
  * 产品SKU对象 portal_product_sku

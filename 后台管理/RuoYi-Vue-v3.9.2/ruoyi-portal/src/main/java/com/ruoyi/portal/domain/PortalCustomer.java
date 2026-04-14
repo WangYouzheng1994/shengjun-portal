@@ -1,9 +1,10 @@
 package com.ruoyi.portal.domain;
 
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.common.annotation.Excel;
+import com.ruoyi.common.core.domain.BaseEntity;
+
+import java.util.Date;
 
 /**
  * 客户对象 portal_customer
