@@ -15,8 +15,8 @@
         <el-tree-select
           v-model="queryParams.categoryId"
           :data="categoryTreeOptions"
-          :props="{ value: 'categoryId', label: 'categoryName', children: 'children' }"
-          value-key="categoryId"
+          :props="{ value: 'id', label: 'label', children: 'children' }"
+          value-key="id"
           placeholder="选择分类"
           check-strictly
           filterable

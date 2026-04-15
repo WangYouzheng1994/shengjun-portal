@@ -13,7 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="attrValueText"  column="attr_value_text"   />
         <result property="attrValueNum"   column="attr_value_num"    />
         <result property="sortOrder"      column="sort_order"         />
-        <result property="delFlag"        column="del_flag"           />
+        <result property="delFlag"       column="del_flag"           />
         <result property="createBy"       column="create_by"          />
         <result property="createTime"     column="create_time"        />
         <result property="updateBy"       column="update_by"          />
@@ -24,8 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectPortalProductAttrValueVo">
         select v.value_id, v.product_id, v.attr_def_id, d.attr_name,
                v.attr_value, v.attr_value_text, v.attr_value_num,
-               v.sort_order, v.del_flag, v.create_by, v.create_time,
-               v.update_by, v.update_time, v.remark
+               v.sort_order, v.del_flag, v.create_by, v.create_time, v.update_by, v.update_time, v.remark
         from portal_product_attr_value v
         left join portal_product_attr_def d on v.attr_def_id = d.attr_def_id
     </sql>

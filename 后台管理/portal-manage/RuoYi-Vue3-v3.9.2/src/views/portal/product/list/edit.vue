@@ -30,8 +30,8 @@
                 <el-tree-select
                   v-model="form.categoryId"
                   :data="categoryTreeOptions"
-                  :props="{ value: 'categoryId', label: 'categoryName', children: 'children' }"
-                  value-key="categoryId"
+                  :props="{ value: 'id', label: 'label', children: 'children' }"
+                  value-key="id"
                   placeholder="请选择所属分类"
                   check-strictly
                   filterable
@@ -627,17 +627,16 @@ function handleUpdate(productId) {
     if (response.data.isHot === '1') tagList.value.push('isHot')
 
     /** 处理扩展属性 */
-    if (response.data.attrValues && response.data.attrValues.length > 0) {
+    if (response.data.attrValueList && response.data.attrValueList.length > 0) {
       const newAttrValues = {}
-      response.data.attrValues.forEach(item => {
+      response.data.attrValueList.forEach(item => {
         newAttrValues['attr_' + item.attrCode] = item.attrValue
       })
       attrValuesForm.value = newAttrValues
     }
 
-    /** 处理SKU */
-    skus.value = response.data.skus && response.data.skus.length > 0
-      ? response.data.skus
+    skus.value = response.data.skuList && response.data.skuList.length > 0
+      ? response.data.skuList
       : [createEmptySku()]
 
     /** 加载属性模板 */
@@ -678,16 +677,15 @@ function handleSubmit() {
     }
 
     /** 处理扩展属性值 */
-    submitData.attrValues = []
+    submitData.attrValueList = []
     Object.keys(attrValuesForm.value).forEach(key => {
       if (key.startsWith('attr_')) {
         const attrCode = key.replace('attr_', '')
         let attrValue = attrValuesForm.value[key]
-        /** 多选类型转为逗号分隔的字符串 */
         if (Array.isArray(attrValue)) {
           attrValue = attrValue.join(',')
         }
-        submitData.attrValues.push({
+        submitData.attrValueList.push({
           attrCode: attrCode,
           attrValue: String(attrValue || '')
         })
@@ -695,7 +693,7 @@ function handleSubmit() {
     })
 
     /** 处理SKU数据 */
-    submitData.skus = skus.value.filter(sku => sku.skuCode || sku.skuName)
+    submitData.skuList = skus.value.filter(sku => sku.skuCode || sku.skuName)
 
     submitLoading.value = true
     const promise = submitData.productId != null
