@@ -239,6 +239,45 @@
             </el-row>
           </el-form>
         </el-tab-pane>
+
+        <!-- 办公点管理 Tab -->
+        <el-tab-pane label="办公点管理" name="office">
+          <div class="office-header">
+            <el-button
+              type="primary"
+              plain
+              icon="Plus"
+              @click="handleAddOffice"
+              v-hasPermi="['portal:base:company:add']"
+            >新增办公点</el-button>
+            <span class="office-tip">管理企业的各个办公地点（如总部、分公司、仓库等）</span>
+          </div>
+
+          <el-table v-loading="officeLoading" :data="officeList" border style="width: 100%; margin-top: 10px">
+            <el-table-column label="办公点名称" align="center" prop="locationName" min-width="120" />
+            <el-table-column label="类型" align="center" prop="locationType" width="90">
+              <template #default="scope">
+                <dict-tag :options="portal_office_type" :value="scope.row.locationType" />
+              </template>
+            </el-table-column>
+            <el-table-column label="地址" align="center" prop="address" min-width="180" :show-overflow-tooltip="true" />
+            <el-table-column label="联系人" align="center" prop="contactPerson" width="100" />
+            <el-table-column label="联系电话" align="center" prop="contactPhone" width="120" />
+            <el-table-column label="状态" align="center" prop="status" width="80">
+              <template #default="scope">
+                <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="150">
+              <template #default="scope">
+                <el-button link type="primary" icon="Edit" @click="handleUpdateOffice(scope.row)" v-hasPermi="['portal:base:company:edit']">修改</el-button>
+                <el-button link type="danger" icon="Delete" @click="handleDeleteOffice(scope.row)" v-hasPermi="['portal:base:company:remove']">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+
+          <el-empty v-if="!officeLoading && officeList.length === 0" description="暂无办公点数据" :image-size="100" />
+        </el-tab-pane>
       </el-tabs>
 
       <template #footer>
@@ -248,14 +287,127 @@
         </div>
       </template>
     </el-dialog>
+
+    <!-- 办公点编辑对话框 -->
+    <el-dialog :title="officeDialogTitle" v-model="officeDialogOpen" width="900px" append-to-body destroy-on-close>
+      <el-form ref="officeRef" :model="officeForm" label-width="100px">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="办公点名称" prop="locationName">
+              <el-input v-model="officeForm.locationName" placeholder="如：北京总部、上海分公司" maxlength="100" show-word-limit />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="办公点类型" prop="locationType">
+              <el-select v-model="officeForm.locationType" placeholder="请选择类型">
+                <el-option
+                  v-for="dict in portal_office_type"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="详细地址" prop="address">
+              <el-input v-model="officeForm.address" placeholder="请输入详细地址" maxlength="500" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="地图定位">
+              <MapPicker
+                v-model:longitude="officeForm.longitude"
+                v-model:latitude="officeForm.latitude"
+                :address="officeForm.address"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-divider content-position="left">联系信息</el-divider>
+
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="联系人">
+              <el-input v-model="officeForm.contactPerson" placeholder="请输入联系人姓名" maxlength="50" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="联系电话">
+              <el-input v-model="officeForm.contactPhone" placeholder="请输入联系电话" maxlength="20" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="邮箱">
+              <el-input v-model="officeForm.contactEmail" placeholder="请输入电子邮箱" maxlength="100" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="微信号">
+              <el-input v-model="officeForm.wechat" placeholder="请输入微信号" maxlength="100" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="飞书号">
+              <el-input v-model="officeForm.feishu" placeholder="请输入飞书号" maxlength="100" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="排序">
+              <el-input-number v-model="officeForm.sortOrder" :min="0" :max="9999" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="状态">
+              <el-radio-group v-model="officeForm.status">
+                <el-radio
+                  v-for="dict in sys_normal_disable"
+                  :key="dict.value"
+                  :value="dict.value"
+                >{{ dict.label }}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="备注">
+              <el-input v-model="officeForm.remark" type="textarea" placeholder="请输入备注信息" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="submitOfficeForm">确 定</el-button>
+          <el-button @click="officeDialogOpen = false">取 消</el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup name="CompanyInfo">
 import { listCompany, getCompany, delCompany, addCompany, updateCompany } from "@/api/portal/company"
+import { listOfficeLocation, getOfficeLocation, addOfficeLocation, updateOfficeLocation, delOfficeLocation } from "@/api/portal/officeLocation"
 
 const { proxy } = getCurrentInstance()
-const { sys_normal_disable } = proxy.useDict("sys_normal_disable")
+const { sys_normal_disable, portal_office_type } = proxy.useDict("sys_normal_disable", "portal_office_type")
 
 const companyList = ref([])
 const open = ref(false)
@@ -267,6 +419,13 @@ const multiple = ref(true)
 const total = ref(0)
 const title = ref("")
 const activeTab = ref("basic")
+
+// 办公点相关状态
+const officeList = ref([])
+const officeDialogOpen = ref(false)
+const officeDialogTitle = ref("")
+const officeForm = ref({})
+const officeLoading = ref(false)
 
 const data = reactive({
   form: {},
@@ -320,6 +479,7 @@ function reset() {
     remark: undefined
   }
   activeTab.value = 'basic'
+  officeList.value = []
   proxy.resetForm("companyRef")
   proxy.resetForm("socialRef")
   proxy.resetForm("introRef")
@@ -359,6 +519,8 @@ function handleUpdate(row) {
     form.value = response.data
     open.value = true
     title.value = "修改企业信息"
+    // 加载办公点数据
+    loadOfficeLocations(infoId)
   })
 }
 
@@ -394,6 +556,109 @@ function handleDelete(row) {
   }).catch(() => {})
 }
 
+// ==================== 办公点管理方法 ====================
+
+/**
+ * 加载办公点列表
+ * @param infoId 企业信息ID
+ */
+function loadOfficeLocations(infoId) {
+  if (!infoId) {
+    return
+  }
+  officeLoading.value = true
+  listOfficeLocation(infoId).then(response => {
+    officeList.value = response.data || []
+    officeLoading.value = false
+  }).catch(() => {
+    officeLoading.value = false
+  })
+}
+
+/** 新增办公点按钮操作 */
+function handleAddOffice() {
+  resetOfficeForm()
+  officeForm.value.infoId = form.value.infoId
+  officeDialogOpen.value = true
+  officeDialogTitle.value = "新增办公点"
+}
+
+/** 修改办公点按钮操作 */
+function handleUpdateOffice(row) {
+  resetOfficeForm()
+  getOfficeLocation(row.locationId).then(response => {
+    officeForm.value = response.data
+    officeDialogOpen.value = true
+    officeDialogTitle.value = "修改办公点"
+  })
+}
+
+/** 重置办公点表单 */
+function resetOfficeForm() {
+  officeForm.value = {
+    locationId: undefined,
+    infoId: undefined,
+    locationName: undefined,
+    locationType: '0',
+    province: undefined,
+    city: undefined,
+    district: undefined,
+    address: undefined,
+    longitude: undefined,
+    latitude: undefined,
+    contactPerson: undefined,
+    contactPhone: undefined,
+    contactEmail: undefined,
+    wechat: undefined,
+    feishu: undefined,
+    sortOrder: 0,
+    status: '0',
+    remark: undefined
+  }
+}
+
+/** 提交办公点表单 */
+function submitOfficeForm() {
+  if (!officeForm.value.locationName) {
+    proxy.$modal.msgWarning("请输入办公点名称")
+    return
+  }
+
+  if (officeForm.value.locationId != undefined) {
+    updateOfficeLocation(officeForm.value).then(response => {
+      proxy.$modal.msgSuccess("修改成功")
+      officeDialogOpen.value = false
+      loadOfficeLocations(form.value.infoId)
+    })
+  } else {
+    addOfficeLocation(officeForm.value).then(response => {
+      proxy.$modal.msgSuccess("新增成功")
+      officeDialogOpen.value = false
+      loadOfficeLocations(form.value.infoId)
+    })
+  }
+}
+
+/** 删除办公点按钮操作 */
+function handleDeleteOffice(row) {
+  const locationIds = row.locationId
+  proxy.$modal.confirm('是否确认删除办公点"' + row.locationName + '"？').then(function() {
+    return delOfficeLocation(locationIds)
+  }).then(() => {
+    loadOfficeLocations(form.value.infoId)
+    proxy.$modal.msgSuccess("删除成功")
+  }).catch(() => {})
+}
+
+/**
+ * 监听Tab切换，懒加载办公点数据
+ */
+watch(activeTab, async (newVal) => {
+  if (newVal === 'office' && form.value.infoId && officeList.value.length === 0) {
+    loadOfficeLocations(form.value.infoId)
+  }
+})
+
 getList()
 </script>
 
@@ -411,5 +676,17 @@ getList()
   color: #909399;
   font-size: 12px;
   margin-top: 4px;
+}
+
+.office-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.office-tip {
+  color: #909399;
+  font-size: 13px;
 }
 </style>

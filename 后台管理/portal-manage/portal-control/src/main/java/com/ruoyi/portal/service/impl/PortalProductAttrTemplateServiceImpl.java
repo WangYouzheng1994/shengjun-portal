@@ -43,8 +43,8 @@ public class PortalProductAttrTemplateServiceImpl implements IPortalProductAttrT
     public PortalProductAttrTemplate selectPortalProductAttrTemplateByTemplateId(Long templateId) {
         PortalProductAttrTemplate template = portalProductAttrTemplateMapper.selectPortalProductAttrTemplateByTemplateId(templateId);
         if (template != null) {
-            List<PortalProductAttrDef> attrDefList = portalProductAttrDefMapper.selectPortalProductAttrDefListByTemplateId(templateId);
-            template.setAttrDefList(attrDefList);
+            List<PortalProductAttrDef> attrDefs = portalProductAttrDefMapper.selectPortalProductAttrDefListByTemplateId(templateId);
+            template.setAttrDefs(attrDefs);
         }
         return template;
     }
@@ -135,10 +135,11 @@ public class PortalProductAttrTemplateServiceImpl implements IPortalProductAttrT
      * @param template 属性模板
      */
     private void insertAttrDefs(PortalProductAttrTemplate template) {
-        List<PortalProductAttrDef> attrDefList = template.getAttrDefList();
-        if (attrDefList != null && !attrDefList.isEmpty()) {
-            for (PortalProductAttrDef attrDef : attrDefList) {
+        List<PortalProductAttrDef> attrDefs = template.getAttrDefs();
+        if (attrDefs != null && !attrDefs.isEmpty()) {
+            for (PortalProductAttrDef attrDef : attrDefs) {
                 attrDef.setTemplateId(template.getTemplateId());
+                attrDef.setDelFlag("0");
                 attrDef.setCreateTime(DateUtils.getNowDate());
                 portalProductAttrDefMapper.insertPortalProductAttrDef(attrDef);
             }

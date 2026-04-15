@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.portal.mapper.PortalNoticeMapper">
+
+    <resultMap type="com.ruoyi.portal.domain.PortalNotice" id="PortalNoticeResult">
+        <result property="noticeId"       column="notice_id"       />
+        <result property="title"          column="title"            />
+        <result property="content"        column="content"          />
+        <result property="noticeType"     column="notice_type"      />
+        <result property="priorityLevel"  column="priority_level"   />
+        <result property="displayMode"    column="display_mode"     />
+        <result property="isTop"          column="is_top"           />
+        <result property="isSticky"       column="is_sticky"        />
+        <result property="status"         column="status"           />
+        <result property="publishTime"    column="publish_time"     />
+        <result property="startTime"      column="start_time"       />
+        <result property="endTime"        column="end_time"         />
+        <result property="sortOrder"      column="sort_order"       />
+        <result property="viewCount"      column="view_count"       />
+        <result property="clickCount"     column="click_count"      />
+        <result property="requireConfirm" column="require_confirm"  />
+        <result property="confirmText"    column="confirm_text"     />
+        <result property="popupStyle"     column="popup_style"      />
+        <result property="targetAudience" column="target_audience"  />
+        <result property="delFlag"        column="del_flag"         />
+        <result property="createBy"       column="create_by"        />
+        <result property="createTime"     column="create_time"      />
+        <result property="updateBy"       column="update_by"        />
+        <result property="updateTime"     column="update_time"      />
+        <result property="remark"         column="remark"           />
+    </resultMap>
+
+    <sql id="selectPortalNoticeVo">
+        select notice_id, title, content, notice_type, priority_level,
+               display_mode, is_top, is_sticky, status, publish_time,
+               start_time, end_time, sort_order, view_count, click_count,
+               require_confirm, confirm_text, popup_style, target_audience,
+               del_flag, create_by, create_time, update_by, update_time,
+               remark
+        from portal_notice
+    </sql>
+
+    <select id="selectPortalNoticeList" parameterType="com.ruoyi.portal.domain.PortalNotice" resultMap="PortalNoticeResult">
+        <include refid="selectPortalNoticeVo"/>
+        <where>
+            del_flag = '0'
+            <if test="title != null and title != ''">
+                and title like concat('%', #{title}, '%')
+            </if>
+            <if test="noticeType != null and noticeType != ''">
+                and notice_type = #{noticeType}
+            </if>
+            <if test="priorityLevel != null and priorityLevel != ''">
+                and priority_level = #{priorityLevel}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+            <if test="displayMode != null and displayMode != ''">
+                and display_mode = #{displayMode}
+            </if>
+            <if test="targetAudience != null and targetAudience != ''">
+                and target_audience = #{targetAudience}
+            </if>
+            <if test="params.beginTime != null and params.beginTime != ''">
+                and date_format(publish_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''">
+                and date_format(publish_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+        order by is_top desc, is_sticky desc, sort_order desc, publish_time desc
+    </select>
+
+    <select id="selectPortalNoticeByNoticeId" parameterType="Long" resultMap="PortalNoticeResult">
+        <include refid="selectPortalNoticeVo"/>
+        where notice_id = #{noticeId} and del_flag = '0'
+    </select>
+
+    <insert id="insertPortalNotice" parameterType="com.ruoyi.portal.domain.PortalNotice" useGeneratedKeys="true" keyProperty="noticeId">
+        insert into portal_notice
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">title,</if>
+            <if test="content != null">content,</if>
+            <if test="noticeType != null and noticeType != ''">notice_type,</if>
+            <if test="priorityLevel != null and priorityLevel != ''">priority_level,</if>
+            <if test="displayMode != null and displayMode != ''">display_mode,</if>
+            <if test="isTop != null">is_top,</if>
+            <if test="isSticky != null">is_sticky,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="publishTime != null">publish_time,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="sortOrder != null">sort_order,</if>
+            <if test="viewCount != null">view_count,</if>
+            <if test="clickCount != null">click_count,</if>
+            <if test="requireConfirm != null">require_confirm,</if>
+            <if test="confirmText != null">confirm_text,</if>
+            <if test="popupStyle != null and popupStyle != ''">popup_style,</if>
+            <if test="targetAudience != null and targetAudience != ''">target_audience,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="content != null">#{content},</if>
+            <if test="noticeType != null and noticeType != ''">#{noticeType},</if>
+            <if test="priorityLevel != null and priorityLevel != ''">#{priorityLevel},</if>
+            <if test="displayMode != null and displayMode != ''">#{displayMode},</if>
+            <if test="isTop != null">#{isTop},</if>
+            <if test="isSticky != null">#{isSticky},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="publishTime != null">#{publishTime},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+            <if test="viewCount != null">#{viewCount},</if>
+            <if test="clickCount != null">#{clickCount},</if>
+            <if test="requireConfirm != null">#{requireConfirm},</if>
+            <if test="confirmText != null">#{confirmText},</if>
+            <if test="popupStyle != null and popupStyle != ''">#{popupStyle},</if>
+            <if test="targetAudience != null and targetAudience != ''">#{targetAudience},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePortalNotice" parameterType="com.ruoyi.portal.domain.PortalNotice">
+        update portal_notice
+        <set>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="noticeType != null and noticeType != ''">notice_type = #{noticeType},</if>
+            <if test="priorityLevel != null and priorityLevel != ''">priority_level = #{priorityLevel},</if>
+            <if test="displayMode != null and displayMode != ''">display_mode = #{displayMode},</if>
+            <if test="isTop != null">is_top = #{isTop},</if>
+            <if test="isSticky != null">is_sticky = #{isSticky},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="publishTime != null">publish_time = #{publishTime},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+            <if test="viewCount != null">view_count = #{viewCount},</if>
+            <if test="clickCount != null">click_count = #{clickCount},</if>
+            <if test="requireConfirm != null">require_confirm = #{requireConfirm},</if>
+            <if test="confirmText != null">confirm_text = #{confirmText},</if>
+            <if test="popupStyle != null and popupStyle != ''">popup_style = #{popupStyle},</if>
+            <if test="targetAudience != null and targetAudience != ''">target_audience = #{targetAudience},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where notice_id = #{noticeId}
+    </update>
+
+    <delete id="deletePortalNoticeByNoticeId" parameterType="Long">
+        update portal_notice set del_flag = '1' where notice_id = #{noticeId}
+    </delete>
+
+    <delete id="deletePortalNoticeByNoticeIds" parameterType="String">
+        update portal_notice set del_flag = '1' where notice_id in
+        <foreach item="noticeId" collection="array" open="(" separator="," close=")">
+            #{noticeId}
+        </foreach>
+    </delete>
+
+    <update id="publishNotice" parameterType="Long">
+        update portal_notice
+        set status = '1',
+            publish_time = case when publish_time is null then now() else publish_time end,
+            update_time = now()
+        where notice_id = #{noticeId}
+          and status in ('0', '3')
+    </update>
+
+    <update id="offlineNotice" parameterType="Long">
+        update portal_notice
+        set status = '3',
+            update_time = now()
+        where notice_id = #{noticeId}
+          and status = '1'
+    </update>
+
+</mapper>

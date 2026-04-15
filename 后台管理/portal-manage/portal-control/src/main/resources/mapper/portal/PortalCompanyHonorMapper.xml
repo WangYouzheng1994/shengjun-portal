@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.portal.mapper.PortalCompanyHonorMapper">
+
+    <resultMap type="com.ruoyi.portal.domain.PortalCompanyHonor" id="PortalCompanyHonorResult">
+        <result property="honorId"          column="honor_id"           />
+        <result property="honorTitle"       column="honor_title"        />
+        <result property="honorImage"       column="honor_image"        />
+        <result property="honorDescription" column="honor_description"  />
+        <result property="awardOrg"         column="award_org"          />
+        <result property="awardDate"        column="award_date"         />
+        <result property="honorType"        column="honor_type"         />
+        <result property="sortOrder"        column="sort_order"         />
+        <result property="status"           column="status"             />
+        <result property="delFlag"          column="del_flag"           />
+        <result property="createBy"         column="create_by"          />
+        <result property="createTime"       column="create_time"        />
+        <result property="updateBy"         column="update_by"          />
+        <result property="updateTime"       column="update_time"        />
+        <result property="remark"           column="remark"             />
+    </resultMap>
+
+    <sql id="selectPortalCompanyHonorVo">
+        select honor_id, honor_title, honor_image, honor_description, award_org,
+               award_date, honor_type, sort_order, status, del_flag,
+               create_by, create_time, update_by, update_time, remark
+        from portal_company_honor
+    </sql>
+
+    <select id="selectPortalCompanyHonorList" parameterType="com.ruoyi.portal.domain.PortalCompanyHonor" resultMap="PortalCompanyHonorResult">
+        <include refid="selectPortalCompanyHonorVo"/>
+        <where>
+            del_flag = '0'
+            <if test="honorTitle != null and honorTitle != ''">
+                and honor_title like concat('%', #{honorTitle}, '%')
+            </if>
+            <if test="honorType != null and honorType != ''">
+                and honor_type = #{honorType}
+            </if>
+            <if test="awardOrg != null and awardOrg != ''">
+                and award_org like concat('%', #{awardOrg}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+        </where>
+        order by sort_order asc, honor_id desc
+    </select>
+
+    <select id="selectPortalCompanyHonorByHonorId" parameterType="Long" resultMap="PortalCompanyHonorResult">
+        <include refid="selectPortalCompanyHonorVo"/>
+        where honor_id = #{honorId}
+    </select>
+
+    <insert id="insertPortalCompanyHonor" parameterType="com.ruoyi.portal.domain.PortalCompanyHonor" useGeneratedKeys="true" keyProperty="honorId">
+        insert into portal_company_honor
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="honorTitle != null and honorTitle != ''">honor_title,</if>
+            <if test="honorImage != null">honor_image,</if>
+            <if test="honorDescription != null">honor_description,</if>
+            <if test="awardOrg != null">award_org,</if>
+            <if test="awardDate != null">award_date,</if>
+            <if test="honorType != null">honor_type,</if>
+            <if test="sortOrder != null">sort_order,</if>
+            <if test="status != null">status,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="honorTitle != null and honorTitle != ''">#{honorTitle},</if>
+            <if test="honorImage != null">#{honorImage},</if>
+            <if test="honorDescription != null">#{honorDescription},</if>
+            <if test="awardOrg != null">#{awardOrg},</if>
+            <if test="awardDate != null">#{awardDate},</if>
+            <if test="honorType != null">#{honorType},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+            <if test="status != null">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePortalCompanyHonor" parameterType="com.ruoyi.portal.domain.PortalCompanyHonor">
+        update portal_company_honor
+        <set>
+            <if test="honorTitle != null and honorTitle != ''">honor_title = #{honorTitle},</if>
+            <if test="honorImage != null">honor_image = #{honorImage},</if>
+            <if test="honorDescription != null">honor_description = #{honorDescription},</if>
+            <if test="awardOrg != null">award_org = #{awardOrg},</if>
+            <if test="awardDate != null">award_date = #{awardDate},</if>
+            <if test="honorType != null">honor_type = #{honorType},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where honor_id = #{honorId}
+    </update>
+
+    <delete id="deletePortalCompanyHonorByHonorId" parameterType="Long">
+        update portal_company_honor set del_flag = '1' where honor_id = #{honorId}
+    </delete>
+
+    <delete id="deletePortalCompanyHonorByHonorIds" parameterType="String">
+        update portal_company_honor set del_flag = '1' where honor_id in
+        <foreach item="honorId" collection="array" open="(" separator="," close=")">
+            #{honorId}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.portal.mapper.PortalCompanyMilestoneMapper">
+
+    <resultMap type="com.ruoyi.portal.domain.PortalCompanyMilestone" id="PortalCompanyMilestoneResult">
+        <result property="milestoneId"     column="milestone_id"      />
+        <result property="companyId"       column="company_id"        />
+        <result property="milestoneTitle"  column="milestone_title"   />
+        <result property="milestoneYear"   column="milestone_year"    />
+        <result property="milestoneMonth"  column="milestone_month"   />
+        <result property="milestoneDay"    column="milestone_day"     />
+        <result property="milestoneLevel"  column="milestone_level"   />
+        <result property="description"     column="description"       />
+        <result property="thumbnailImage"  column="thumbnail_image"   />
+        <result property="hdImage"         column="hd_image"          />
+        <result property="linkType"        column="link_type"         />
+        <result property="linkUrl"         column="link_url"          />
+        <result property="linkContent"     column="link_content"      />
+        <result property="sortOrder"       column="sort_order"        />
+        <result property="status"          column="status"            />
+        <result property="delFlag"         column="del_flag"          />
+        <result property="createBy"        column="create_by"         />
+        <result property="createTime"      column="create_time"       />
+        <result property="updateBy"        column="update_by"         />
+        <result property="updateTime"      column="update_time"       />
+        <result property="remark"          column="remark"            />
+    </resultMap>
+
+    <sql id="selectPortalCompanyMilestoneVo">
+        select milestone_id, company_id, milestone_title, milestone_year, milestone_month,
+               milestone_day, milestone_level, description, thumbnail_image, hd_image,
+               link_type, link_url, link_content, sort_order, status, del_flag,
+               create_by, create_time, update_by, update_time, remark
+        from portal_company_milestone
+    </sql>
+
+    <!-- 查询里程碑列表（支持按企业、年份、级别筛选，按时间倒序） -->
+    <select id="selectPortalCompanyMilestoneList" parameterType="com.ruoyi.portal.domain.PortalCompanyMilestone" resultMap="PortalCompanyMilestoneResult">
+        <include refid="selectPortalCompanyMilestoneVo"/>
+        <where>
+            del_flag = '0'
+            <if test="companyId != null">
+                and company_id = #{companyId}
+            </if>
+            <if test="milestoneTitle != null and milestoneTitle != ''">
+                and milestone_title like concat('%', #{milestoneTitle}, '%')
+            </if>
+            <if test="milestoneYear != null">
+                and milestone_year = #{milestoneYear}
+            </if>
+            <if test="milestoneLevel != null and milestoneLevel != ''">
+                and milestone_level = #{milestoneLevel}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+        </where>
+        order by milestone_year desc, milestone_month asc, milestone_day asc, sort_order asc, milestone_id desc
+    </select>
+
+    <!-- 根据ID查询里程碑详情 -->
+    <select id="selectPortalCompanyMilestoneByMilestoneId" parameterType="Long" resultMap="PortalCompanyMilestoneResult">
+        <include refid="selectPortalCompanyMilestoneVo"/>
+        where milestone_id = #{milestoneId} and del_flag = '0'
+    </select>
+
+    <!-- 新增里程碑 -->
+    <insert id="insertPortalCompanyMilestone" parameterType="com.ruoyi.portal.domain.PortalCompanyMilestone" useGeneratedKeys="true" keyProperty="milestoneId">
+        insert into portal_company_milestone
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="companyId != null">company_id,</if>
+            <if test="milestoneTitle != null and milestoneTitle != ''">milestone_title,</if>
+            <if test="milestoneYear != null">milestone_year,</if>
+            <if test="milestoneMonth != null">milestone_month,</if>
+            <if test="milestoneDay != null">milestone_day,</if>
+            <if test="milestoneLevel != null">milestone_level,</if>
+            <if test="description != null">description,</if>
+            <if test="thumbnailImage != null">thumbnail_image,</if>
+            <if test="hdImage != null">hd_image,</if>
+            <if test="linkType != null">link_type,</if>
+            <if test="linkUrl != null">link_url,</if>
+            <if test="linkContent != null">link_content,</if>
+            <if test="sortOrder != null">sort_order,</if>
+            <if test="status != null">status,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="companyId != null">#{companyId},</if>
+            <if test="milestoneTitle != null and milestoneTitle != ''">#{milestoneTitle},</if>
+            <if test="milestoneYear != null">#{milestoneYear},</if>
+            <if test="milestoneMonth != null">#{milestoneMonth},</if>
+            <if test="milestoneDay != null">#{milestoneDay},</if>
+            <if test="milestoneLevel != null">#{milestoneLevel},</if>
+            <if test="description != null">#{description},</if>
+            <if test="thumbnailImage != null">#{thumbnailImage},</if>
+            <if test="hdImage != null">#{hdImage},</if>
+            <if test="linkType != null">#{linkType},</if>
+            <if test="linkUrl != null">#{linkUrl},</if>
+            <if test="linkContent != null">#{linkContent},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+            <if test="status != null">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <!-- 修改里程碑 -->
+    <update id="updatePortalCompanyMilestone" parameterType="com.ruoyi.portal.domain.PortalCompanyMilestone">
+        update portal_company_milestone
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="companyId != null">company_id = #{companyId},</if>
+            <if test="milestoneTitle != null and milestoneTitle != ''">milestone_title = #{milestoneTitle},</if>
+            <if test="milestoneYear != null">milestone_year = #{milestoneYear},</if>
+            <if test="milestoneMonth != null">milestone_month = #{milestoneMonth},</if>
+            <if test="milestoneDay != null">milestone_day = #{milestoneDay},</if>
+            <if test="milestoneLevel != null">milestone_level = #{milestoneLevel},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="thumbnailImage != null">thumbnail_image = #{thumbnailImage},</if>
+            <if test="hdImage != null">hd_image = #{hdImage},</if>
+            <if test="linkType != null">link_type = #{linkType},</if>
+            <if test="linkUrl != null">link_url = #{linkUrl},</if>
+            <if test="linkContent != null">link_content = #{linkContent},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where milestone_id = #{milestoneId}
+    </update>
+
+    <!-- 批量删除里程碑（逻辑删除） -->
+    <update id="deletePortalCompanyMilestoneByMilestoneIds" parameterType="String">
+        update portal_company_milestone set del_flag = '1' where milestone_id in
+        <foreach item="milestoneId" collection="array" open="(" separator="," close=")">
+            #{milestoneId}
+        </foreach>
+    </update>
+
+    <!-- 删除单个里程碑信息（逻辑删除） -->
+    <update id="deletePortalCompanyMilestoneByMilestoneId" parameterType="Long">
+        update portal_company_milestone set del_flag = '1' where milestone_id = #{milestoneId}
+    </update>
+
+    <!-- 统计某企业的里程碑总数 -->
+    <select id="countByCompanyId" parameterType="Long" resultType="int">
+        select count(*) from portal_company_milestone
+        where company_id = #{companyId} and del_flag = '0'
+    </select>
+
+    <!-- 按年份分组统计某企业的里程碑数量（用于前端时间轴展示优化） -->
+    <select id="countGroupByYear" parameterType="Long" resultType="java.util.Map">
+        select milestone_year as year, count(*) as count
+        from portal_company_milestone
+        where company_id = #{companyId} and del_flag = '0'
+        group by milestone_year
+        order by milestone_year desc
+    </select>
+
+</mapper>

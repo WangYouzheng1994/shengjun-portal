@@ -57,7 +57,7 @@ public class PortalProductAttrTemplate extends BaseEntity {
     /**
      * 属性定义列表
      */
-    private List<PortalProductAttrDef> attrDefList;
+    private List<PortalProductAttrDef> attrDefs;
 
     public void setTemplateId(Long templateId) {
         this.templateId = templateId;
@@ -115,12 +115,12 @@ public class PortalProductAttrTemplate extends BaseEntity {
         return delFlag;
     }
 
-    public void setAttrDefList(List<PortalProductAttrDef> attrDefList) {
-        this.attrDefList = attrDefList;
+    public void setAttrDefs(List<PortalProductAttrDef> attrDefs) {
+        this.attrDefs = attrDefs;
     }
 
-    public List<PortalProductAttrDef> getAttrDefList() {
-        return attrDefList;
+    public List<PortalProductAttrDef> getAttrDefs() {
+        return attrDefs;
     }
 
     @Override

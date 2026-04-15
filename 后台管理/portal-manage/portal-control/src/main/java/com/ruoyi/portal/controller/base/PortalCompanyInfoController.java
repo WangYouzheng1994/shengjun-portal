@@ -21,6 +21,8 @@ import com.ruoyi.portal.domain.PortalCompanyInfo;
 import com.ruoyi.portal.service.IPortalCompanyInfoService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.portal.domain.PortalOfficeLocation;
+import com.ruoyi.portal.service.IPortalOfficeLocationService;
 
 /**
  * 企业基础信息Controller
@@ -33,6 +35,9 @@ public class PortalCompanyInfoController extends BaseController {
 
     @Autowired
     private IPortalCompanyInfoService portalCompanyInfoService;
+
+    @Autowired
+    private IPortalOfficeLocationService portalOfficeLocationService;
 
     /**
      * 查询企业基础信息列表
@@ -94,5 +99,56 @@ public class PortalCompanyInfoController extends BaseController {
     @DeleteMapping("/{infoIds}")
     public AjaxResult remove(@PathVariable Long[] infoIds) {
         return toAjax(portalCompanyInfoService.deletePortalCompanyInfoByInfoIds(infoIds));
+    }
+
+    // ==================== 办公点管理接口 ====================
+
+    /**
+     * 查询企业下的所有办公点
+     */
+    @PreAuthorize("@ss.hasPermi('portal:base:company:query')")
+    @GetMapping("/office/list/{infoId}")
+    public AjaxResult listOfficeLocations(@PathVariable("infoId") Long infoId) {
+        List<PortalOfficeLocation> list = portalOfficeLocationService.selectPortalOfficeLocationByInfoId(infoId);
+        return success(list);
+    }
+
+    /**
+     * 获取办公点详细信息
+     */
+    @PreAuthorize("@ss.hasPermi('portal:base:company:query')")
+    @GetMapping("/office/{locationId}")
+    public AjaxResult getOfficeLocation(@PathVariable("locationId") Long locationId) {
+        return success(portalOfficeLocationService.selectPortalOfficeLocationByLocationId(locationId));
+    }
+
+    /**
+     * 新增办公点
+     */
+    @PreAuthorize("@ss.hasPermi('portal:base:company:add')")
+    @Log(title = "企业办公点", businessType = BusinessType.INSERT)
+    @PostMapping("/office")
+    public AjaxResult addOffice(@RequestBody PortalOfficeLocation portalOfficeLocation) {
+        return toAjax(portalOfficeLocationService.insertPortalOfficeLocation(portalOfficeLocation));
+    }
+
+    /**
+     * 修改办公点
+     */
+    @PreAuthorize("@ss.hasPermi('portal:base:company:edit')")
+    @Log(title = "企业办公点", businessType = BusinessType.UPDATE)
+    @PutMapping("/office")
+    public AjaxResult editOffice(@RequestBody PortalOfficeLocation portalOfficeLocation) {
+        return toAjax(portalOfficeLocationService.updatePortalOfficeLocation(portalOfficeLocation));
+    }
+
+    /**
+     * 删除办公点
+     */
+    @PreAuthorize("@ss.hasPermi('portal:base:company:remove')")
+    @Log(title = "企业办公点", businessType = BusinessType.DELETE)
+    @DeleteMapping("/office/{locationIds}")
+    public AjaxResult removeOffice(@PathVariable Long[] locationIds) {
+        return toAjax(portalOfficeLocationService.deletePortalOfficeLocationByLocationIds(locationIds));
     }
 }
