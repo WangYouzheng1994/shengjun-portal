@@ -227,15 +227,15 @@ INSERT INTO `portal_product_attr_template`(`template_name`, `template_code`, `de
 ('服装鞋帽模板', 'CLOTHING_PRODUCT', '适用于服装鞋帽类产品的属性模板', '0', '0', 'admin', sysdate());
 
 -- 插入通用产品模板的属性定义
-INSERT INTO `portal_product_attr_def`(`template_id`, `attr_name`, `attr_code`, `attr_group`, `attr_type`, `input_type`, `options`, `unit`, `is_required`, `is_searchable`, `is_filterable`, `is_sku_attr`, `show_in_list`, `show_in_detail`, `sort_order`, `status`, `create_by`, `create_time`) VALUES
-(1, '材质', 'material', '基本属性', 3, 'select', '[{"label":"纯棉","value":"纯棉"},{"label":"涤纶","value":"涤纶"},{"label":"混纺","value":"混纺"},{"label":"皮革","value":"皮革"},{"label":"其他","value":"其他"}]', '', '0', '1', '1', '0', '0', '1', 1, '0', 'admin', sysdate()),
-(1, '产地', 'origin', '基本属性', 1, 'input', '', '', '0', '1', '1', '0', '0', '1', 2, '0', 'admin', sysdate()),
-(1, '保质期', 'shelf_life', '基本属性', 1, 'input', '', '天', '0', '0', '0', '0', '0', '1', 3, '0', 'admin', sysdate()),
-(1, '颜色', 'color', '规格参数', 3, 'select', '[{"label":"红色","value":"红色"},{"label":"蓝色","value":"蓝色"},{"label":"黑色","value":"黑色"},{"label":"白色","value":"白色"},{"label":"绿色","value":"绿色"}]', '', '0', '1', '1', '1', '1', '1', 10, '0', 'admin', sysdate()),
-(1, '尺寸', 'size', '规格参数', 3, 'select', '[{"label":"S","value":"S"},{"label":"M","value":"M"},{"label":"L","value":"L"},{"label":"XL","value":"XL"},{"label":"XXL","value":"XXL"}]', '', '0', '1', '1', '1', '1', '1', 11, '0', 'admin', sysdate()),
-(1, '重量', 'weight', '规格参数', 2, 'input', '', 'g', '0', '0', '1', '0', '0', '1', 12, '0', 'admin', sysdate()),
-(1, '包装方式', 'package_method', '详细信息', 1, 'input', '', '', '0', '0', '0', '0', '0', '1', 20, '0', 'admin', sysdate()),
-(1, '售后服务', 'after_sale_service', '详细信息', 7, 'textarea', '', '', '0', '0', '0', '0', '0', '1', 21, '0', 'admin', sysdate());
+INSERT INTO `portal_product_attr_def`(`template_id`, `attr_name`, `attr_code`, `attr_group`, `attr_type`, `input_type`, `options`, `unit`, `is_required`, `is_searchable`, `is_filterable`, `is_sku_attr`, `show_in_list`, `show_in_detail`, `sort_order`, `status`, `del_flag`, `create_by`, `create_time`) VALUES
+(1, '材质', 'material', '基本属性', 3, 'select', '[{"label":"纯棉","value":"纯棉"},{"label":"涤纶","value":"涤纶"},{"label":"混纺","value":"混纺"},{"label":"皮革","value":"皮革"},{"label":"其他","value":"其他"}]', '', '0', '1', '1', '0', '0', '1', 1, '0', '0', 'admin', sysdate()),
+(1, '产地', 'origin', '基本属性', 1, 'input', '', '', '0', '1', '1', '0', '0', '1', 2, '0', '0', 'admin', sysdate()),
+(1, '保质期', 'shelf_life', '基本属性', 1, 'input', '', '天', '0', '0', '0', '0', '0', '1', 3, '0', '0', 'admin', sysdate()),
+(1, '颜色', 'color', '规格参数', 3, 'select', '[{"label":"红色","value":"红色"},{"label":"蓝色","value":"蓝色"},{"label":"黑色","value":"黑色"},{"label":"白色","value":"白色"},{"label":"绿色","value":"绿色"}]', '', '0', '1', '1', '1', '1', '1', 10, '0', '0', 'admin', sysdate()),
+(1, '尺寸', 'size', '规格参数', 3, 'select', '[{"label":"S","value":"S"},{"label":"M","value":"M"},{"label":"L","value":"L"},{"label":"XL","value":"XL"},{"label":"XXL","value":"XXL"}]', '', '0', '1', '1', '1', '1', '1', 11, '0', '0', 'admin', sysdate()),
+(1, '重量', 'weight', '规格参数', 2, 'input', '', 'g', '0', '0', '1', '0', '0', '1', 12, '0', '0', 'admin', sysdate()),
+(1, '包装方式', 'package_method', '详细信息', 1, 'input', '', '', '0', '0', '0', '0', '0', '1', 20, '0', '0', 'admin', sysdate()),
+(1, '售后服务', 'after_sale_service', '详细信息', 7, 'textarea', '', '', '0', '0', '0', '0', '0', '1', 21, '0', '0', 'admin', sysdate());
 
 
 -- ============================================
