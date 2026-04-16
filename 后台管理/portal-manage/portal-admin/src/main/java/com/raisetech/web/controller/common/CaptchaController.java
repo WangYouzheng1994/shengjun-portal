@@ -8,7 +8,7 @@ import com.raisetech.common.core.domain.AjaxResult;
 import com.raisetech.common.core.redis.RedisCache;
 import com.raisetech.common.utils.sign.Base64;
 import com.raisetech.common.utils.uuid.IdUtils;
-import com.raisetech.system.service.ISysConfigService;
+import com.ruoyi.system.service.ISysConfigService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
