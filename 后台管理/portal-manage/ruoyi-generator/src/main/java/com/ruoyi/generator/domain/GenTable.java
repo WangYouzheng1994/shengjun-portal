@@ -2,6 +2,7 @@ package com.ruoyi.generator.domain;
 
 import com.raisetech.common.constant.GenConstants;
 import com.raisetech.common.core.domain.BaseEntity;
+import com.raisetech.common.utils.StringUtils;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.apache.commons.lang3.ArrayUtils;

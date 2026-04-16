@@ -1,6 +1,7 @@
 package com.ruoyi.generator.domain;
 
 import com.raisetech.common.core.domain.BaseEntity;
+import com.raisetech.common.utils.StringUtils;
 import jakarta.validation.constraints.NotBlank;
 
 /**

@@ -34,7 +34,7 @@ public interface PortalCompanyInfoI18nMapper {
      * @param langCode 语言代码
      * @return 企业信息多语言集合
      */
-    public List<PortalCompanyInfoI18n selectByInfoIdsAndLang(@Param("infoIds") List<Long> infoIds, @Param("langCode") String langCode);
+    public List<PortalCompanyInfoI18n> selectByInfoIdsAndLang(@Param("infoIds") List<Long> infoIds, @Param("langCode") String langCode);
 
     /**
      * 根据信息ID查询所有语言版本
@@ -42,7 +42,7 @@ public interface PortalCompanyInfoI18nMapper {
      * @param infoId 信息ID
      * @return 企业信息多语言集合
      */
-    public List<PortalCompanyInfoI18n selectByInfoId(Long infoId);
+    public List<PortalCompanyInfoI18n> selectByInfoId(Long infoId);
 
     /**
      * 新增企业信息多语言

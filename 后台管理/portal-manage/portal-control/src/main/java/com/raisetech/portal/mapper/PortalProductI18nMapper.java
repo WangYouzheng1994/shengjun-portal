@@ -34,7 +34,7 @@ public interface PortalProductI18nMapper {
      * @param langCode 语言代码
      * @return 产品多语言集合
      */
-    public List<PortalProductI18n selectByProductIdsAndLang(@Param("productIds") List<Long> productIds, @Param("langCode") String langCode);
+    public List<PortalProductI18n> selectByProductIdsAndLang(@Param("productIds") List<Long> productIds, @Param("langCode") String langCode);
 
     /**
      * 根据产品ID查询所有语言版本
@@ -42,7 +42,7 @@ public interface PortalProductI18nMapper {
      * @param productId 产品ID
      * @return 产品多语言集合
      */
-    public List<PortalProductI18n selectByProductId(Long productId);
+    public List<PortalProductI18n> selectByProductId(Long productId);
 
     /**
      * 新增产品多语言

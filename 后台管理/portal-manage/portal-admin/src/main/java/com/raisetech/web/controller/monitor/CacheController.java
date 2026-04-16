@@ -3,7 +3,7 @@ package com.raisetech.web.controller.monitor;
 import com.raisetech.common.constant.CacheConstants;
 import com.raisetech.common.core.domain.AjaxResult;
 import com.raisetech.common.utils.StringUtils;
-import com.raisetech.system.domain.SysCache;
+import com.ruoyi.system.domain.SysCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;

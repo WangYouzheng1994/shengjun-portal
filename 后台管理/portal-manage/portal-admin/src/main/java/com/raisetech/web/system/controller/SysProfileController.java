@@ -14,7 +14,7 @@ import com.raisetech.common.utils.file.FileUploadUtils;
 import com.raisetech.common.utils.file.FileUtils;
 import com.raisetech.common.utils.file.MimeTypeUtils;
 import com.raisetech.framework.web.service.TokenService;
-import com.raisetech.system.service.ISysUserService;
+import com.ruoyi.system.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
+
 import com.raisetech.common.utils.StringUtils;
 import com.raisetech.common.utils.spring.SpringUtils;
 import com.ruoyi.quartz.domain.SysJob;
@@ -64,7 +65,7 @@ public class JobInvokeUtil
 
     /**
      * 校验是否为为class包名
-     * 
+     *
      * @param invokeTarget 名称
      * @return true是 false否
      */
@@ -75,7 +76,7 @@ public class JobInvokeUtil
 
     /**
      * 获取bean名称
-     * 
+     *
      * @param invokeTarget 目标字符串
      * @return bean名称
      */
@@ -87,7 +88,7 @@ public class JobInvokeUtil
 
     /**
      * 获取bean方法
-     * 
+     *
      * @param invokeTarget 目标字符串
      * @return method方法
      */
@@ -99,7 +100,7 @@ public class JobInvokeUtil
 
     /**
      * 获取method方法参数相关列表
-     * 
+     *
      * @param invokeTarget 目标字符串
      * @return method方法相关参数列表
      */
@@ -110,13 +111,13 @@ public class JobInvokeUtil
         {
             return null;
         }
-        String[] methodParams = methodStr.split(",(?=([^"']*["'][^"']*["'])*[^"']*$)");
+        String[] methodParams = methodStr.split(",(?=([^\"']*[\"'][^\"']*[\"'])*[^\"']*$)");
         List<Object[]> classs = new LinkedList<>();
         for (int i = 0; i < methodParams.length; i++)
         {
             String str = StringUtils.trimToEmpty(methodParams[i]);
             // String字符串类型，以'或"开头
-            if (StringUtils.startsWithAny(str, "'", """))
+            if (StringUtils.startsWithAny(str, "'", "\""))
             {
                 classs.add(new Object[] { StringUtils.substring(str, 1, str.length() - 1), String.class });
             }
@@ -146,7 +147,7 @@ public class JobInvokeUtil
 
     /**
      * 获取参数类型
-     * 
+     *
      * @param methodParams 参数相关列表
      * @return 参数类型列表
      */
@@ -164,7 +165,7 @@ public class JobInvokeUtil
 
     /**
      * 获取参数值
-     * 
+     *
      * @param methodParams 参数相关列表
      * @return 参数值列表
      */
