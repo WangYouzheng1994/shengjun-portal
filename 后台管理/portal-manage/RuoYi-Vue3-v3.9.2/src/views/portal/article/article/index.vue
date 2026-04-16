@@ -76,6 +76,9 @@
         <!-- 操作按钮 -->
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
+            <I18nLanguageSelector @lang-change="handleLangChange" />
+          </el-col>
+          <el-col :span="1.5">
             <el-button
               type="primary"
               plain
@@ -300,6 +303,7 @@
 <script setup name="Article">
 import { listArticle, getArticle, delArticle, addArticle, updateArticle, exportArticle, publishArticle, offlineArticle } from "@/api/portal/article"
 import { categoryTreeSelect, listCategory } from "@/api/portal/articleCategory"
+import I18nLanguageSelector from '@/components/I18nLanguageSelector/index.vue'
 
 const { proxy } = getCurrentInstance()
 const { portal_article_status } = proxy.useDict("portal_article_status")
@@ -314,6 +318,11 @@ const multiple = ref(true)
 const total = ref(0)
 const title = ref("")
 const dateRange = ref([])
+
+/**
+ * 当前选中的语言代码（用于列表查询和编辑）
+ */
+const currentLang = ref('zh-CN')
 
 /**
  * 分类选项列表（用于表单下拉）
@@ -426,11 +435,24 @@ function getCategoryOptions() {
 /** 查询文章列表 */
 function getList() {
   loading.value = true
-  listArticle(proxy.addDateRange(queryParams.value, dateRange.value)).then(response => {
+  const params = {
+    ...proxy.addDateRange(queryParams.value, dateRange.value),
+    lang: currentLang.value
+  }
+  listArticle(params).then(response => {
     articleList.value = response.rows
     total.value = response.total
     loading.value = false
   })
+}
+
+/**
+ * 语言切换处理
+ * 切换语言后重新加载列表数据
+ */
+function handleLangChange(lang) {
+  currentLang.value = lang
+  getList()
 }
 
 /** 点击树节点 */

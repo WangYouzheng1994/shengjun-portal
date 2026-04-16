@@ -72,4 +72,14 @@ public interface IPortalArticleService {
      * @return 结果
      */
     public int offlineArticle(PortalArticle portalArticle);
+
+    /**
+     * 填充文章的多语言翻译内容
+     * 根据指定语言代码批量查询翻译数据并填充到文章对象中
+     * 如果某字段没有翻译则保留主表的原始值（回退机制）
+     *
+     * @param articles 文章列表
+     * @param langCode 目标语言代码（如 en-US）
+     */
+    public void fillI18nContent(List<PortalArticle> articles, String langCode);
 }
