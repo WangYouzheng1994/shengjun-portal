@@ -12,7 +12,7 @@
     <artifactId>portal-message</artifactId>
 
     <description>
-        第三方消息对接工具模块（钉钉、企业微信等）
+        消息中心模块（统一消息服务：钉钉、企业微信、邮件、飞书等）
     </description>
 
     <dependencies>
@@ -26,6 +26,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- MyBatis ORM框架 -->
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
         </dependency>
 
         <!-- JSON处理 -->
