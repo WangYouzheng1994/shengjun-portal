@@ -1,21 +1,22 @@
 package com.ruoyi.generator.util;
 
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
+import com.raisetech.common.constant.GenConstants;
+import com.raisetech.common.utils.DateUtils;
+import com.raisetech.common.utils.StringUtils;
+import com.ruoyi.generator.domain.GenTable;
+import com.ruoyi.generator.domain.GenTableColumn;
+import org.apache.velocity.VelocityContext;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.apache.velocity.VelocityContext;
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONObject;
-import com.ruoyi.common.constant.GenConstants;
-import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.generator.domain.GenTable;
-import com.ruoyi.generator.domain.GenTableColumn;
 
 /**
  * 模板处理工具类
- * 
+ *
  * @author ruoyi
  */
 public class VelocityUtils
@@ -269,7 +270,7 @@ public class VelocityUtils
 
     /**
      * 根据列类型获取导入包
-     * 
+     *
      * @param genTable 业务表对象
      * @return 返回需要导入的包列表
      */
@@ -299,7 +300,7 @@ public class VelocityUtils
 
     /**
      * 根据列类型获取字典组
-     * 
+     *
      * @param genTable 业务表对象
      * @return 返回字典组
      */
@@ -318,7 +319,7 @@ public class VelocityUtils
 
     /**
      * 添加字典列表
-     * 
+     *
      * @param dicts 字典列表
      * @param columns 列集合
      */

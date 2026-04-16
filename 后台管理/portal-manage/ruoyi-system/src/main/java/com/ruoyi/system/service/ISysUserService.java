@@ -2,7 +2,7 @@ package com.ruoyi.system.service;
 
 import java.util.Date;
 import java.util.List;
-import com.ruoyi.common.core.domain.entity.SysUser;
+import com.raisetech.common.core.domain.entity.SysUser;
 
 /**
  * 用户 业务层

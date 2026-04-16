@@ -271,11 +271,11 @@
 </template>
 
 <script setup lang="ts" name="${BusinessName}">
-import { list${BusinessName}, get${BusinessName}, del${BusinessName}, add${BusinessName}, update${BusinessName} } from "@/api/${moduleName}/${businessName}"
-import type { ${ClassName}, ${BusinessName}QueryParams } from "@/types/api/${moduleName}/${businessName}"
-import type { TreeSelect } from '@/types/api/common'
+  import {get${BusinessName}, list${BusinessName}} from "@/api/"
+  import type {${BusinessName}QueryParams} from "@/types/api/"
+  import type {TreeSelect} from '@/types/api/common'
 
-const { proxy } = getCurrentInstance()
+  const { proxy } = getCurrentInstance()
 #if(${dicts} != '')
 #set($dictsNoSymbol=$dicts.replace("'", ""))
 const { ${dictsNoSymbol} } = proxy.useDict(${dicts})
@@ -357,7 +357,7 @@ function getTreeselect() {
     ${businessName}Options.value.push(data)
   })
 }
-	
+
 // 取消按钮
 function cancel() {
   open.value = false

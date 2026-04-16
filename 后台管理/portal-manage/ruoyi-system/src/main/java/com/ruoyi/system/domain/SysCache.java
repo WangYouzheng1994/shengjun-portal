@@ -1,6 +1,6 @@
 package com.ruoyi.system.domain;
 
-import com.ruoyi.common.utils.StringUtils;
+import com.raisetech.common.utils.StringUtils;
 
 /**
  * 缓存信息

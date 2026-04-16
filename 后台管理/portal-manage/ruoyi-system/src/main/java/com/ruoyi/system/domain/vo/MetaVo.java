@@ -1,6 +1,6 @@
 package com.ruoyi.system.domain.vo;
 
-import com.ruoyi.common.utils.StringUtils;
+import com.raisetech.common.utils.StringUtils;
 
 /**
  * 路由显示信息

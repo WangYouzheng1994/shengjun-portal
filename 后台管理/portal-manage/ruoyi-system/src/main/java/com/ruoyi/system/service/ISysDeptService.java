@@ -1,8 +1,8 @@
 package com.ruoyi.system.service;
 
 import java.util.List;
-import com.ruoyi.common.core.domain.TreeSelect;
-import com.ruoyi.common.core.domain.entity.SysDept;
+import com.raisetech.common.core.domain.TreeSelect;
+import com.raisetech.common.core.domain.entity.SysDept;
 
 /**
  * 部门管理 服务层

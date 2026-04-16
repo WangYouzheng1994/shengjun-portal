@@ -5,9 +5,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import com.ruoyi.common.annotation.Excel;
-import com.ruoyi.common.annotation.Excel.ColumnType;
-import com.ruoyi.common.core.domain.BaseEntity;
+import com.raisetech.common.annotation.Excel;
+import com.raisetech.common.annotation.Excel.ColumnType;
+import com.raisetech.common.core.domain.BaseEntity;
 
 /**
  * 岗位表 sys_post

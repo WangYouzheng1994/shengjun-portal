@@ -2,9 +2,9 @@ package com.ruoyi.system.domain;
 
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.ruoyi.common.annotation.Excel;
-import com.ruoyi.common.annotation.Excel.ColumnType;
-import com.ruoyi.common.core.domain.BaseEntity;
+import com.raisetech.common.annotation.Excel;
+import com.raisetech.common.annotation.Excel.ColumnType;
+import com.raisetech.common.core.domain.BaseEntity;
 
 /**
  * 系统访问记录表 sys_logininfor

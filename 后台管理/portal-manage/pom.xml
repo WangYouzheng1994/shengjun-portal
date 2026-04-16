@@ -196,6 +196,7 @@
         <module>portal-common</module>
         <module>portal-control</module>
         <module>portal-message</module>
+        <module>portal-service</module>
     </modules>
     <packaging>pom</packaging>
 
