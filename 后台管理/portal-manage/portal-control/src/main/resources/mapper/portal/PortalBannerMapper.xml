@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.portal.mapper.PortalBannerMapper">
+<mapper namespace="com.raisetech.portal.mapper.PortalBannerMapper">
 
-    <resultMap type="com.ruoyi.portal.domain.PortalBanner" id="PortalBannerResult">
+    <resultMap type="com.raisetech.portal.domain.PortalBanner" id="PortalBannerResult">
         <result property="bannerId"       column="banner_id"       />
         <result property="title"          column="title"           />
         <result property="pcImage"        column="pc_image"        />
@@ -32,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from portal_banner
     </sql>
 
-    <select id="selectPortalBannerList" parameterType="com.ruoyi.portal.domain.PortalBanner" resultMap="PortalBannerResult">
+    <select id="selectPortalBannerList" parameterType="com.raisetech.portal.domain.PortalBanner" resultMap="PortalBannerResult">
         <include refid="selectPortalBannerVo"/>
         <where>
             del_flag = '0'
@@ -54,7 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where banner_id = #{bannerId}
     </select>
 
-    <insert id="insertPortalBanner" parameterType="com.ruoyi.portal.domain.PortalBanner" useGeneratedKeys="true" keyProperty="bannerId">
+    <insert id="insertPortalBanner" parameterType="com.raisetech.portal.domain.PortalBanner" useGeneratedKeys="true" keyProperty="bannerId">
         insert into portal_banner
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="title != null and title != ''">title,</if>
@@ -96,7 +96,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
     </insert>
 
-    <update id="updatePortalBanner" parameterType="com.ruoyi.portal.domain.PortalBanner">
+    <update id="updatePortalBanner" parameterType="com.raisetech.portal.domain.PortalBanner">
         update portal_banner
         <set>
             <if test="title != null and title != ''">title = #{title},</if>

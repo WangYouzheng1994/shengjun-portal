@@ -8,7 +8,7 @@ import com.raisetech.common.core.domain.BaseEntity;
  *
  * @author 王有政
  */
-public class PortalMessageTemplate extends BaseEntity {
+public class PortalReplyTemplate extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**

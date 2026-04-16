@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.portal.mapper.PortalCustomerMapper">
+<mapper namespace="com.raisetech.portal.mapper.PortalCustomerMapper">
 
-    <resultMap type="com.ruoyi.portal.domain.PortalCustomer" id="PortalCustomerResult">
+    <resultMap type="com.raisetech.portal.domain.PortalCustomer" id="PortalCustomerResult">
         <result property="customerId"        column="customer_id"        />
         <result property="customerName"      column="customer_name"      />
         <result property="phone"             column="phone"              />
@@ -38,7 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from portal_customer
     </sql>
 
-    <select id="selectPortalCustomerList" parameterType="com.ruoyi.portal.domain.PortalCustomer" resultMap="PortalCustomerResult">
+    <select id="selectPortalCustomerList" parameterType="com.raisetech.portal.domain.PortalCustomer" resultMap="PortalCustomerResult">
         <include refid="selectPortalCustomerVo"/>
         <where>
             del_flag = '0'
@@ -94,7 +94,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where email = #{email} and del_flag = '0' limit 1
     </select>
 
-    <insert id="insertPortalCustomer" parameterType="com.ruoyi.portal.domain.PortalCustomer" useGeneratedKeys="true" keyProperty="customerId">
+    <insert id="insertPortalCustomer" parameterType="com.raisetech.portal.domain.PortalCustomer" useGeneratedKeys="true" keyProperty="customerId">
         insert into portal_customer
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="customerName != null and customerName != ''">customer_name,</if>
@@ -146,7 +146,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
     </insert>
 
-    <update id="updatePortalCustomer" parameterType="com.ruoyi.portal.domain.PortalCustomer">
+    <update id="updatePortalCustomer" parameterType="com.raisetech.portal.domain.PortalCustomer">
         update portal_customer
         <set>
             <if test="customerName != null and customerName != ''">customer_name = #{customerName},</if>

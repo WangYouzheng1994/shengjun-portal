@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.message.mapper.MessageChannelWecomMapper">
-    <resultMap type="com.ruoyi.message.domain.config.PortalMessageChannelWecom" id="WecomResult">
+<mapper namespace="com.raisetech.message.mapper.MessageChannelWecomMapper">
+    <resultMap type="com.raisetech.message.domain.config.PortalMessageChannelWecom" id="WecomResult">
         <result property="configId" column="config_id"/>
         <result property="channelId" column="channel_id"/>
         <result property="wecomType" column="wecom_type"/>
@@ -21,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select config_id, channel_id, wecom_type, corp_id, agent_id, agent_secret, webhook_url, del_flag, create_by, create_time, update_by, update_time
         from portal_message_channel_wecom
     </sql>
-    <select id="selectMessageChannelWecomList" parameterType="com.ruoyi.message.domain.config.PortalMessageChannelWecom" resultMap="WecomResult">
+    <select id="selectMessageChannelWecomList" parameterType="com.raisetech.message.domain.config.PortalMessageChannelWecom" resultMap="WecomResult">
         <include refid="selectWecomVo"/>
         <where>del_flag = '0'
             <if test="channelId != null">and channel_id = #{channelId}</if>
@@ -30,7 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     <select id="selectMessageChannelWecomByConfigId" parameterType="Long" resultMap="WecomResult"><include refid="selectWecomVo"/> where config_id = #{configId}</select>
     <select id="selectMessageChannelWecomByChannelId" parameterType="Long" resultMap="WecomResult"><include refid="selectWecomVo"/> where channel_id = #{channelId} and del_flag = '0'</select>
-    <insert id="insertMessageChannelWecom" parameterType="com.ruoyi.message.domain.config.PortalMessageChannelWecom" useGeneratedKeys="true" keyProperty="configId">
+    <insert id="insertMessageChannelWecom" parameterType="com.raisetech.message.domain.config.PortalMessageChannelWecom" useGeneratedKeys="true" keyProperty="configId">
         insert into portal_message_channel_wecom <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="channelId != null">channel_id,</if>
             <if test="wecomType != null">wecom_type,</if>
@@ -53,7 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">#{createTime},</if>
         </trim>
     </insert>
-    <update id="updateMessageChannelWecom" parameterType="com.ruoyi.message.domain.config.PortalMessageChannelWecom">
+    <update id="updateMessageChannelWecom" parameterType="com.raisetech.message.domain.config.PortalMessageChannelWecom">
         update portal_message_channel_wecom <set>
             <if test="wecomType != null">wecom_type = #{wecomType},</if>
             <if test="corpId != null">corp_id = #{corpId},</if>

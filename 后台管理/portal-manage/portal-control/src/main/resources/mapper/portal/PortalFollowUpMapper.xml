@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.portal.mapper.PortalFollowUpMapper">
+<mapper namespace="com.raisetech.portal.mapper.PortalFollowUpMapper">
 
-    <resultMap type="com.ruoyi.portal.domain.PortalFollowUp" id="PortalFollowUpResult">
+    <resultMap type="com.raisetech.portal.domain.PortalFollowUp" id="PortalFollowUpResult">
         <result property="followId"          column="follow_id"            />
         <result property="customerId"        column="customer_id"          />
         <result property="messageId"         column="message_id"           />
@@ -35,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join portal_customer c on f.customer_id = c.customer_id
     </sql>
 
-    <select id="selectPortalFollowUpList" parameterType="com.ruoyi.portal.domain.PortalFollowUp" resultMap="PortalFollowUpResult">
+    <select id="selectPortalFollowUpList" parameterType="com.raisetech.portal.domain.PortalFollowUp" resultMap="PortalFollowUpResult">
         <include refid="selectPortalFollowUpVo"/>
         <where>
             f.del_flag = '0'
@@ -72,7 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         order by f.create_time desc
     </select>
 
-    <insert id="insertPortalFollowUp" parameterType="com.ruoyi.portal.domain.PortalFollowUp" useGeneratedKeys="true" keyProperty="followId">
+    <insert id="insertPortalFollowUp" parameterType="com.raisetech.portal.domain.PortalFollowUp" useGeneratedKeys="true" keyProperty="followId">
         insert into portal_follow_up
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="customerId != null">customer_id,</if>
@@ -114,7 +114,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
     </insert>
 
-    <update id="updatePortalFollowUp" parameterType="com.ruoyi.portal.domain.PortalFollowUp">
+    <update id="updatePortalFollowUp" parameterType="com.raisetech.portal.domain.PortalFollowUp">
         update portal_follow_up
         <set>
             <if test="customerId != null">customer_id = #{customerId},</if>

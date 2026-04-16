@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.message.mapper.MessageChannelFeishuMapper">
-    <resultMap type="com.ruoyi.message.domain.config.PortalMessageChannelFeishu" id="FeishuResult">
+<mapper namespace="com.raisetech.message.mapper.MessageChannelFeishuMapper">
+    <resultMap type="com.raisetech.message.domain.config.PortalMessageChannelFeishu" id="FeishuResult">
         <result property="configId" column="config_id"/>
         <result property="channelId" column="channel_id"/>
         <result property="feishuType" column="feishu_type"/>
@@ -21,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select config_id, channel_id, feishu_type, app_id, app_secret, tenant_key, webhook_url, del_flag, create_by, create_time, update_by, update_time
         from portal_message_channel_feishu
     </sql>
-    <select id="selectMessageChannelFeishuList" parameterType="com.ruoyi.message.domain.config.PortalMessageChannelFeishu" resultMap="FeishuResult">
+    <select id="selectMessageChannelFeishuList" parameterType="com.raisetech.message.domain.config.PortalMessageChannelFeishu" resultMap="FeishuResult">
         <include refid="selectFeishuVo"/>
         <where>del_flag = '0'
             <if test="channelId != null">and channel_id = #{channelId}</if>
@@ -30,7 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     <select id="selectMessageChannelFeishuByConfigId" parameterType="Long" resultMap="FeishuResult"><include refid="selectFeishuVo"/> where config_id = #{configId}</select>
     <select id="selectMessageChannelFeishuByChannelId" parameterType="Long" resultMap="FeishuResult"><include refid="selectFeishuVo"/> where channel_id = #{channelId} and del_flag = '0'</select>
-    <insert id="insertMessageChannelFeishu" parameterType="com.ruoyi.message.domain.config.PortalMessageChannelFeishu" useGeneratedKeys="true" keyProperty="configId">
+    <insert id="insertMessageChannelFeishu" parameterType="com.raisetech.message.domain.config.PortalMessageChannelFeishu" useGeneratedKeys="true" keyProperty="configId">
         insert into portal_message_channel_feishu <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="channelId != null">channel_id,</if>
             <if test="feishuType != null">feishu_type,</if>
@@ -53,7 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">#{createTime},</if>
         </trim>
     </insert>
-    <update id="updateMessageChannelFeishu" parameterType="com.ruoyi.message.domain.config.PortalMessageChannelFeishu">
+    <update id="updateMessageChannelFeishu" parameterType="com.raisetech.message.domain.config.PortalMessageChannelFeishu">
         update portal_message_channel_feishu <set>
             <if test="feishuType != null">feishu_type = #{feishuType},</if>
             <if test="appId != null">app_id = #{appId},</if>

@@ -5,8 +5,8 @@ import com.raisetech.common.core.controller.BaseController;
 import com.raisetech.common.core.domain.AjaxResult;
 import com.raisetech.common.core.page.TableDataInfo;
 import com.raisetech.common.enums.BusinessType;
-import com.raisetech.portal.domain.PortalMessageTemplate;
-import com.raisetech.portal.mapper.PortalMessageTemplateMapper;
+import com.raisetech.portal.domain.PortalReplyTemplate;
+import com.raisetech.portal.mapper.PortalReplyTemplateMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -20,19 +20,19 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/portal/crm/template")
-public class PortalMessageTemplateController extends BaseController {
+public class PortalReplyTemplateController extends BaseController {
 
     @Autowired
-    private PortalMessageTemplateMapper portalMessageTemplateMapper;
+    private PortalReplyTemplateMapper portalReplyTemplateMapper;
 
     /**
      * 查询模板列表
      */
     @PreAuthorize("@ss.hasPermi('portal:crm:template:list')")
     @GetMapping("/list")
-    public TableDataInfo list(PortalMessageTemplate portalMessageTemplate) {
+    public TableDataInfo list(PortalReplyTemplate portalReplyTemplate) {
         startPage();
-        List<PortalMessageTemplate> list = portalMessageTemplateMapper.selectPortalMessageTemplateList(portalMessageTemplate);
+        List<PortalReplyTemplate> list = portalReplyTemplateMapper.selectPortalReplyTemplateList(portalReplyTemplate);
         return getDataTable(list);
     }
 
@@ -42,7 +42,7 @@ public class PortalMessageTemplateController extends BaseController {
     @PreAuthorize("@ss.hasPermi('portal:crm:template:query')")
     @GetMapping(value = "/{templateId}")
     public AjaxResult getInfo(@PathVariable("templateId") Long templateId) {
-        return success(portalMessageTemplateMapper.selectPortalMessageTemplateByTemplateId(templateId));
+        return success(portalReplyTemplateMapper.selectPortalReplyTemplateByTemplateId(templateId));
     }
 
     /**
@@ -51,11 +51,11 @@ public class PortalMessageTemplateController extends BaseController {
     @PreAuthorize("@ss.hasPermi('portal:crm:template:add')")
     @Log(title = "回复模板", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody PortalMessageTemplate portalMessageTemplate) {
-        if (portalMessageTemplate.getUseCount() == null) {
-            portalMessageTemplate.setUseCount(0);
+    public AjaxResult add(@RequestBody PortalReplyTemplate portalReplyTemplate) {
+        if (portalReplyTemplate.getUseCount() == null) {
+            portalReplyTemplate.setUseCount(0);
         }
-        return toAjax(portalMessageTemplateMapper.insertPortalMessageTemplate(portalMessageTemplate));
+        return toAjax(portalReplyTemplateMapper.insertPortalReplyTemplate(portalReplyTemplate));
     }
 
     /**
@@ -64,8 +64,8 @@ public class PortalMessageTemplateController extends BaseController {
     @PreAuthorize("@ss.hasPermi('portal:crm:template:edit')")
     @Log(title = "回复模板", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody PortalMessageTemplate portalMessageTemplate) {
-        return toAjax(portalMessageTemplateMapper.updatePortalMessageTemplate(portalMessageTemplate));
+    public AjaxResult edit(@RequestBody PortalReplyTemplate portalReplyTemplate) {
+        return toAjax(portalReplyTemplateMapper.updatePortalReplyTemplate(portalReplyTemplate));
     }
 
     /**
@@ -75,6 +75,6 @@ public class PortalMessageTemplateController extends BaseController {
     @Log(title = "回复模板", businessType = BusinessType.DELETE)
     @DeleteMapping("/{templateIds}")
     public AjaxResult remove(@PathVariable Long[] templateIds) {
-        return toAjax(portalMessageTemplateMapper.deletePortalMessageTemplateByTemplateIds(templateIds));
+        return toAjax(portalReplyTemplateMapper.deletePortalReplyTemplateByTemplateIds(templateIds));
     }
 }

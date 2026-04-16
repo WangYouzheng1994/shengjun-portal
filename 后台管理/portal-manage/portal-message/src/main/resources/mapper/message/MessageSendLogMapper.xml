@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.message.mapper.MessageSendLogMapper">
+<mapper namespace="com.raisetech.message.mapper.MessageSendLogMapper">
 
-    <resultMap type="com.ruoyi.message.domain.PortalMessageSendLog" id="MessageSendLogResult">
+    <resultMap type="com.raisetech.message.domain.PortalMessageSendLog" id="MessageSendLogResult">
         <result property="logId"         column="log_id"         />
         <result property="channelType"   column="channel_type"   />
         <result property="templateId"   column="template_id"   />
@@ -32,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from portal_message_send_log
     </sql>
 
-    <select id="selectMessageSendLogList" parameterType="com.ruoyi.message.domain.PortalMessageSendLog" resultMap="MessageSendLogResult">
+    <select id="selectMessageSendLogList" parameterType="com.raisetech.message.domain.PortalMessageSendLog" resultMap="MessageSendLogResult">
         <include refid="selectMessageSendLogVo"/>
         <where>
             del_flag = '0'
@@ -60,7 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where log_id = #{logId}
     </select>
 
-    <insert id="insertMessageSendLog" parameterType="com.ruoyi.message.domain.PortalMessageSendLog" useGeneratedKeys="true" keyProperty="logId">
+    <insert id="insertMessageSendLog" parameterType="com.raisetech.message.domain.PortalMessageSendLog" useGeneratedKeys="true" keyProperty="logId">
         insert into portal_message_send_log
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="channelType != null and channelType != ''">channel_type,</if>
@@ -102,7 +102,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
     </insert>
 
-    <update id="updateMessageSendLog" parameterType="com.ruoyi.message.domain.PortalMessageSendLog">
+    <update id="updateMessageSendLog" parameterType="com.raisetech.message.domain.PortalMessageSendLog">
         update portal_message_send_log
         <set>
             <if test="sendStatus != null">send_status = #{sendStatus},</if>

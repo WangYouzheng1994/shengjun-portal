@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.portal.mapper.PortalCompanyInfoMapper">
+<mapper namespace="com.raisetech.portal.mapper.PortalCompanyInfoMapper">
 
-    <resultMap type="com.ruoyi.portal.domain.PortalCompanyInfo" id="PortalCompanyInfoResult">
+    <resultMap type="com.raisetech.portal.domain.PortalCompanyInfo" id="PortalCompanyInfoResult">
         <result property="infoId"          column="info_id"           />
         <result property="companyName"     column="company_name"      />
         <result property="companyLogo"     column="company_logo"      />
@@ -35,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from portal_company_info
     </sql>
 
-    <select id="selectPortalCompanyInfoList" parameterType="com.ruoyi.portal.domain.PortalCompanyInfo" resultMap="PortalCompanyInfoResult">
+    <select id="selectPortalCompanyInfoList" parameterType="com.raisetech.portal.domain.PortalCompanyInfo" resultMap="PortalCompanyInfoResult">
         <include refid="selectPortalCompanyInfoVo"/>
         <where>
             del_flag = '0'
@@ -54,7 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where info_id = #{infoId}
     </select>
 
-    <insert id="insertPortalCompanyInfo" parameterType="com.ruoyi.portal.domain.PortalCompanyInfo" useGeneratedKeys="true" keyProperty="infoId">
+    <insert id="insertPortalCompanyInfo" parameterType="com.raisetech.portal.domain.PortalCompanyInfo" useGeneratedKeys="true" keyProperty="infoId">
         insert into portal_company_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="companyName != null and companyName != ''">company_name,</if>
@@ -102,7 +102,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
     </insert>
 
-    <update id="updatePortalCompanyInfo" parameterType="com.ruoyi.portal.domain.PortalCompanyInfo">
+    <update id="updatePortalCompanyInfo" parameterType="com.raisetech.portal.domain.PortalCompanyInfo">
         update portal_company_info
         <set>
             <if test="companyName != null and companyName != ''">company_name = #{companyName},</if>

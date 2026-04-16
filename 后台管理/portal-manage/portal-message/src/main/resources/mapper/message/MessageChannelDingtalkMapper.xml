@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.message.mapper.MessageChannelDingtalkMapper">
+<mapper namespace="com.raisetech.message.mapper.MessageChannelDingtalkMapper">
 
-    <resultMap type="com.ruoyi.message.domain.config.PortalMessageChannelDingtalk" id="DingtalkResult">
+    <resultMap type="com.raisetech.message.domain.config.PortalMessageChannelDingtalk" id="DingtalkResult">
         <result property="configId"        column="config_id"        />
         <result property="channelId"       column="channel_id"       />
         <result property="dingtalkType"    column="dingtalk_type"    />
@@ -32,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from portal_message_channel_dingtalk
     </sql>
 
-    <select id="selectMessageChannelDingtalkList" parameterType="com.ruoyi.message.domain.config.PortalMessageChannelDingtalk" resultMap="DingtalkResult">
+    <select id="selectMessageChannelDingtalkList" parameterType="com.raisetech.message.domain.config.PortalMessageChannelDingtalk" resultMap="DingtalkResult">
         <include refid="selectDingtalkVo"/>
         <where>
             del_flag = '0'
@@ -58,7 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where channel_id = #{channelId} and del_flag = '0'
     </select>
 
-    <insert id="insertMessageChannelDingtalk" parameterType="com.ruoyi.message.domain.config.PortalMessageChannelDingtalk" useGeneratedKeys="true" keyProperty="configId">
+    <insert id="insertMessageChannelDingtalk" parameterType="com.raisetech.message.domain.config.PortalMessageChannelDingtalk" useGeneratedKeys="true" keyProperty="configId">
         insert into portal_message_channel_dingtalk
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="channelId != null">channel_id,</if>
@@ -96,7 +96,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
     </insert>
 
-    <update id="updateMessageChannelDingtalk" parameterType="com.ruoyi.message.domain.config.PortalMessageChannelDingtalk">
+    <update id="updateMessageChannelDingtalk" parameterType="com.raisetech.message.domain.config.PortalMessageChannelDingtalk">
         update portal_message_channel_dingtalk
         <set>
             <if test="dingtalkType != null">dingtalk_type = #{dingtalkType},</if>

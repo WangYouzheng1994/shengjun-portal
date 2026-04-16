@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.portal.mapper.PortalOfficeLocationMapper">
+<mapper namespace="com.raisetech.portal.mapper.PortalOfficeLocationMapper">
 
-    <resultMap type="com.ruoyi.portal.domain.PortalOfficeLocation" id="PortalOfficeLocationResult">
+    <resultMap type="com.raisetech.portal.domain.PortalOfficeLocation" id="PortalOfficeLocationResult">
         <result property="locationId"     column="location_id"      />
         <result property="infoId"         column="info_id"          />
         <result property="locationName"   column="location_name"    />
@@ -38,7 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from portal_office_location
     </sql>
 
-    <select id="selectPortalOfficeLocationList" parameterType="com.ruoyi.portal.domain.PortalOfficeLocation" resultMap="PortalOfficeLocationResult">
+    <select id="selectPortalOfficeLocationList" parameterType="com.raisetech.portal.domain.PortalOfficeLocation" resultMap="PortalOfficeLocationResult">
         <include refid="selectPortalOfficeLocationVo"/>
         <where>
             del_flag = '0'
@@ -75,7 +75,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where location_id = #{locationId}
     </select>
 
-    <insert id="insertPortalOfficeLocation" parameterType="com.ruoyi.portal.domain.PortalOfficeLocation" useGeneratedKeys="true" keyProperty="locationId">
+    <insert id="insertPortalOfficeLocation" parameterType="com.raisetech.portal.domain.PortalOfficeLocation" useGeneratedKeys="true" keyProperty="locationId">
         insert into portal_office_location
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="infoId != null">info_id,</if>
@@ -127,7 +127,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
     </insert>
 
-    <update id="updatePortalOfficeLocation" parameterType="com.ruoyi.portal.domain.PortalOfficeLocation">
+    <update id="updatePortalOfficeLocation" parameterType="com.raisetech.portal.domain.PortalOfficeLocation">
         update portal_office_location
         <set>
             <if test="infoId != null">info_id = #{infoId},</if>

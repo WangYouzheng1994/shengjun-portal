@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.portal.mapper.PortalCompanyHonorMapper">
+<mapper namespace="com.raisetech.portal.mapper.PortalCompanyHonorMapper">
 
-    <resultMap type="com.ruoyi.portal.domain.PortalCompanyHonor" id="PortalCompanyHonorResult">
+    <resultMap type="com.raisetech.portal.domain.PortalCompanyHonor" id="PortalCompanyHonorResult">
         <result property="honorId"          column="honor_id"           />
         <result property="honorTitle"       column="honor_title"        />
         <result property="honorImage"       column="honor_image"        />
@@ -29,7 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from portal_company_honor
     </sql>
 
-    <select id="selectPortalCompanyHonorList" parameterType="com.ruoyi.portal.domain.PortalCompanyHonor" resultMap="PortalCompanyHonorResult">
+    <select id="selectPortalCompanyHonorList" parameterType="com.raisetech.portal.domain.PortalCompanyHonor" resultMap="PortalCompanyHonorResult">
         <include refid="selectPortalCompanyHonorVo"/>
         <where>
             del_flag = '0'
@@ -54,7 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where honor_id = #{honorId}
     </select>
 
-    <insert id="insertPortalCompanyHonor" parameterType="com.ruoyi.portal.domain.PortalCompanyHonor" useGeneratedKeys="true" keyProperty="honorId">
+    <insert id="insertPortalCompanyHonor" parameterType="com.raisetech.portal.domain.PortalCompanyHonor" useGeneratedKeys="true" keyProperty="honorId">
         insert into portal_company_honor
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="honorTitle != null and honorTitle != ''">honor_title,</if>
@@ -90,7 +90,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
     </insert>
 
-    <update id="updatePortalCompanyHonor" parameterType="com.ruoyi.portal.domain.PortalCompanyHonor">
+    <update id="updatePortalCompanyHonor" parameterType="com.raisetech.portal.domain.PortalCompanyHonor">
         update portal_company_honor
         <set>
             <if test="honorTitle != null and honorTitle != ''">honor_title = #{honorTitle},</if>

@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.portal.mapper.PortalCustomerTagMapper">
+<mapper namespace="com.raisetech.portal.mapper.PortalCustomerTagMapper">
 
-    <resultMap type="com.ruoyi.portal.domain.PortalCustomerTag" id="PortalCustomerTagResult">
+    <resultMap type="com.raisetech.portal.domain.PortalCustomerTag" id="PortalCustomerTagResult">
         <result property="tagId"       column="tag_id"        />
         <result property="tagName"     column="tag_name"      />
         <result property="tagColor"    column="tag_color"     />
@@ -24,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from portal_customer_tag
     </sql>
 
-    <select id="selectPortalCustomerTagList" parameterType="com.ruoyi.portal.domain.PortalCustomerTag" resultMap="PortalCustomerTagResult">
+    <select id="selectPortalCustomerTagList" parameterType="com.raisetech.portal.domain.PortalCustomerTag" resultMap="PortalCustomerTagResult">
         <include refid="selectPortalCustomerTagVo"/>
         <where>
             del_flag = '0'
@@ -43,7 +43,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where tag_id = #{tagId} and del_flag = '0'
     </select>
 
-    <insert id="insertPortalCustomerTag" parameterType="com.ruoyi.portal.domain.PortalCustomerTag" useGeneratedKeys="true" keyProperty="tagId">
+    <insert id="insertPortalCustomerTag" parameterType="com.raisetech.portal.domain.PortalCustomerTag" useGeneratedKeys="true" keyProperty="tagId">
         insert into portal_customer_tag
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="tagName != null and tagName != ''">tag_name,</if>
@@ -71,7 +71,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
     </insert>
 
-    <update id="updatePortalCustomerTag" parameterType="com.ruoyi.portal.domain.PortalCustomerTag">
+    <update id="updatePortalCustomerTag" parameterType="com.raisetech.portal.domain.PortalCustomerTag">
         update portal_customer_tag
         <set>
             <if test="tagName != null and tagName != ''">tag_name = #{tagName},</if>

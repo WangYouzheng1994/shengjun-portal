@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.portal.mapper.PortalMessageTemplateMapper">
+<mapper namespace="com.raisetech.portal.mapper.PortalReplyTemplateMapper">
 
-    <resultMap type="com.ruoyi.portal.domain.PortalMessageTemplate" id="PortalMessageTemplateResult">
+    <resultMap type="PortalReplyTemplate" id="PortalReplyTemplateResult">
         <result property="templateId"      column="template_id"        />
         <result property="templateName"    column="template_name"      />
         <result property="templateContent" column="template_content"   />
@@ -19,15 +19,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="remark"          column="remark"             />
     </resultMap>
 
-    <sql id="selectPortalMessageTemplateVo">
+    <sql id="selectPortalReplyTemplateVo">
         select template_id, template_name, template_content, template_type,
                status, use_count, del_flag, create_by, create_time,
                update_by, update_time, remark
         from portal_message_template
     </sql>
 
-    <select id="selectPortalMessageTemplateList" parameterType="com.ruoyi.portal.domain.PortalMessageTemplate" resultMap="PortalMessageTemplateResult">
-        <include refid="selectPortalMessageTemplateVo"/>
+    <select id="selectPortalReplyTemplateList" parameterType="PortalReplyTemplate" resultMap="PortalReplyTemplateResult">
+        <include refid="selectPortalReplyTemplateVo"/>
         <where>
             del_flag = '0'
             <if test="templateName != null and templateName != ''">
@@ -43,12 +43,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         order by create_time desc
     </select>
 
-    <select id="selectPortalMessageTemplateByTemplateId" parameterType="Long" resultMap="PortalMessageTemplateResult">
-        <include refid="selectPortalMessageTemplateVo"/>
+    <select id="selectPortalReplyTemplateByTemplateId" parameterType="Long" resultMap="PortalReplyTemplateResult">
+        <include refid="selectPortalReplyTemplateVo"/>
         where template_id = #{templateId} and del_flag = '0'
     </select>
 
-    <insert id="insertPortalMessageTemplate" parameterType="com.ruoyi.portal.domain.PortalMessageTemplate" useGeneratedKeys="true" keyProperty="templateId">
+    <insert id="insertPortalReplyTemplate" parameterType="PortalReplyTemplate" useGeneratedKeys="true" keyProperty="templateId">
         insert into portal_message_template
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="templateName != null and templateName != ''">template_name,</if>
@@ -78,7 +78,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
     </insert>
 
-    <update id="updatePortalMessageTemplate" parameterType="com.ruoyi.portal.domain.PortalMessageTemplate">
+    <update id="updatePortalReplyTemplate" parameterType="PortalReplyTemplate">
         update portal_message_template
         <set>
             <if test="templateName != null and templateName != ''">template_name = #{templateName},</if>
@@ -93,11 +93,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where template_id = #{templateId}
     </update>
 
-    <delete id="deletePortalMessageTemplateByTemplateId" parameterType="Long">
+    <delete id="deletePortalReplyTemplateByTemplateId" parameterType="Long">
         update portal_message_template set del_flag = '1' where template_id = #{templateId}
     </delete>
 
-    <delete id="deletePortalMessageTemplateByTemplateIds" parameterType="String">
+    <delete id="deletePortalReplyTemplateByTemplateIds" parameterType="String">
         update portal_message_template set del_flag = '1' where template_id in
         <foreach item="templateId" collection="array" open="(" separator="," close=")">
             #{templateId}

@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.portal.mapper.PortalProductAttrValueMapper">
+<mapper namespace="com.raisetech.portal.mapper.PortalProductAttrValueMapper">
 
-    <resultMap type="com.ruoyi.portal.domain.PortalProductAttrValue" id="PortalProductAttrValueResult">
+    <resultMap type="com.raisetech.portal.domain.PortalProductAttrValue" id="PortalProductAttrValueResult">
         <result property="valueId"        column="value_id"         />
         <result property="productId"      column="product_id"        />
         <result property="attrDefId"      column="attr_def_id"       />
@@ -29,7 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join portal_product_attr_def d on v.attr_def_id = d.attr_def_id
     </sql>
 
-    <select id="selectPortalProductAttrValueList" parameterType="com.ruoyi.portal.domain.PortalProductAttrValue" resultMap="PortalProductAttrValueResult">
+    <select id="selectPortalProductAttrValueList" parameterType="com.raisetech.portal.domain.PortalProductAttrValue" resultMap="PortalProductAttrValueResult">
         <include refid="selectPortalProductAttrValueVo"/>
         <where>
             v.del_flag = '0'
@@ -57,7 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where v.value_id = #{valueId}
     </select>
 
-    <insert id="insertPortalProductAttrValue" parameterType="com.ruoyi.portal.domain.PortalProductAttrValue" useGeneratedKeys="true" keyProperty="valueId">
+    <insert id="insertPortalProductAttrValue" parameterType="com.raisetech.portal.domain.PortalProductAttrValue" useGeneratedKeys="true" keyProperty="valueId">
         insert into portal_product_attr_value
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="productId != null">product_id,</if>
@@ -97,7 +97,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </insert>
 
-    <update id="updatePortalProductAttrValue" parameterType="com.ruoyi.portal.domain.PortalProductAttrValue">
+    <update id="updatePortalProductAttrValue" parameterType="com.raisetech.portal.domain.PortalProductAttrValue">
         update portal_product_attr_value
         <set>
             <if test="attrValue != null">attr_value = #{attrValue},</if>

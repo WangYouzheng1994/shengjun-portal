@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.portal.mapper.PortalProductCategoryMapper">
+<mapper namespace="com.raisetech.portal.mapper.PortalProductCategoryMapper">
 
-    <resultMap type="com.ruoyi.portal.domain.PortalProductCategory" id="PortalProductCategoryResult">
+    <resultMap type="com.raisetech.portal.domain.PortalProductCategory" id="PortalProductCategoryResult">
         <result property="categoryId"     column="category_id"     />
         <result property="categoryName"   column="category_name"   />
         <result property="categoryCode"   column="category_code"   />
@@ -33,7 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from portal_product_category
     </sql>
 
-    <select id="selectPortalProductCategoryList" parameterType="com.ruoyi.portal.domain.PortalProductCategory" resultMap="PortalProductCategoryResult">
+    <select id="selectPortalProductCategoryList" parameterType="com.raisetech.portal.domain.PortalProductCategory" resultMap="PortalProductCategoryResult">
         <include refid="selectPortalProductCategoryVo"/>
         <where>
             del_flag = '0'
@@ -50,7 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         order by sort_order asc, category_id asc
     </select>
 
-    <select id="selectPortalProductCategoryTree" parameterType="com.ruoyi.portal.domain.PortalProductCategory" resultMap="PortalProductCategoryResult">
+    <select id="selectPortalProductCategoryTree" parameterType="com.raisetech.portal.domain.PortalProductCategory" resultMap="PortalProductCategoryResult">
         <include refid="selectPortalProductCategoryVo"/>
         <where>
             del_flag = '0'
@@ -69,7 +69,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where category_id = #{categoryId}
     </select>
 
-    <insert id="insertPortalProductCategory" parameterType="com.ruoyi.portal.domain.PortalProductCategory" useGeneratedKeys="true" keyProperty="categoryId">
+    <insert id="insertPortalProductCategory" parameterType="com.raisetech.portal.domain.PortalProductCategory" useGeneratedKeys="true" keyProperty="categoryId">
         insert into portal_product_category
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="categoryName != null and categoryName != ''">category_name,</if>
@@ -111,7 +111,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
     </insert>
 
-    <update id="updatePortalProductCategory" parameterType="com.ruoyi.portal.domain.PortalProductCategory">
+    <update id="updatePortalProductCategory" parameterType="com.raisetech.portal.domain.PortalProductCategory">
         update portal_product_category
         <set>
             <if test="categoryName != null and categoryName != ''">category_name = #{categoryName},</if>

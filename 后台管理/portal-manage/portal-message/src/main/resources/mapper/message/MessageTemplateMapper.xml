@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.message.mapper.MessageTemplateMapper">
+<mapper namespace="com.raisetech.message.mapper.MessageTemplateMapper">
 
-    <resultMap type="com.ruoyi.message.domain.PortalMessageTemplate" id="MessageTemplateResult">
+    <resultMap type="com.raisetech.message.domain.PortalMessageTemplate" id="MessageTemplateResult">
         <result property="templateId"      column="template_id"/>
         <result property="templateCode"   column="template_code"/>
         <result property="templateName"   column="template_name"/>
@@ -28,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from portal_message_template
     </sql>
 
-    <select id="selectMessageTemplateList" parameterType="com.ruoyi.message.domain.PortalMessageTemplate" resultMap="MessageTemplateResult">
+    <select id="selectMessageTemplateList" parameterType="com.raisetech.message.domain.PortalMessageTemplate" resultMap="MessageTemplateResult">
         <include refid="selectTemplateVo"/>
         <where>
             del_flag = '0'
@@ -61,7 +61,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where template_code = #{templateCode} and del_flag = '0'
     </select>
 
-    <insert id="insertMessageTemplate" parameterType="com.ruoyi.message.domain.PortalMessageTemplate" useGeneratedKeys="true" keyProperty="templateId">
+    <insert id="insertMessageTemplate" parameterType="com.raisetech.message.domain.PortalMessageTemplate" useGeneratedKeys="true" keyProperty="templateId">
         insert into portal_message_template
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="templateCode != null and templateCode != ''">template_code,</if>
@@ -91,7 +91,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
     </insert>
 
-    <update id="updateMessageTemplate" parameterType="com.ruoyi.message.domain.PortalMessageTemplate">
+    <update id="updateMessageTemplate" parameterType="com.raisetech.message.domain.PortalMessageTemplate">
         update portal_message_template
         <set>
             <if test="templateCode != null and templateCode != ''">template_code = #{templateCode},</if>

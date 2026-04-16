@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.portal.mapper.PortalProductSkuMapper">
+<mapper namespace="com.raisetech.portal.mapper.PortalProductSkuMapper">
 
-    <resultMap type="com.ruoyi.portal.domain.PortalProductSku" id="PortalProductSkuResult">
+    <resultMap type="com.raisetech.portal.domain.PortalProductSku" id="PortalProductSkuResult">
         <result property="skuId"          column="sku_id"            />
         <result property="productId"      column="product_id"         />
         <result property="skuCode"        column="sku_code"           />
@@ -35,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from portal_product_sku
     </sql>
 
-    <select id="selectPortalProductSkuList" parameterType="com.ruoyi.portal.domain.PortalProductSku" resultMap="PortalProductSkuResult">
+    <select id="selectPortalProductSkuList" parameterType="com.raisetech.portal.domain.PortalProductSku" resultMap="PortalProductSkuResult">
         <include refid="selectPortalProductSkuVo"/>
         <where>
             del_flag = '0'
@@ -69,7 +69,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where sku_id = #{skuId}
     </select>
 
-    <insert id="insertPortalProductSku" parameterType="com.ruoyi.portal.domain.PortalProductSku" useGeneratedKeys="true" keyProperty="skuId">
+    <insert id="insertPortalProductSku" parameterType="com.raisetech.portal.domain.PortalProductSku" useGeneratedKeys="true" keyProperty="skuId">
         insert into portal_product_sku
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="productId != null">product_id,</if>
@@ -123,7 +123,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </insert>
 
-    <update id="updatePortalProductSku" parameterType="com.ruoyi.portal.domain.PortalProductSku">
+    <update id="updatePortalProductSku" parameterType="com.raisetech.portal.domain.PortalProductSku">
         update portal_product_sku
         <set>
             <if test="skuCode != null and skuCode != ''">sku_code = #{skuCode},</if>

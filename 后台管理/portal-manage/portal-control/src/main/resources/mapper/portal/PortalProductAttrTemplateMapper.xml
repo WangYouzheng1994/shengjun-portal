@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.portal.mapper.PortalProductAttrTemplateMapper">
+<mapper namespace="com.raisetech.portal.mapper.PortalProductAttrTemplateMapper">
 
-    <resultMap type="com.ruoyi.portal.domain.PortalProductAttrTemplate" id="PortalProductAttrTemplateResult">
+    <resultMap type="com.raisetech.portal.domain.PortalProductAttrTemplate" id="PortalProductAttrTemplateResult">
         <result property="templateId"     column="template_id"     />
         <result property="templateName"   column="template_name"   />
         <result property="templateCode"   column="template_code"   />
@@ -26,7 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from portal_product_attr_template
     </sql>
 
-    <select id="selectPortalProductAttrTemplateList" parameterType="com.ruoyi.portal.domain.PortalProductAttrTemplate" resultMap="PortalProductAttrTemplateResult">
+    <select id="selectPortalProductAttrTemplateList" parameterType="com.raisetech.portal.domain.PortalProductAttrTemplate" resultMap="PortalProductAttrTemplateResult">
         <include refid="selectPortalProductAttrTemplateVo"/>
         <where>
             del_flag = '0'
@@ -51,7 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where template_id = #{templateId}
     </select>
 
-    <insert id="insertPortalProductAttrTemplate" parameterType="com.ruoyi.portal.domain.PortalProductAttrTemplate" useGeneratedKeys="true" keyProperty="templateId">
+    <insert id="insertPortalProductAttrTemplate" parameterType="com.raisetech.portal.domain.PortalProductAttrTemplate" useGeneratedKeys="true" keyProperty="templateId">
         insert into portal_product_attr_template
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="templateName != null and templateName != ''">template_name,</if>
@@ -81,7 +81,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
     </insert>
 
-    <update id="updatePortalProductAttrTemplate" parameterType="com.ruoyi.portal.domain.PortalProductAttrTemplate">
+    <update id="updatePortalProductAttrTemplate" parameterType="com.raisetech.portal.domain.PortalProductAttrTemplate">
         update portal_product_attr_template
         <set>
             <if test="templateName != null and templateName != ''">template_name = #{templateName},</if>

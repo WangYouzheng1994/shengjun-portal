@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.portal.mapper.PortalCompanyMilestoneMapper">
+<mapper namespace="com.raisetech.portal.mapper.PortalCompanyMilestoneMapper">
 
-    <resultMap type="com.ruoyi.portal.domain.PortalCompanyMilestone" id="PortalCompanyMilestoneResult">
+    <resultMap type="com.raisetech.portal.domain.PortalCompanyMilestone" id="PortalCompanyMilestoneResult">
         <result property="milestoneId"     column="milestone_id"      />
         <result property="companyId"       column="company_id"        />
         <result property="milestoneTitle"  column="milestone_title"   />
@@ -36,8 +36,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from portal_company_milestone
     </sql>
 
-    <!-- 查询里程碑列表（支持按企业、年份、级别筛选，按时间倒序） -->
-    <select id="selectPortalCompanyMilestoneList" parameterType="com.ruoyi.portal.domain.PortalCompanyMilestone" resultMap="PortalCompanyMilestoneResult">
+    <!-- 查询里程碑列表（支持按企业、年份、级别筛选，按时间倒序�?-->
+    <select id="selectPortalCompanyMilestoneList" parameterType="com.raisetech.portal.domain.PortalCompanyMilestone" resultMap="PortalCompanyMilestoneResult">
         <include refid="selectPortalCompanyMilestoneVo"/>
         <where>
             del_flag = '0'
@@ -60,14 +60,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         order by milestone_year desc, milestone_month asc, milestone_day asc, sort_order asc, milestone_id desc
     </select>
 
-    <!-- 根据ID查询里程碑详情 -->
+    <!-- 根据ID查询里程碑详�?-->
     <select id="selectPortalCompanyMilestoneByMilestoneId" parameterType="Long" resultMap="PortalCompanyMilestoneResult">
         <include refid="selectPortalCompanyMilestoneVo"/>
         where milestone_id = #{milestoneId} and del_flag = '0'
     </select>
 
-    <!-- 新增里程碑 -->
-    <insert id="insertPortalCompanyMilestone" parameterType="com.ruoyi.portal.domain.PortalCompanyMilestone" useGeneratedKeys="true" keyProperty="milestoneId">
+    <!-- 新增里程�?-->
+    <insert id="insertPortalCompanyMilestone" parameterType="com.raisetech.portal.domain.PortalCompanyMilestone" useGeneratedKeys="true" keyProperty="milestoneId">
         insert into portal_company_milestone
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="companyId != null">company_id,</if>
@@ -115,8 +115,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
     </insert>
 
-    <!-- 修改里程碑 -->
-    <update id="updatePortalCompanyMilestone" parameterType="com.ruoyi.portal.domain.PortalCompanyMilestone">
+    <!-- 修改里程�?-->
+    <update id="updatePortalCompanyMilestone" parameterType="com.raisetech.portal.domain.PortalCompanyMilestone">
         update portal_company_milestone
         <trim prefix="SET" suffixOverrides=",">
             <if test="companyId != null">company_id = #{companyId},</if>
@@ -140,7 +140,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where milestone_id = #{milestoneId}
     </update>
 
-    <!-- 批量删除里程碑（逻辑删除） -->
+    <!-- 批量删除里程碑（逻辑删除�?-->
     <update id="deletePortalCompanyMilestoneByMilestoneIds" parameterType="String">
         update portal_company_milestone set del_flag = '1' where milestone_id in
         <foreach item="milestoneId" collection="array" open="(" separator="," close=")">
@@ -148,7 +148,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </update>
 
-    <!-- 删除单个里程碑信息（逻辑删除） -->
+    <!-- 删除单个里程碑信息（逻辑删除�?-->
     <update id="deletePortalCompanyMilestoneByMilestoneId" parameterType="Long">
         update portal_company_milestone set del_flag = '1' where milestone_id = #{milestoneId}
     </update>
@@ -159,7 +159,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where company_id = #{companyId} and del_flag = '0'
     </select>
 
-    <!-- 按年份分组统计某企业的里程碑数量（用于前端时间轴展示优化） -->
+    <!-- 按年份分组统计某企业的里程碑数量（用于前端时间轴展示优化�?-->
     <select id="countGroupByYear" parameterType="Long" resultType="java.util.Map">
         select milestone_year as year, count(*) as count
         from portal_company_milestone
