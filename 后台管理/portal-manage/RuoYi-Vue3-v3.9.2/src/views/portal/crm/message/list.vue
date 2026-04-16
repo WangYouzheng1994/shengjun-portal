@@ -255,8 +255,10 @@
 
 <script setup name="MessageList">
 import { listMessage, getMessage, delMessage, replyMessage, exportMessage, updateMessage, convertMessageToCustomer } from "@/api/portal/crm/message"
+import useUserStore from "@/store/modules/user"
 
 const { proxy } = getCurrentInstance()
+const userStore = useUserStore()
 const { portal_message_status, portal_customer_level } = proxy.useDict("portal_message_status", "portal_customer_level")
 
 const messageList = ref([])
@@ -403,8 +405,8 @@ function switchToReply() {
 function submitForm() {
   proxy.$refs["messageRef"].validate(valid => {
     if (valid) {
-      form.value.handlerId = proxy.$store.state.user.id
-      form.value.handlerName = proxy.$store.state.user.name
+      form.value.handlerId = userStore.id
+      form.value.handlerName = userStore.name
       replyMessage(form.value).then(response => {
         proxy.$modal.msgSuccess("回复成功")
         open.value = false
@@ -472,8 +474,8 @@ function handleBatchReply() {
       replyMessage({
         messageId: messageId,
         replyContent: value,
-        handlerId: proxy.$store.state.user.id,
-        handlerName: proxy.$store.state.user.name
+        handlerId: userStore.id,
+        handlerName: userStore.name
       })
     })
     proxy.$modal.msgSuccess("批量回复成功")

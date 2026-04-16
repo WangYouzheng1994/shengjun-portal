@@ -125,6 +125,16 @@ VALUES('门户管理', 0, 10, 'portal', NULL, 'M', '0', '0', '', 'documentation'
 
 SET @portalMenuId = LAST_INSERT_ID();
 
+-- 门户首页菜单（作为门户管理的第一个子菜单）
+INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `is_frame`, `is_cache`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES('门户首页', @portalMenuId, 0, 'dashboard', 'portal/dashboard/index', 'C', '0', '0', 'portal:dashboard:query', 'dashboard', 1, 0, 'admin', sysdate(), '', null, '门户数据概览首页');
+
+SET @dashboardMenuId = LAST_INSERT_ID();
+
+-- 门户首页按钮权限
+INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES('门户概览查询', @dashboardMenuId, 1, '#', '', 'F', '0', '0', 'portal:dashboard:query', '#', 'admin', sysdate(), '', null, '');
+
 -- 二级目录：基础管理
 INSERT INTO `sys_menu`(`menu_name`, `parent_id`, `order_num`, `path`, `component`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
 VALUES('基础管理', @portalMenuId, 1, 'base', NULL, 'M', '0', '0', '', 'system', 'admin', sysdate(), '', null, '基础管理目录');
@@ -239,7 +249,8 @@ SET @companyAdminRoleId = LAST_INSERT_ID();
 -- 为企业管理员角色分配所有门户管理相关菜单权限
 INSERT INTO `sys_role_menu`(`role_id`, `menu_id`)
 SELECT @companyAdminRoleId, menu_id FROM sys_menu WHERE menu_name IN (
-  '门户管理', '基础管理', '信息发布',
+  '门户管理', '门户首页', '门户概览查询',
+  '基础管理', '信息发布',
   '轮播图管理', '轮播图查询', '轮播图新增', '轮播图修改', '轮播图删除', '轮播图导出',
   '企业信息', '企业信息查询', '企业信息新增', '企业信息修改', '企业信息删除', '企业信息导出',
   '文章分类', '文章分类查询', '文章分类新增', '文章分类修改', '文章分类删除', '文章分类导出',

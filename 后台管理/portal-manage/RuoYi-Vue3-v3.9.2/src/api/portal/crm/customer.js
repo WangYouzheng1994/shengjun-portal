@@ -75,3 +75,15 @@ export function exportCustomer(query) {
     params: query
   })
 }
+
+/**
+ * 查询所有客户（用于下拉选择）
+ * @returns Promise
+ */
+export function listAllCustomer() {
+  return request({
+    url: '/portal/crm/customer/list',
+    method: 'get',
+    params: { pageNum: 1, pageSize: 1000 }
+  })
+}

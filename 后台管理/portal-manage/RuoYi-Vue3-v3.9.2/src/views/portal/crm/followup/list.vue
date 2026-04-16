@@ -100,7 +100,7 @@
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="150">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="150" fixed="right">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['portal:crm:followup:edit']">修改</el-button>
           <el-button link type="danger" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['portal:crm:followup:remove']">删除</el-button>
@@ -123,8 +123,14 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="关联客户" prop="customerId">
-              <el-input v-model="form.customerName" disabled placeholder="从客户详情页进入时自动填充" />
-              <input type="hidden" v-model="form.customerId" />
+              <el-select v-model="form.customerId" placeholder="请选择客户" filterable style="width: 100%" @change="handleCustomerChange">
+                <el-option
+                  v-for="customer in customerList"
+                  :key="customer.customerId"
+                  :label="customer.customerName + ' - ' + (customer.phone || '无电话')"
+                  :value="customer.customerId"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -208,11 +214,15 @@
 
 <script setup name="FollowUpList">
 import { listFollowUp, getFollowUp, delFollowUp, addFollowUp, updateFollowUp } from "@/api/portal/crm/followup"
+import { listAllCustomer } from "@/api/portal/crm/customer"
+import useUserStore from "@/store/modules/user"
 
 const { proxy } = getCurrentInstance()
+const userStore = useUserStore()
 const { portal_follow_type, portal_contact_feeling } = proxy.useDict("portal_follow_type", "portal_contact_feeling")
 
 const followUpList = ref([])
+const customerList = ref([])
 const open = ref(false)
 const loading = ref(true)
 const showSearch = ref(true)
@@ -251,6 +261,21 @@ function getList() {
     total.value = response.total
     loading.value = false
   })
+}
+
+/** 加载客户列表 */
+function loadCustomerList() {
+  listAllCustomer().then(response => {
+    customerList.value = response.rows || []
+  })
+}
+
+/** 客户选择变化 */
+function handleCustomerChange(customerId) {
+  const customer = customerList.value.find(item => item.customerId === customerId)
+  if (customer) {
+    form.value.customerName = customer.customerName
+  }
 }
 
 /** 取消按钮 */
@@ -301,6 +326,8 @@ function handleAdd() {
   reset()
   open.value = true
   title.value = "添加跟进记录"
+  // 加载客户列表
+  loadCustomerList()
 }
 
 /** 修改按钮操作 */
@@ -311,6 +338,7 @@ function handleUpdate(row) {
     form.value = response.data
     open.value = true
     title.value = "修改跟进记录"
+    loadCustomerList()
   })
 }
 
@@ -323,14 +351,20 @@ function submitForm() {
           proxy.$modal.msgSuccess("修改成功")
           open.value = false
           getList()
+        }).catch(error => {
+          console.error("修改跟进记录失败:", error)
+          proxy.$modal.msgError("修改失败：" + (error.message || "请检查网络或刷新重试"))
         })
       } else {
-        form.value.followUserId = proxy.$store.state.user.id
-        form.value.followUserName = proxy.$store.state.user.name
+        form.value.followUserId = userStore.id
+        form.value.followUserName = userStore.name
         addFollowUp(form.value).then(response => {
           proxy.$modal.msgSuccess("新增成功")
           open.value = false
           getList()
+        }).catch(error => {
+          console.error("新增跟进记录失败:", error)
+          proxy.$modal.msgError("新增失败：" + (error.message || "请检查网络或刷新重试"))
         })
       }
     }

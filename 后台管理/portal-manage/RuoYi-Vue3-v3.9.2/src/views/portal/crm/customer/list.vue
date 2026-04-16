@@ -317,8 +317,10 @@
 <script setup name="CustomerList">
 import { listCustomer, getCustomer, delCustomer, addCustomer, updateCustomer, exportCustomer } from "@/api/portal/crm/customer"
 import { listFollowUpByCustomer, addFollowUp } from "@/api/portal/crm/followup"
+import useUserStore from "@/store/modules/user"
 
 const { proxy } = getCurrentInstance()
+const userStore = useUserStore()
 const { portal_customer_source, portal_customer_status, portal_customer_level, portal_follow_type, portal_contact_feeling } = proxy.useDict("portal_customer_source", "portal_customer_status", "portal_customer_level", "portal_follow_type", "portal_contact_feeling")
 
 const customerList = ref([])
@@ -433,10 +435,15 @@ function handleUpdate(row) {
 function handleDetail(row) {
   detailForm.value = row || {}
   detailOpen.value = true
+  followUpList.value = []
 
   if (row && row.customerId) {
-    listFollowUpByCustomer(row.customerId, { pageNum: 1, pageSize: 10 }).then(response => {
+    const queryParams = { pageNum: 1, pageSize: 10 }
+    listFollowUpByCustomer(row.customerId, queryParams).then(response => {
       followUpList.value = response.rows
+    }).catch(error => {
+      console.error("加载跟进记录失败:", error)
+      proxy.$modal.msgError("加载跟进记录失败")
     })
   }
 }
@@ -492,14 +499,16 @@ function handleAddFollowUp(customer) {
       customerId: customer.customerId,
       followType: "0",
       followContent: value,
-      followUserId: proxy.$store.state.user.id,
-      followUserName: proxy.$store.state.user.name
+      followUserId: userStore.id,
+      followUserName: userStore.name
     }
     addFollowUp(followUpData).then(response => {
       proxy.$modal.msgSuccess("添加成功")
       listFollowUpByCustomer(customer.customerId, { pageNum: 1, pageSize: 10 }).then(res => {
         followUpList.value = res.rows
       })
+    }).catch(error => {
+      proxy.$modal.msgError("添加失败：" + (error.message || "未知错误"))
     })
   }).catch(() => {})
 }
