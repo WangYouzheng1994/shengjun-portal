@@ -3,15 +3,22 @@
 """
 MySQL Query Tool - MySQL数据库查询工具
 支持从项目配置文件自动检测数据库连接参数
+支持执行SQL文件和Python脚本
 
 使用方式:
+  # 查询
   python mysql_query.py "SHOW TABLES;"
   python mysql_query.py "SELECT * FROM portal_article LIMIT 5"
-  python mysql_query.py --file sql_file.sql
   python mysql_query.py --config application-druid.yml "DESCRIBE sys_menu"
 
+  # 执行SQL文件（支持多SQL）
+  python mysql_query.py --file sql_file.sql
+
+  # 执行Python脚本（支持复杂SQL操作）
+  python mysql_query.py --python exec_script.py
+
 作者: 王有政
-日期: 2026-04-12
+日期: 2026-04-16
 """
 
 import argparse
@@ -69,7 +76,7 @@ class MySQLQueryTool:
 
     def execute(self, sql, fetch=True, limit=None):
         """
-        执行SQL语句
+        执行单条SQL语句
 
         Args:
             sql: SQL语句
@@ -86,7 +93,6 @@ class MySQLQueryTool:
         try:
             sql_upper = sql.strip().upper()
 
-            # 对于SELECT语句，自动添加LIMIT保护
             if fetch and sql_upper.startswith('SELECT') and 'LIMIT' not in sql_upper:
                 if limit:
                     sql = f"{sql.rstrip(';')} LIMIT {limit};"
@@ -113,15 +119,114 @@ class MySQLQueryTool:
         finally:
             cursor.close()
 
+    def execute_file(self, file_path, limit=100):
+        """
+        执行SQL文件（支持多SQL语句，用分号分隔）
+
+        Args:
+            file_path: SQL文件路径
+            limit: SELECT语句的LIMIT值
+        Returns:
+            执行结果列表
+        """
+        if not os.path.exists(file_path):
+            print(f"文件不存在: {file_path}")
+            return None
+
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+
+        if not self.connection or not self.connection.open:
+            if not self.connect():
+                return None
+
+        results = []
+        statements = self._split_sql_statements(content)
+
+        print(f"开始执行文件: {file_path}")
+        print(f"共 {len(statements)} 条SQL语句\n")
+
+        for i, sql in enumerate(statements, 1):
+            sql = sql.strip()
+            if not sql or sql.startswith('--'):
+                continue
+
+            sql_upper = sql.upper()
+
+            if sql_upper.startswith(('SELECT', 'SHOW', 'DESC', 'EXPLAIN')):
+                if 'LIMIT' not in sql_upper:
+                    sql = f"{sql.rstrip(';')} LIMIT {limit};"
+                cursor = self.connection.cursor()
+                try:
+                    cursor.execute(sql)
+                    result = cursor.fetchall()
+                    print(f"[{i}/{len(statements)}] 查询成功: {len(result)} 行")
+                    results.append(result)
+                except Exception as e:
+                    print(f"[{i}/{len(statements)}] 执行错误: {e}")
+                    results.append(None)
+                finally:
+                    cursor.close()
+            else:
+                cursor = self.connection.cursor()
+                try:
+                    cursor.execute(sql)
+                    affected = cursor.rowcount
+                    self.connection.commit()
+                    print(f"[{i}/{len(statements)}] 执行成功: 影响 {affected} 行")
+                    results.append(affected)
+                except Exception as e:
+                    print(f"[{i}/{len(statements)}] 执行错误: {e}")
+                    self.connection.rollback()
+                    results.append(None)
+                finally:
+                    cursor.close()
+
+        print(f"\n文件执行完成! 成功执行 {sum(1 for r in results if r is not None)}/{len(statements)} 条SQL")
+        return results
+
+    def _split_sql_statements(self, content):
+        """分割SQL语句（处理字符串内的分号）"""
+        statements = []
+        current = []
+        in_string = False
+        string_char = None
+
+        for char in content:
+            if char in ("'", '"') and not in_string:
+                in_string = True
+                string_char = char
+            elif char == string_char and in_string:
+                in_string = False
+                string_char = None
+            elif char == ';' and not in_string:
+                stmt = ''.join(current).strip()
+                if stmt:
+                    statements.append(stmt)
+                current = []
+                continue
+            current.append(char)
+
+        last_stmt = ''.join(current).strip()
+        if last_stmt:
+            statements.append(last_stmt)
+
+        return statements
+
+    def get_connection_params(self):
+        """获取连接参数（供Python脚本使用）"""
+        return {
+            'host': self.host,
+            'port': self.port,
+            'user': self.user,
+            'password': self.password,
+            'database': self.database,
+            'charset': self.charset
+        }
+
 
 def load_config_from_yaml(config_path):
-    """
-    从YAML配置文件加载数据库连接参数
-
-    支持的格式:
-    - Spring Boot application.yml / application-druid.yml (Druid数据源)
-    - 通用YAML格式
-    """
+    """从YAML配置文件加载数据库连接参数"""
     if not os.path.exists(config_path):
         return None
 
@@ -129,7 +234,6 @@ def load_config_from_yaml(config_path):
         with open(config_path, 'r', encoding='utf-8') as f:
             config = yaml.safe_load(f)
 
-        # Spring Boot Druid格式
         if 'spring' in config and 'datasource' in config['spring']:
             ds = config['spring']['datasource']
             if 'druid' in ds and 'master' in ds['druid']:
@@ -145,7 +249,6 @@ def load_config_from_yaml(config_path):
                         'password': master.get('password', '')
                     }
 
-        # 直接格式
         if 'database' in config:
             db_config = config['database']
             return {
@@ -183,14 +286,7 @@ def load_config_from_env():
 
 
 def auto_detect_config(project_dir=None):
-    """
-    自动检测数据库配置
-
-    检测顺序:
-    1. 项目目录下的Spring Boot配置文件
-    2. 环境变量
-    3. 默认值
-    """
+    """自动检测数据库配置"""
     config_files = [
         'application-druid.yml',
         'application.yml',
@@ -214,7 +310,6 @@ def auto_detect_config(project_dir=None):
                         print(f"已从环境文件加载: {cf}")
                         return result
 
-    # 尝试环境变量
     env_config = load_config_from_env()
     if env_config.get('host') != 'localhost' or env_config.get('password'):
         print("已从环境变量加载配置")
@@ -231,14 +326,12 @@ def format_table(results, max_col_width=50):
 
     columns = list(results[0].keys())
 
-    # 计算每列宽度
     col_widths = {}
     for col in columns:
         header_len = len(str(col))
         max_val_len = max(len(str(row.get(col, ''))) for row in results)
         col_widths[col] = min(max(header_len, max_val_len) + 2, max_col_width)
 
-    # 打印表头
     header = '|'.join(str(col).center(col_widths[col]) for col in columns)
     separator = '+'.join('-' * col_widths[col] for col in columns)
 
@@ -246,7 +339,6 @@ def format_table(results, max_col_width=50):
     print(f"|{header}|")
     print(separator)
 
-    # 打印数据行
     for row in results:
         line = '|'.join(str(row.get(col, '')).center(col_widths[col]) for col in columns)
         print(f"|{line}|")
@@ -259,23 +351,51 @@ def format_json(results):
     print(json.dumps(results, ensure_ascii=False, indent=2, default=str))
 
 
+def execute_python_script(script_path, config):
+    """
+    执行Python脚本，注入数据库连接参数
+
+    Args:
+        script_path: Python脚本路径
+        config: 数据库配置字典
+    """
+    if not os.path.exists(script_path):
+        print(f"文件不存在: {script_path}")
+        return None
+
+    with open(script_path, 'r', encoding='utf-8') as f:
+        script_code = f.read()
+
+    local_namespace = {
+        'DB_HOST': config.get('host'),
+        'DB_PORT': config.get('port'),
+        'DB_USER': config.get('user'),
+        'DB_PASSWORD': config.get('password'),
+        'DB_DATABASE': config.get('database'),
+        'DB_CHARSET': config.get('charset', 'utf8mb4'),
+        'pymysql': pymysql,
+        'print': print
+    }
+
+    try:
+        exec(script_code, local_namespace)
+        return True
+    except Exception as e:
+        print(f"Python脚本执行错误: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
 def main():
     parser = argparse.ArgumentParser(
         description='MySQL数据库查询工具',
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""
-示例:
-  %(prog)s "SHOW TABLES LIKE 'portal_%';"
-  %(prog)s "DESCRIBE portal_article;"
-  %(prog)s "SELECT COUNT(*) FROM sys_menu WHERE parent_id = 0;"
-  %(prog)s --json "SELECT * FROM portal_banner LIMIT 3;"
-  %(prog)s --file query.sql
-  %(prog)s --host 192.168.0.69 --db ry392 "SELECT 1;"
-        """
+        formatter_class=argparse.RawDescriptionHelpFormatter
     )
 
     parser.add_argument('sql', nargs='?', help='要执行的SQL语句')
-    parser.add_argument('--file', '-f', help='从文件执行SQL')
+    parser.add_argument('--file', '-f', help='从SQL文件执行（支持多SQL，用分号分隔）')
+    parser.add_argument('--python', '-py', help='执行Python脚本（注入DB_*环境变量）')
     parser.add_argument('--host', '-H', help='数据库主机地址')
     parser.add_argument('--port', '-P', type=int, help='数据库端口')
     parser.add_argument('--user', '-u', help='用户名')
@@ -289,23 +409,9 @@ def main():
 
     args = parser.parse_args()
 
-    # 获取SQL语句
-    sql = args.sql
-    if args.file:
-        if not os.path.exists(args.file):
-            print(f"文件不存在: {args.file}")
-            sys.exit(1)
-        with open(args.file, 'r', encoding='utf-8') as f:
-            sql = f.read().strip()
-
-    if not sql:
-        parser.print_help()
-        sys.exit(0)
-
     # 获取数据库配置
     config = None
 
-    # 命令行参数优先
     if args.host:
         config = {
             'host': args.host,
@@ -314,13 +420,11 @@ def main():
             'password': args.password or '',
             'database': args.db or 'test'
         }
-    # 指定配置文件
     elif args.config:
         config = load_config_from_yaml(args.config)
         if not config:
             print(f"无法从配置文件加载: {args.config}")
             sys.exit(1)
-    # 自动检测
     else:
         project_dir = args.project_dir or os.getcwd()
         config = auto_detect_config(project_dir)
@@ -331,19 +435,39 @@ def main():
             print("  3. 设置环境变量: MYSQL_HOST, MYSQL_PORT等")
             sys.exit(1)
 
+    print(f"连接: {config['user']}@{config['host']}:{config['port']}/{config['database']}")
+    print("-" * 60)
+
     # 创建工具实例
     tool = MySQLQueryTool(**config)
 
-    # 显示连接信息
-    print(f"连接: {config['user']}@{config['host']}:{config['port']}/{config['database']}")
-    print(f"SQL: {sql[:100]}{'...' if len(sql) > 100 else ''}")
-    print("-" * 60)
-
-    # 连接并执行
-    if not tool.connect():
-        sys.exit(1)
-
     try:
+        # 执行Python脚本模式
+        if args.python:
+            print(f"执行Python脚本: {args.python}")
+            print("-" * 60)
+            execute_python_script(args.python, config)
+            return
+
+        # 执行SQL文件模式
+        if args.file:
+            print(f"执行SQL文件: {args.file}")
+            print("-" * 60)
+            tool.execute_file(args.file, limit=args.limit)
+            return
+
+        # 单条SQL模式
+        sql = args.sql
+        if not sql:
+            parser.print_help()
+            sys.exit(0)
+
+        print(f"SQL: {sql[:100]}{'...' if len(sql) > 100 else ''}")
+        print("-" * 60)
+
+        if not tool.connect():
+            sys.exit(1)
+
         limit = None if args.no_limit else args.limit
         is_select = sql.strip().upper().startswith(('SELECT', 'SHOW', 'DESC', 'EXPLAIN'))
         results = tool.execute(sql, fetch=is_select, limit=limit)
