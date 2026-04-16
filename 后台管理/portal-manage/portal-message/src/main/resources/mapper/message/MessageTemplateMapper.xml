@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.message.mapper.MessageTemplateMapper">
+
+    <resultMap type="com.ruoyi.message.domain.PortalMessageTemplate" id="MessageTemplateResult">
+        <result property="templateId"      column="template_id"/>
+        <result property="templateCode"   column="template_code"/>
+        <result property="templateName"   column="template_name"/>
+        <result property="channelType"    column="channel_type"/>
+        <result property="templateType"   column="template_type"/>
+        <result property="titleTemplate"  column="title_template"/>
+        <result property="contentTemplate" column="content_template"/>
+        <result property="isEnabled"      column="is_enabled"/>
+        <result property="delFlag"       column="del_flag"/>
+        <result property="createBy"       column="create_by"/>
+        <result property="createTime"     column="create_time"/>
+        <result property="updateBy"       column="update_by"/>
+        <result property="updateTime"    column="update_time"/>
+        <result property="remark"         column="remark"/>
+    </resultMap>
+
+    <sql id="selectTemplateVo">
+        select template_id, template_code, template_name, channel_type, template_type,
+               title_template, content_template, is_enabled, del_flag,
+               create_by, create_time, update_by, update_time, remark
+        from portal_message_template
+    </sql>
+
+    <select id="selectMessageTemplateList" parameterType="com.ruoyi.message.domain.PortalMessageTemplate" resultMap="MessageTemplateResult">
+        <include refid="selectTemplateVo"/>
+        <where>
+            del_flag = '0'
+            <if test="templateCode != null and templateCode != ''">
+                and template_code = #{templateCode}
+            </if>
+            <if test="templateName != null and templateName != ''">
+                and template_name like concat('%', #{templateName}, '%')
+            </if>
+            <if test="channelType != null and channelType != ''">
+                and channel_type = #{channelType}
+            </if>
+            <if test="templateType != null and templateType != ''">
+                and template_type = #{templateType}
+            </if>
+            <if test="isEnabled != null and isEnabled != ''">
+                and is_enabled = #{isEnabled}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectMessageTemplateByTemplateId" parameterType="Long" resultMap="MessageTemplateResult">
+        <include refid="selectTemplateVo"/>
+        where template_id = #{templateId}
+    </select>
+
+    <select id="selectMessageTemplateByTemplateCode" parameterType="String" resultMap="MessageTemplateResult">
+        <include refid="selectTemplateVo"/>
+        where template_code = #{templateCode} and del_flag = '0'
+    </select>
+
+    <insert id="insertMessageTemplate" parameterType="com.ruoyi.message.domain.PortalMessageTemplate" useGeneratedKeys="true" keyProperty="templateId">
+        insert into portal_message_template
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="templateCode != null and templateCode != ''">template_code,</if>
+            <if test="templateName != null and templateName != ''">template_name,</if>
+            <if test="channelType != null and channelType != ''">channel_type,</if>
+            <if test="templateType != null and templateType != ''">template_type,</if>
+            <if test="titleTemplate != null">title_template,</if>
+            <if test="contentTemplate != null">content_template,</if>
+            <if test="isEnabled != null">is_enabled,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="templateCode != null and templateCode != ''">#{templateCode},</if>
+            <if test="templateName != null and templateName != ''">#{templateName},</if>
+            <if test="channelType != null and channelType != ''">#{channelType},</if>
+            <if test="templateType != null and templateType != ''">#{templateType},</if>
+            <if test="titleTemplate != null">#{titleTemplate},</if>
+            <if test="contentTemplate != null">#{contentTemplate},</if>
+            <if test="isEnabled != null">#{isEnabled},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateMessageTemplate" parameterType="com.ruoyi.message.domain.PortalMessageTemplate">
+        update portal_message_template
+        <set>
+            <if test="templateCode != null and templateCode != ''">template_code = #{templateCode},</if>
+            <if test="templateName != null and templateName != ''">template_name = #{templateName},</if>
+            <if test="channelType != null and channelType != ''">channel_type = #{channelType},</if>
+            <if test="templateType != null and templateType != ''">template_type = #{templateType},</if>
+            <if test="titleTemplate != null">title_template = #{titleTemplate},</if>
+            <if test="contentTemplate != null">content_template = #{contentTemplate},</if>
+            <if test="isEnabled != null">is_enabled = #{isEnabled},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where template_id = #{templateId}
+    </update>
+
+    <delete id="deleteMessageTemplateByTemplateId" parameterType="Long">
+        update portal_message_template set del_flag = '1' where template_id = #{templateId}
+    </delete>
+
+    <delete id="deleteMessageTemplateByTemplateIds" parameterType="Long">
+        update portal_message_template set del_flag = '1' where template_id in
+        <foreach item="templateId" collection="array" open="(" separator="," close=")">
+            #{templateId}
+        </foreach>
+    </delete>
+
+</mapper>

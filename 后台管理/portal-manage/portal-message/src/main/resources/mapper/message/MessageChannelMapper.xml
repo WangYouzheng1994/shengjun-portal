@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.message.mapper.MessageChannelMapper">
+
+    <resultMap type="com.ruoyi.message.domain.PortalMessageChannel" id="MessageChannelResult">
+        <result property="channelId"     column="channel_id"      />
+        <result property="channelType"   column="channel_type"   />
+        <result property="channelName"   column="channel_name"   />
+        <result property="isEnabled"     column="is_enabled"     />
+        <result property="configContent" column="config_content" />
+        <result property="sortOrder"     column="sort_order"     />
+        <result property="delFlag"       column="del_flag"       />
+        <result property="createBy"      column="create_by"     />
+        <result property="createTime"    column="create_time"   />
+        <result property="updateBy"      column="update_by"     />
+        <result property="updateTime"    column="update_time"   />
+        <result property="remark"        column="remark"        />
+    </resultMap>
+
+    <sql id="selectMessageChannelVo">
+        select channel_id, channel_type, channel_name, is_enabled, config_content,
+               sort_order, del_flag, create_by, create_time, update_by, update_time, remark
+        from portal_message_channel
+    </sql>
+
+    <select id="selectMessageChannelList" parameterType="com.ruoyi.message.domain.PortalMessageChannel" resultMap="MessageChannelResult">
+        <include refid="selectMessageChannelVo"/>
+        <where>
+            del_flag = '0'
+            <if test="channelType != null and channelType != ''">
+                and channel_type = #{channelType}
+            </if>
+            <if test="channelName != null and channelName != ''">
+                and channel_name like concat('%', #{channelName}, '%')
+            </if>
+            <if test="isEnabled != null and isEnabled != ''">
+                and is_enabled = #{isEnabled}
+            </if>
+        </where>
+        order by sort_order asc, channel_id desc
+    </select>
+
+    <select id="selectMessageChannelByChannelId" parameterType="Long" resultMap="MessageChannelResult">
+        <include refid="selectMessageChannelVo"/>
+        where channel_id = #{channelId}
+    </select>
+
+    <select id="selectMessageChannelByChannelType" parameterType="String" resultMap="MessageChannelResult">
+        <include refid="selectMessageChannelVo"/>
+        where channel_type = #{channelType} and del_flag = '0'
+    </select>
+
+    <insert id="insertMessageChannel" parameterType="com.ruoyi.message.domain.PortalMessageChannel" useGeneratedKeys="true" keyProperty="channelId">
+        insert into portal_message_channel
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="channelType != null and channelType != ''">channel_type,</if>
+            <if test="channelName != null and channelName != ''">channel_name,</if>
+            <if test="isEnabled != null">is_enabled,</if>
+            <if test="configContent != null">config_content,</if>
+            <if test="sortOrder != null">sort_order,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="channelType != null and channelType != ''">#{channelType},</if>
+            <if test="channelName != null and channelName != ''">#{channelName},</if>
+            <if test="isEnabled != null">#{isEnabled},</if>
+            <if test="configContent != null">#{configContent},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateMessageChannel" parameterType="com.ruoyi.message.domain.PortalMessageChannel">
+        update portal_message_channel
+        <set>
+            <if test="channelType != null and channelType != ''">channel_type = #{channelType},</if>
+            <if test="channelName != null and channelName != ''">channel_name = #{channelName},</if>
+            <if test="isEnabled != null">is_enabled = #{isEnabled},</if>
+            <if test="configContent != null">config_content = #{configContent},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where channel_id = #{channelId}
+    </update>
+
+    <delete id="deleteMessageChannelByChannelId" parameterType="Long">
+        update portal_message_channel set del_flag = '1' where channel_id = #{channelId}
+    </delete>
+
+    <delete id="deleteMessageChannelByChannelIds" parameterType="String">
+        update portal_message_channel set del_flag = '1' where channel_id in
+        <foreach item="channelId" collection="array" open="(" separator="," close=")">
+            #{channelId}
+        </foreach>
+    </delete>
+
+</mapper>

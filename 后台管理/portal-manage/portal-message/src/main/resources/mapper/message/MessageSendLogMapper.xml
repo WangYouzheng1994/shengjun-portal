@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.message.mapper.MessageSendLogMapper">
+
+    <resultMap type="com.ruoyi.message.domain.PortalMessageSendLog" id="MessageSendLogResult">
+        <result property="logId"         column="log_id"         />
+        <result property="channelType"   column="channel_type"   />
+        <result property="templateId"   column="template_id"   />
+        <result property="templateName" column="template_name" />
+        <result property="sendType"     column="send_type"     />
+        <result property="receiver"      column="receiver"      />
+        <result property="title"         column="title"         />
+        <result property="content"       column="content"       />
+        <result property="sendStatus"    column="send_status"    />
+        <result property="errorCode"     column="error_code"     />
+        <result property="errorMessage"  column="error_message"  />
+        <result property="sendTime"      column="send_time"      />
+        <result property="delFlag"       column="del_flag"       />
+        <result property="createBy"      column="create_by"     />
+        <result property="createTime"    column="create_time"   />
+        <result property="updateBy"      column="update_by"     />
+        <result property="updateTime"    column="update_time"   />
+        <result property="remark"        column="remark"        />
+    </resultMap>
+
+    <sql id="selectMessageSendLogVo">
+        select log_id, channel_type, template_id, template_name, send_type, receiver,
+               title, content, send_status, error_code, error_message, send_time,
+               del_flag, create_by, create_time, update_by, update_time, remark
+        from portal_message_send_log
+    </sql>
+
+    <select id="selectMessageSendLogList" parameterType="com.ruoyi.message.domain.PortalMessageSendLog" resultMap="MessageSendLogResult">
+        <include refid="selectMessageSendLogVo"/>
+        <where>
+            del_flag = '0'
+            <if test="channelType != null and channelType != ''">
+                and channel_type = #{channelType}
+            </if>
+            <if test="sendType != null and sendType != ''">
+                and send_type = #{sendType}
+            </if>
+            <if test="sendStatus != null and sendStatus != ''">
+                and send_status = #{sendStatus}
+            </if>
+            <if test="receiver != null and receiver != ''">
+                and receiver like concat('%', #{receiver}, '%')
+            </if>
+            <if test="title != null and title != ''">
+                and title like concat('%', #{title}, '%')
+            </if>
+        </where>
+        order by send_time desc, log_id desc
+    </select>
+
+    <select id="selectMessageSendLogByLogId" parameterType="Long" resultMap="MessageSendLogResult">
+        <include refid="selectMessageSendLogVo"/>
+        where log_id = #{logId}
+    </select>
+
+    <insert id="insertMessageSendLog" parameterType="com.ruoyi.message.domain.PortalMessageSendLog" useGeneratedKeys="true" keyProperty="logId">
+        insert into portal_message_send_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="channelType != null and channelType != ''">channel_type,</if>
+            <if test="templateId != null">template_id,</if>
+            <if test="templateName != null and templateName != ''">template_name,</if>
+            <if test="sendType != null and sendType != ''">send_type,</if>
+            <if test="receiver != null and receiver != ''">receiver,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="content != null">content,</if>
+            <if test="sendStatus != null">send_status,</if>
+            <if test="errorCode != null and errorCode != ''">error_code,</if>
+            <if test="errorMessage != null and errorMessage != ''">error_message,</if>
+            <if test="sendTime != null">send_time,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="channelType != null and channelType != ''">#{channelType},</if>
+            <if test="templateId != null">#{templateId},</if>
+            <if test="templateName != null and templateName != ''">#{templateName},</if>
+            <if test="sendType != null and sendType != ''">#{sendType},</if>
+            <if test="receiver != null and receiver != ''">#{receiver},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="content != null">#{content},</if>
+            <if test="sendStatus != null">#{sendStatus},</if>
+            <if test="errorCode != null and errorCode != ''">#{errorCode},</if>
+            <if test="errorMessage != null and errorMessage != ''">#{errorMessage},</if>
+            <if test="sendTime != null">#{sendTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateMessageSendLog" parameterType="com.ruoyi.message.domain.PortalMessageSendLog">
+        update portal_message_send_log
+        <set>
+            <if test="sendStatus != null">send_status = #{sendStatus},</if>
+            <if test="errorCode != null and errorCode != ''">error_code = #{errorCode},</if>
+            <if test="errorMessage != null and errorMessage != ''">error_message = #{errorMessage},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where log_id = #{logId}
+    </update>
+
+    <delete id="deleteMessageSendLogByLogId" parameterType="Long">
+        update portal_message_send_log set del_flag = '1' where log_id = #{logId}
+    </delete>
+
+    <delete id="deleteMessageSendLogByLogIds" parameterType="String">
+        update portal_message_send_log set del_flag = '1' where log_id in
+        <foreach item="logId" collection="array" open="(" separator="," close=")">
+            #{logId}
+        </foreach>
+    </delete>
+
+</mapper>

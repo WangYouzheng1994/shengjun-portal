@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.message.mapper.MessageChannelDingtalkMapper">
+
+    <resultMap type="com.ruoyi.message.domain.config.PortalMessageChannelDingtalk" id="DingtalkResult">
+        <result property="configId"        column="config_id"        />
+        <result property="channelId"       column="channel_id"       />
+        <result property="dingtalkType"    column="dingtalk_type"    />
+        <result property="corpId"          column="corp_id"          />
+        <result property="appKey"          column="app_key"          />
+        <result property="appSecret"       column="app_secret"       />
+        <result property="agentId"         column="agent_id"         />
+        <result property="webhookUrl"      column="webhook_url"      />
+        <result property="secretKey"       column="secret_key"       />
+        <result property="suiteId"        column="suite_id"         />
+        <result property="suiteSecret"    column="suite_secret"     />
+        <result property="token"           column="token"           />
+        <result property="encodingAesKey"  column="encoding_aes_key" />
+        <result property="delFlag"         column="del_flag"         />
+        <result property="createBy"        column="create_by"        />
+        <result property="createTime"      column="create_time"      />
+        <result property="updateBy"        column="update_by"        />
+        <result property="updateTime"     column="update_time"      />
+    </resultMap>
+
+    <sql id="selectDingtalkVo">
+        select config_id, channel_id, dingtalk_type, corp_id, app_key, app_secret, agent_id, webhook_url,
+               secret_key, suite_id, suite_secret, token, encoding_aes_key,
+               del_flag, create_by, create_time, update_by, update_time
+        from portal_message_channel_dingtalk
+    </sql>
+
+    <select id="selectMessageChannelDingtalkList" parameterType="com.ruoyi.message.domain.config.PortalMessageChannelDingtalk" resultMap="DingtalkResult">
+        <include refid="selectDingtalkVo"/>
+        <where>
+            del_flag = '0'
+            <if test="channelId != null">
+                and channel_id = #{channelId}
+            </if>
+            <if test="dingtalkType != null and dingtalkType != ''">
+                and dingtalk_type = #{dingtalkType}
+            </if>
+            <if test="corpId != null and corpId != ''">
+                and corp_id = #{corpId}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectMessageChannelDingtalkByConfigId" parameterType="Long" resultMap="DingtalkResult">
+        <include refid="selectDingtalkVo"/>
+        where config_id = #{configId}
+    </select>
+
+    <select id="selectMessageChannelDingtalkByChannelId" parameterType="Long" resultMap="DingtalkResult">
+        <include refid="selectDingtalkVo"/>
+        where channel_id = #{channelId} and del_flag = '0'
+    </select>
+
+    <insert id="insertMessageChannelDingtalk" parameterType="com.ruoyi.message.domain.config.PortalMessageChannelDingtalk" useGeneratedKeys="true" keyProperty="configId">
+        insert into portal_message_channel_dingtalk
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="channelId != null">channel_id,</if>
+            <if test="dingtalkType != null">dingtalk_type,</if>
+            <if test="corpId != null">corp_id,</if>
+            <if test="appKey != null">app_key,</if>
+            <if test="appSecret != null">app_secret,</if>
+            <if test="agentId != null">agent_id,</if>
+            <if test="webhookUrl != null">webhook_url,</if>
+            <if test="secretKey != null">secret_key,</if>
+            <if test="suiteId != null">suite_id,</if>
+            <if test="suiteSecret != null">suite_secret,</if>
+            <if test="token != null">token,</if>
+            <if test="encodingAesKey != null">encoding_aes_key,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="channelId != null">#{channelId},</if>
+            <if test="dingtalkType != null">#{dingtalkType},</if>
+            <if test="corpId != null">#{corpId},</if>
+            <if test="appKey != null">#{appKey},</if>
+            <if test="appSecret != null">#{appSecret},</if>
+            <if test="agentId != null">#{agentId},</if>
+            <if test="webhookUrl != null">#{webhookUrl},</if>
+            <if test="secretKey != null">#{secretKey},</if>
+            <if test="suiteId != null">#{suiteId},</if>
+            <if test="suiteSecret != null">#{suiteSecret},</if>
+            <if test="token != null">#{token},</if>
+            <if test="encodingAesKey != null">#{encodingAesKey},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateMessageChannelDingtalk" parameterType="com.ruoyi.message.domain.config.PortalMessageChannelDingtalk">
+        update portal_message_channel_dingtalk
+        <set>
+            <if test="dingtalkType != null">dingtalk_type = #{dingtalkType},</if>
+            <if test="corpId != null">corp_id = #{corpId},</if>
+            <if test="appKey != null">app_key = #{appKey},</if>
+            <if test="appSecret != null">app_secret = #{appSecret},</if>
+            <if test="agentId != null">agent_id = #{agentId},</if>
+            <if test="webhookUrl != null">webhook_url = #{webhookUrl},</if>
+            <if test="secretKey != null">secret_key = #{secretKey},</if>
+            <if test="suiteId != null">suite_id = #{suiteId},</if>
+            <if test="suiteSecret != null">suite_secret = #{suiteSecret},</if>
+            <if test="token != null">token = #{token},</if>
+            <if test="encodingAesKey != null">encoding_aes_key = #{encodingAesKey},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </set>
+        where config_id = #{configId}
+    </update>
+
+    <delete id="deleteMessageChannelDingtalkByConfigId" parameterType="Long">
+        update portal_message_channel_dingtalk set del_flag = '1' where config_id = #{configId}
+    </delete>
+
+    <delete id="deleteMessageChannelDingtalkByChannelId" parameterType="Long">
+        update portal_message_channel_dingtalk set del_flag = '1' where channel_id = #{channelId}
+    </delete>
+
+</mapper>

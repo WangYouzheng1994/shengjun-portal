@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.message.mapper.MessageChannelEmailMapper">
+    <resultMap type="com.ruoyi.message.domain.config.PortalMessageChannelEmail" id="EmailResult">
+        <result property="configId" column="config_id"/><result property="channelId" column="channel_id"/>
+        <result property="smtpHost" column="smtp_host"/><result property="smtpPort" column="smtp_port"/>
+        <result property="username" column="username"/><result property="password" column="password"/>
+        <result property="fromAddress" column="from_address"/><result property="fromName" column="from_name"/>
+        <result property="useSsl" column="use_ssl"/><result property="useTls" column="use_tls"/>
+        <result property="delFlag" column="del_flag"/><result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/><result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <sql id="selectEmailVo">select config_id, channel_id, smtp_host, smtp_port, username, password, from_address, from_name, use_ssl, use_tls, del_flag, create_by, create_time, update_by, update_time from portal_message_channel_email</sql>
+    <select id="selectMessageChannelEmailList" parameterType="com.ruoyi.message.domain.config.PortalMessageChannelEmail" resultMap="EmailResult"><include refid="selectEmailVo"/><where>del_flag = '0' <if test="channelId != null">and channel_id = #{channelId}</if></where></select>
+    <select id="selectMessageChannelEmailByConfigId" parameterType="Long" resultMap="EmailResult"><include refid="selectEmailVo"/> where config_id = #{configId}</select>
+    <select id="selectMessageChannelEmailByChannelId" parameterType="Long" resultMap="EmailResult"><include refid="selectEmailVo"/> where channel_id = #{channelId} and del_flag = '0'</select>
+    <insert id="insertMessageChannelEmail" parameterType="com.ruoyi.message.domain.config.PortalMessageChannelEmail" useGeneratedKeys="true" keyProperty="configId">
+        insert into portal_message_channel_email <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="channelId != null">channel_id,</if><if test="smtpHost != null">smtp_host,</if><if test="smtpPort != null">smtp_port,</if>
+            <if test="username != null">username,</if><if test="password != null">password,</if><if test="fromAddress != null">from_address,</if>
+            <if test="fromName != null">from_name,</if><if test="useSsl != null">use_ssl,</if><if test="useTls != null">use_tls,</if>
+            <if test="delFlag != null">del_flag,</if><if test="createBy != null">create_by,</if><if test="createTime != null">create_time,</if>
+        </trim><trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="channelId != null">#{channelId},</if><if test="smtpHost != null">#{smtpHost},</if><if test="smtpPort != null">#{smtpPort},</if>
+            <if test="username != null">#{username},</if><if test="password != null">#{password},</if><if test="fromAddress != null">#{fromAddress},</if>
+            <if test="fromName != null">#{fromName},</if><if test="useSsl != null">#{useSsl},</if><if test="useTls != null">#{useTls},</if>
+            <if test="delFlag != null">#{delFlag},</if><if test="createBy != null">#{createBy},</if><if test="createTime != null">#{createTime},</if>
+        </trim>
+    </insert>
+    <update id="updateMessageChannelEmail" parameterType="com.ruoyi.message.domain.config.PortalMessageChannelEmail">update portal_message_channel_email <set>
+        <if test="smtpHost != null">smtp_host = #{smtpHost},</if><if test="smtpPort != null">smtp_port = #{smtpPort},</if>
+        <if test="username != null">username = #{username},</if><if test="password != null">password = #{password},</if>
+        <if test="fromAddress != null">from_address = #{fromAddress},</if><if test="fromName != null">from_name = #{fromName},</if>
+        <if test="useSsl != null">use_ssl = #{useSsl},</if><if test="useTls != null">use_tls = #{useTls},</if>
+        <if test="updateBy != null">update_by = #{updateBy},</if><if test="updateTime != null">update_time = #{updateTime},</if>
+    </set> where config_id = #{configId}</update>
+    <delete id="deleteMessageChannelEmailByConfigId" parameterType="Long">update portal_message_channel_email set del_flag = '1' where config_id = #{configId}</delete>
+    <delete id="deleteMessageChannelEmailByChannelId" parameterType="Long">update portal_message_channel_email set del_flag = '1' where channel_id = #{channelId}</delete>
+</mapper>
