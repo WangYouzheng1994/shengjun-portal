@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Service 签名调试工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-title {
+            font-size: 1.3em;
+            color: #667eea;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+            font-family: 'Courier New', monospace;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .result-box {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .result-label {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-right: 10px;
+            font-family: inherit;
+        }
+
+        .copy-btn {
+            float: right;
+            padding: 4px 12px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .copy-btn:hover {
+            background: #218838;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .code-comment {
+            color: #5c6370;
+            font-style: italic;
+        }
+
+        .code-string {
+            color: #98c379;
+        }
+
+        .code-keyword {
+            color: #c678dd;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .info-badge {
+            display: inline-block;
+            background: #e9ecef;
+            color: #495057;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <h1>🔐 Portal Service 签名调试工具</h1>
+            <p>HMAC-SHA256 接口签名生成与验证工具 - 前端开发专用</p>
+        </div>
+
+        <!-- 配置区域 -->
+        <div class="card">
+            <h2 class="card-title">⚙️ 1. 签名配置</h2>
+            
+            <div class="grid-2">
+                <div class="form-group">
+                    <label for="secret">签名密钥（Secret Key）</label>
+                    <input type="text" id="secret" 
+                           value="portal_service_secret_key_2026_secure" 
+                           placeholder="请输入与服务端一致的签名密钥">
+                    <small style="color: #888;">⚠️ 生产环境请使用环境变量管理密钥</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="timestampWindow">时间戳有效窗口（秒）</label>
+                    <input type="number" id="timestampWindow" value="300" min="60" max="3600">
+                    <span class="info-badge">默认300秒（5分钟）</span>
+                </div>
+            </div>
+
+            <button class="btn" onclick="initConfig()">✅ 初始化配置</button>
+            <button class="btn btn-secondary" onclick="resetConfig()">🔄 重置默认值</button>
+        </div>
+
+        <!-- 签名生成区域 -->
+        <div class="card">
+            <h2 class="card-title">🔑 2. 生成签名</h2>
+            
+            <div class="grid-2">
+                <div class="form-group">
+                    <label for="method">HTTP 方法</label>
+                    <select id="method">
+                        <option value="GET">GET（查询）</option>
+                        <option value="POST" selected>POST（提交）</option>
+                        <option value="PUT">PUT（更新）</option>
+                        <option value="DELETE">DELETE（删除）</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="url">请求路径（URL Path）</label>
+                    <input type="text" id="url" 
+                           value="/open/message/submit" 
+                           placeholder="/open/xxx 或 /portal/xxx">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="body">请求体（Request Body，JSON格式）<span class="info-badge">POST/PUT必填</span></label>
+                <textarea id='body' placeholder='{"name":"张三","contact":"13800138000","content":"测试留言"}'>{
+  "name": "张三",
+  "contact": "13800138000",
+  "content": "测试留言内容"
+}</textarea>
+            </div>
+
+            <button class="btn" onclick="generateSignature()" style="margin-top: 10px;">
+                🚀 生成签名
+            </button>
+        </div>
+
+        <!-- 结果展示区域 -->
+        <div class="card">
+            <h2 class="card-title">📋 3. 签名结果</h2>
+            
+            <div style="margin-bottom: 20px;">
+                <strong><span class="result-label">X-Signature</span></strong>
+                <button class="copy-btn" onclick="copyToClipboard('signatureResult')">复制</button>
+                <div class="result-box" id="signatureResult">点击上方按钮生成签名...</div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <strong><span class="result-label">X-Timestamp</span></strong>
+                <button class="copy-btn" onclick="copyToClipboard('timestampResult')">复制</button>
+                <div class="result-box" id="timestampResult">-</div>
+            </div>
+
+            <div>
+                <strong><span class="result-label">完整Headers（可直接复制到Postman/Axios）</span></strong>
+                <button class="copy-btn" onclick="copyToClipboard('headersResult')">复制全部</button>
+                <div class="result-box" id="headersResult">// 点击「生成签名」后显示完整的请求头信息</div>
+            </div>
+        </div>
+
+        <!-- 待签名字符串展示 -->
+        <div class="card">
+            <h2 class="card-title">🔍 4. 调试信息（Debug）</h2>
+            
+            <div class="form-group">
+                <label>待签名字符串（Sign Data）</label>
+                <div class="result-box" id="signDataResult" style="max-height: 200px; overflow-y: auto;"></div>
+            </div>
+
+            <div class="form-group">
+                <label>时间戳有效性检查</label>
+                <div class="result-box" id="timestampCheckResult"></div>
+            </div>
+        </div>
+
+        <!-- 使用示例 -->
+        <div class="card">
+            <h2 class="card-title">📖 5. 使用示例代码</h2>
+            
+            <div class="form-group">
+                <label>JavaScript / TypeScript 示例</label>
+                <div class="code-block"><span class="code-comment">// 1. 初始化配置（在main.js或入口文件中执行一次）</span>
+<span class="code-keyword">import</span> PortalSign <span class="code-keyword">from</span> <span class="code-string">'@/utils/portal-sign'</span>;
+
+PortalSign.<span class="code-keyword">init</span>({
+  secret: <span class="code-string">'your-secret-key'</span>,
+  timestampWindow: <span class="code-keyword">300</span>,  <span class="code-comment">// 5分钟有效窗口</span>
+  debug: <span class="code-keyword">true</span>       <span class="code-comment">// 开发环境开启调试</span>
+});
+
+<span class="code-comment">// 2. 手动签名（适用于单个请求）</span>
+<span class="code-keyword">const</span> signResult = PortalSign.sign(<span class="code-string">'POST'</span>, <span class="code-string">'/open/message/submit'</span>, JSON.stringify(data));
+
+<span class="code-comment">// 3. 发送请求时带上签名头</span>
+fetch(<span class="code-string">'http://localhost:8081/open/message/submit'</span>, {
+  method: <span class="code-string">'POST'</span>,
+  headers: {
+    <span class="code-string">'Content-Type'</span>: <span class="code-string">'application/json'</span>,
+    ...signResult.headers   <span class="code-comment">// 展开签名头</span>
+  },
+  body: JSON.stringify(data)
+}).then(res => res.json());</div>
+            </div>
+
+            <div class="form-group" style="margin-top: 20px;">
+                <label>Axios 拦截器自动签名（推荐）</label>
+                <div class="code-block"><span class="code-comment">// 在 main.js 中配置全局拦截器</span>
+<span class="code-keyword">import</span> { createPortalService } <span class="code-keyword">from</span> <span class="code-string">'@/utils/portal-sign-axios'</span>;
+
+<span class="code-comment">// 创建带自动签名功能的Axios实例</span>
+<span class="code-keyword">const</span> portalApi = createPortalService({
+  baseURL: process.env.VUE_APP_PORTAL_SERVICE_URL || <span class="code-string">'http://localhost:8081'</span>,
+});
+
+<span class="code-comment">// 之后所有请求都会自动签名！无需手动处理</span>
+portalApi.post(<span class="code-string">'/open/message/submit'</span>, {
+  name: <span class="code-string">'张三'</span>,
+  contact: <span class="code-string">'13800138000'</span>,
+  content: <span class="code-string">'测试留言'</span>
+}).then(response => {
+  console.log(<span class="code-string">'请求成功！'</span>, response.data);
+});</div>
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <div style="text-align: center; padding: 20px; color: #888; font-size: 14px;">
+            <p>Portal Service Signature Tool v1.0.0 | Powered by HMAC-SHA256 | © 2026 盛骏科技</p>
+        </div>
+    </div>
+
+    <!-- 引入签名工具库 -->
+    <script src="./js/portal-sign.js"></script>
+
+    <script>
+        /**
+         * 初始化配置
+         */
+        function initConfig() {
+            const secret = document.getElementById('secret').value.trim();
+            const timestampWindow = parseInt(document.getElementById('timestampWindow').value);
+
+            if (!secret) {
+                showToast('❌ 请输入签名密钥！', 'error');
+                return;
+            }
+
+            try {
+                PortalSign.init({
+                    secret: secret,
+                    timestampWindow: timestampWindow,
+                    debug: true
+                });
+
+                showToast('✅ 配置初始化成功！', 'success');
+                
+                // 自动生成一个示例签名
+                if (document.getElementById('url').value && document.getElementById('method').value) {
+                    generateSignature();
+                }
+            } catch (error) {
+                showToast('❌ 初始化失败：' + error.message, 'error');
+            }
+        }
+
+        /**
+         * 重置配置为默认值
+         */
+        function resetConfig() {
+            document.getElementById('secret').value = 'portal_service_secret_key_2026_secure';
+            document.getElementById('timestampWindow').value = '300';
+            document.getElementById('method').value = 'POST';
+            document.getElementById('url').value = '/open/message/submit';
+            document.getElementById('body').value = '{\n  "name": "张三",\n  "contact": "13800138000",\n  "content": "测试留言内容"\n}';
+            
+            initConfig();
+            showToast('🔄 已重置为默认配置');
+        }
+
+        /**
+         * 生成签名
+         */
+        function generateSignature() {
+            try {
+                const method = document.getElementById('method').value.toUpperCase();
+                const url = document.getElementById('url').value.trim();
+                const bodyText = document.getElementById('body').value.trim();
+
+                if (!url) {
+                    showToast('❌ 请输入请求路径！', 'error');
+                    return;
+                }
+
+                let body = null;
+                if ((method === 'POST' || method === 'PUT') && bodyText) {
+                    // 验证JSON格式
+                    try {
+                        JSON.parse(bodyText);
+                        body = bodyText;
+                    } catch (e) {
+                        showToast('❌ 请求体JSON格式错误！', 'error');
+                        return;
+                    }
+                }
+
+                // 调用签名方法
+                const result = PortalSign.sign(method, url, body);
+
+                // 显示结果
+                document.getElementById('signatureResult').textContent = result.signature;
+                document.getElementById('timestampResult').textContent = result.timestamp;
+
+                // 显示完整headers
+                const headersJson = JSON.stringify(result.headers, null, 2);
+                document.getElementById('headersResult').textContent = headersJson;
+
+                // 显示调试信息
+                const signData = method + '\n' + url + '\n' + result.timestamp + '\n' + (body || '(空)');
+                document.getElementById('signDataResult').textContent = signData;
+
+                // 时间戳有效性检查
+                const isValid = PortalSign.isTimestampValid(result.timestamp);
+                const checkResult = isValid ? 
+                    `✅ 有效 | 当前时间：${new Date().toLocaleString()}` :
+                    `❌ 已过期 | 请重新生成签名`;
+                document.getElementById('timestampCheckResult').innerHTML = checkResult;
+
+                showToast('🎉 签名生成成功！');
+
+            } catch (error) {
+                showToast('❌ 签名失败：' + error.message, 'error');
+                console.error('[签名工具] 错误详情:', error);
+            }
+        }
+
+        /**
+         * 复制到剪贴板
+         */
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('📋 已复制到剪贴板！');
+            }).catch(err => {
+                // Fallback for older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast('📋 已复制到剪贴板！');
+            });
+        }
+
+        /**
+         * 显示Toast提示
+         */
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            toast.style.background = type === 'error' ? '#dc3545' : '#28a745';
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, 2500);
+        }
+
+        // 页面加载完成后自动初始化
+        window.onload = function() {
+            initConfig();
+        };
+    </script>
+</body>
+</html>
