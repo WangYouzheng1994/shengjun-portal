@@ -26,7 +26,7 @@ import com.raisetech.common.annotation.Anonymous;
 @Configuration
 public class PermitAllUrlProperties implements InitializingBean, ApplicationContextAware
 {
-    private static final Pattern PATTERN = Pattern.compile("{(.*?)}");
+    private static final Pattern PATTERN = Pattern.compile("\\{(.*?)\\}");
 
     private ApplicationContext applicationContext;
 
