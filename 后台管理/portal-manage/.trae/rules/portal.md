@@ -22,3 +22,4 @@
 - 菜单表sys_menu中，第一级的菜单的parent_id必须为0。
 - 对于列比较多的列表页面，需要把操作列固定（冻结）在右侧或左侧，避免拖动滚动条才能点击操作按钮。实现方式是在el-table-column上添加fixed="right"（右侧固定）或fixed="left"（左侧固定）属性。
 - 前端代码规范：在HTML/Vue模板的属性值中禁止使用中文引号（"" ''），会导致编译错误。应使用英文引号或替代符号（如「」『』《》）。例如：description="请点击「新增」按钮" ✅  description="请点击"新增"按钮" ❌ 此规则不影响java
+- **Vue组件name与菜单route_name必须一致**：前端组件中 `script setup name` 的值必须与数据库 `sys_menu.route_name` 完全一致（区分大小写），否则 `keep-alive` 缓存无法生效。命名示例：`WeComChannel`、`DingtalkChannel`、`FeishuChannel`。

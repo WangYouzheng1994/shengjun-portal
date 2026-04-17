@@ -960,7 +960,7 @@ INSERT INTO `sys_menu`(
   `perms`, `icon`, `route_name`, `create_by`, `create_time`,
   `update_by`, `update_time`, `remark`
 )
-SELECT '企业微信配置', @channelDirId, 2, 'wecom', 'message/channel/wecom', 'C', '0', '0', 'message:channel:wecom:list', '#', 'WecomChannel', 'admin', sysdate(), '', NULL, '企业微信配置菜单'
+SELECT '企业微信配置', @channelDirId, 2, 'wecom', 'message/channel/wecom', 'C', '0', '0', 'message:channel:wecom:list', '#', 'WeComChannel', 'admin', sysdate(), '', NULL, '企业微信配置菜单'
 FROM DUAL WHERE @channelDirId IS NOT NULL AND NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_name = '企业微信配置' AND parent_id = @channelDirId);
 
 SET @wecomMenuId = (SELECT menu_id FROM sys_menu WHERE menu_name = '企业微信配置' AND parent_id = @channelDirId LIMIT 1);
