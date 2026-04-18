@@ -46,13 +46,27 @@
   }
 }
 
-// to fixed https://github.com/ElemeFE/element/issues/2461
+/* start 模态框内部滚动 2026-04-17 用于实现模态框内容超出时自身滚动而非浏览器滚动 */
 .el-dialog {
   transform: none;
   left: 0;
   position: relative;
   margin: 0 auto;
+  max-height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
+
+  .el-dialog__body {
+    overflow-y: auto;
+    max-height: calc(100vh - 220px);
+    padding: 20px;
+  }
+
+  .el-dialog__footer {
+    flex-shrink: 0;
+  }
 }
+/* end 模态框内部滚动 */
 
 // refine element ui upload
 .upload-container {
